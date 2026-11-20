@@ -21,14 +21,16 @@ export const passportGroups = [
   { id: 'address', label: 'Проверка подключения' },
   { id:'support',label:'Техническая поддержка' },
   { id: 'speed-test', label: 'Проверка скорости интернета' },
+  { id: 'official-site', label: 'Официальный сайт' },
   { id: 'account', label: 'Личный кабинет' },
   { id: 'tariff', label: 'Шаблон страницы тарифа' },
+  { id: 'future', label: 'Будущие блоки' },
 ];
 export function passportGroup(passport) {
   if (passport.id === 'header') return 'global';
   if(passport.id.startsWith('support.'))return 'support';
   if (passport.id.startsWith('speed-test.')) return 'speed-test';
-  if (passport.id.startsWith('official-site.')) return { href: '/templates/official-site', label: 'Открыть редактор', note: 'Вступление, основной переход, семь иллюстраций и FAQ. Принятый дизайн задан кодом.' };
+  if (passport.id.startsWith('official-site.')) return 'official-site';
   if (passport.id.startsWith('account.')) return 'account';
   if (passport.id.startsWith('address.')) return 'address';
   if (passport.id.startsWith('home.')) return 'root';
@@ -59,6 +61,7 @@ export function passportContent(passport) {
 export function passportSource(passport) {
   if(passport.id.startsWith('support.'))return {href:'/templates/support',label:'Открыть редактор',note:'Тексты, типизированные ссылки, изображения и отдельный FAQ; ручное сохранение и публикация отдельно.'};
   if (passport.id.startsWith('speed-test.')) return { href: passport.editorReadiness === 'READY' ? '/templates/speed-test' : null, label: passport.editorReadiness === 'READY' ? 'Открыть редактор' : null, note: 'Заголовок, тексты шести разделов и FAQ. Сохранение меняет рабочую версию. Телефоны и график — в общих настройках.' };
+  if (passport.id.startsWith('official-site.')) return { href: '/templates/official-site', label: 'Открыть редактор', note: 'Вступление, основной переход, семь иллюстраций и FAQ. Принятый дизайн задан кодом.' };
   if (passport.id.startsWith('account.')) return { href: passport.editorReadiness === 'READY' ? '/templates/account' : null, label: passport.editorReadiness === 'READY' ? 'Открыть редактор' : null, note: 'Одна форма страницы: вступление, ссылка входа, иллюстрации и FAQ. Инструкции, условия и композиция заданы кодом.' };
   if (passport.id.startsWith('address.') && passport.editorReadiness === 'READY') return { href: `/templates/home?kind=CITY_ADDRESS_CHECK&block=${encodeURIComponent(passport.id)}`, label: 'Открыть редактор', note: 'Независимый контент ADDRESS. Сохранение меняет рабочую версию; общие факты редактируются в настройках.' };
   if (passport.id.startsWith('city.') && passport.editorReadiness === 'READY') return { href: `/templates/home?kind=CITY_HOME&block=${encodeURIComponent(passport.id)}`, label: 'Открыть редактор', note: 'Независимый контент шаблона города. Общие факты меняются в настройках сайта.' };

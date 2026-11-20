@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import { createRequire } from 'node:module';
 import { readFile } from 'node:fs/promises';
 import {
-  filterPassports, passportContent, passportDesignLink, passportName, passportPlacement,
+  filterPassports, passportContent, passportDesignLink, passportGroup, passportGroups, passportName, passportPlacement,
   passportSource, passportStatus,
 } from '../apps/admin/src/lib/block-passport-presentation.mjs';
 
@@ -33,6 +33,45 @@ test('placement filter distinguishes root, shared city template, tariff and futu
   assert.deepEqual(filterPassports(passports, '', 'future').map(passport => passport.id), []);
   assert.equal(filterPassports(passports, 'Первый экран', 'tariff').length, 1);
   assert.equal(passportPlacement(byId('tariff_grid')), 'Общий шаблон города');
+});
+
+test('every passport in the API registry has a registered placement for the list and details', () => {
+  const groups = new Map(passportGroups.map(group => [group.id, group.label]));
+  assert.equal(groups.size, passportGroups.length, 'Group IDs are unique');
+  assert.equal(filterPassports(passports).length, passports.length);
+  for (const passport of passports) {
+    const placement = passportPlacement(passport);
+    const id = passportGroup(passport);
+    assert.equal(typeof id, 'string', passport.id);
+    assert.ok(groups.get(id)?.trim(), passport.id);
+    assert.equal(placement, groups.get(id), passport.id);
+    assert.ok(filterPassports(passports, '', id).includes(passport), passport.id);
+  }
+});
+
+test('official site passports keep their placement, descriptions and editor source', () => {
+  const official = passports.filter(passport => passport.id.startsWith('official-site.'));
+  assert.ok(official.length > 0, 'Official site is part of the real registry');
+  assert.deepEqual(filterPassports(passports, '', 'official-site'), official);
+  assert.deepEqual(filterPassports(passports, 'Первый экран', 'official-site'), [byId('official-site.hero')]);
+  for (const passport of official) {
+    assert.equal(passportPlacement(passport), 'Официальный сайт');
+    assert.ok(passport.purpose.trim());
+    assert.deepEqual(passportSource(passport), {
+      href: '/templates/official-site', label: 'Открыть редактор',
+      note: 'Вступление, основной переход, семь иллюстраций и FAQ. Принятый дизайн задан кодом.',
+    });
+  }
+});
+
+test('future rich text has a valid read-only placement when presented from a historical record', () => {
+  const richText = { id: 'rich_text', title: 'Текстовый блок', fields: [{ key: 'text', required: true, control: 'textarea' }] };
+  assert.equal(byId(richText.id), undefined, 'The legacy block stays outside the active API registry');
+  assert.equal(passportPlacement(richText), 'Будущие блоки');
+  assert.equal(passportGroup(richText), 'future');
+  assert.deepEqual(filterPassports([...passports, richText], 'текстовый блок', 'future'), [richText]);
+  assert.deepEqual(passportContent(richText), [{ key: 'text', label: 'Описание', required: true }]);
+  assert.deepEqual(passportSource(richText), { href: null, label: null, note: 'Будущий блок — в текущих страницах не используется.' });
 });
 
 test('content sources lead to existing editors and never offer a missing city editor or schema mutation', () => {
