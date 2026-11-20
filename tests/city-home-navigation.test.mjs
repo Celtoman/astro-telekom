@@ -24,7 +24,7 @@ test('city nested publication and preview errors open the same CITY field rather
 });
 test('working usage scan includes city nested text fields exactly once', async () => {
   const { WorkingVariableUsagesService } = require('../apps/api/dist/working-variable-usages.service.js');
-  const tx = { site: { findUnique: async () => ({ workingRevision: 1 }) }, page: { findMany: async () => [] }, tariff: { findMany: async () => [] }, seoTemplate: { findMany: async () => [] },
+  const tx = { site: { findUnique: async () => ({ status: 'PUBLISHED', workingRevision: 1 }) }, page: { findMany: async () => [] }, tariff: { findMany: async () => [] }, seoTemplate: { findMany: async () => [] },
     pageTemplate: { findMany: async () => [{ id: 'template', kind: 'CITY_HOME', status: 'PUBLISHED', titleTemplate: '', content: {}, blocks: [
       { id: 'benefits', blockType: 'city.benefits', visible: true, data: { title: 'В {CITY_NAME}', items: { speed: { title: 'Скорость в {CITY_NAME_PREPOSITIONAL}', text: 'До {CITY_MAX_SPEED}' } } } },
       { id: 'faq', blockType: 'city.faq', visible: true, data: { title: 'Вопросы', items: [{ question: 'Цена?', answer: 'От {CITY_MIN_PRICE}' }] } },

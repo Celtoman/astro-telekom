@@ -76,7 +76,7 @@ test('SPEED_TEST publication identifies exact missing native field and requires 
 
 test('SPEED_TEST working variable registry indexes nested native copy and points to its own editor',async()=>{
  const content=speedTestPageDefaults();content.preparation.steps.vpn.body='Позвоните {SUPPORT_PHONE}';content.tasks.items.files.caption='Подключение {CONNECTION_PHONE}';
- const tx={site:{findUnique:async()=>({workingRevision:7})},page:{findMany:async()=>[{id:'speed',type:'SPEED_TEST',status:'PUBLISHED',content,blocks:[],title:'Проверка скорости'}]},pageTemplate:{findMany:async()=>[]},tariff:{findMany:async()=>[]},seoTemplate:{findMany:async()=>[]}};
+ const tx={site:{findUnique:async()=>({status:'PUBLISHED',workingRevision:7})},page:{findMany:async()=>[{id:'speed',type:'SPEED_TEST',status:'PUBLISHED',content,blocks:[],title:'Проверка скорости'}]},pageTemplate:{findMany:async()=>[]},tariff:{findMany:async()=>[]},seoTemplate:{findMany:async()=>[]}};
  const service=new WorkingVariableUsagesService({$transaction:async run=>run(tx)});
  const usages=await service.list('site',7);assert.equal(usages.length,2);
  assert.ok(usages.every(usage=>usage.pageType==='SPEED_TEST'&&usage.editorHref==='/templates/speed-test'));
