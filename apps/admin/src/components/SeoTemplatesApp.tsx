@@ -26,7 +26,7 @@ interface Workspace {
   templates: Template[]
 }
 interface RouteReview {
-  workingRevision: number; workingError: string | null
+  workingRevision: number; workingError: string | null; reviewId?: string
   page: number; pageSize: number; total: number; routes: string[]
   detail: { path: string; working: Meta | null; published: Meta | null; publishedPublicationId: string | null; warnings: Diagnostic[] } | null
 }
@@ -130,9 +130,11 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
     setReviewing(true); setReviewError(null)
     const query = new URLSearchParams({ workingRevision: String(workspace.workingRevision), kind, page: String(page) })
     if (requestedPath) query.set("path", requestedPath)
+    if (restart) query.set("startReview", "true")
+    else if (review?.reviewId) query.set("reviewId", review.reviewId)
     if (!restart && review?.detail) query.set("publishedPublicationId", review.detail.publishedPublicationId ?? "")
     try {
-      const result = await requestJson<RouteReview>(apiUrl, `/admin/sites/${site.id}/seo-templates/review?${query}`, { signal: request.signal })
+      const result = await requestJson<RouteReview>(apiUrl, `/admin/sites/${site.id}/seo-templates/review?${query}`, { signal: request.signal, cache: "no-store" })
       if (request.signal.aborted) return
       if (review && review.total !== result.total) setConfirmed(false)
       setReview(result)

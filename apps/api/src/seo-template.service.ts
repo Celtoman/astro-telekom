@@ -1,8 +1,10 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
 import { Prisma, SeoIndexState, SeoTemplateKind } from '../generated';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
 import { resolveSocialImage } from './seo-templates';
+import { readPublishedSeoDetail } from './published-seo-detail';
 import { ADMIN_ROUTE_PAGE_SIZE } from './admin-route-pagination';
 import { resolveVariableText } from './variable-registry';
 
@@ -17,8 +19,41 @@ export interface UpdateSeoTemplateInput {
   confirmNoindexCount?: number;
 }
 
+const SEO_REVIEW_TTL_MS = 5 * 60_000;
+const SEO_REVIEW_MAX_REPORTS = 4;
+const SEO_REVIEW_MAX_WEIGHT = 16 * 1024 * 1024;
+const REVIEW_ID = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/;
+
+type ReviewInput = {
+  workingRevision: number;
+  kind: string;
+  page: number;
+  path?: string;
+  publishedPublicationId?: string;
+  startReview?: boolean;
+  reviewId?: string;
+};
+type RouteWarning = { path: string };
+type RouteMeta = { working: unknown; warnings: RouteWarning[] };
+type PublishedStamp = { id: string; catalogGeneration: number } | null;
+const samePublishedStamp = (left: PublishedStamp, right: PublishedStamp) =>
+  (left?.id ?? null) === (right?.id ?? null) && (left?.catalogGeneration ?? null) === (right?.catalogGeneration ?? null);
+type SeoReview = {
+  siteId: string;
+  workingRevision: number;
+  kind: string;
+  paths: string[];
+  details: Map<string, RouteMeta>;
+  published: PublishedStamp;
+  expiresAt: number;
+  weight: number;
+};
+
 @Injectable()
 export class SeoTemplateService {
+  private readonly reviews = new Map<string, SeoReview>();
+  private reviewWeight = 0;
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly publications: PublicationWorkflowService,
@@ -63,7 +98,37 @@ export class SeoTemplateService {
     return this.prisma.$transaction(tx => this.readSettings(siteId, tx), { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 
-  async review(siteId: string, input: { workingRevision: number; kind: string; page: number; path?: string; publishedPublicationId?: string }) {
+  private removeReview(id: string, review: SeoReview) {
+    this.reviews.delete(id);
+    this.reviewWeight -= review.weight;
+  }
+
+  private rememberReview(
+    siteId: string, input: ReviewInput, paths: string[],
+    metadata: Record<string, unknown>, warnings: RouteWarning[], published: PublishedStamp,
+  ) {
+    const details = new Map<string, RouteMeta>(paths.map(path => [path, { working: metadata[path] ?? null, warnings: [] }]));
+    for (const warning of warnings) details.get(warning.path)?.warnings.push(warning);
+    // Budget UTF-16 data and per-entry overhead in addition to the report count.
+    let weight = 0;
+    for (const [path, detail] of details) {
+      weight += 256 + (path.length + JSON.stringify(detail).length) * 2;
+      if (weight > SEO_REVIEW_MAX_WEIGHT) return undefined;
+    }
+    const now = Date.now();
+    for (const [id, review] of this.reviews) {
+      if (review.expiresAt <= now || this.reviews.size >= SEO_REVIEW_MAX_REPORTS || this.reviewWeight + weight > SEO_REVIEW_MAX_WEIGHT) {
+        this.removeReview(id, review);
+      }
+    }
+    const reviewId = randomUUID();
+    this.reviews.set(reviewId, { siteId, workingRevision: input.workingRevision, kind: input.kind, paths, details,
+      published, expiresAt: now + SEO_REVIEW_TTL_MS, weight });
+    this.reviewWeight += weight;
+    return reviewId;
+  }
+
+  async review(siteId: string, input: ReviewInput) {
     if (!Object.values(SeoTemplateKind).includes(input.kind as SeoTemplateKind)) throw new BadRequestException('Неизвестный тип SEO-шаблона');
     if (input.path !== undefined && (typeof input.path !== 'string' || !input.path.startsWith('/') || input.path.length > 2048)) {
       throw new BadRequestException('Укажите канонический путь URL');
@@ -71,6 +136,9 @@ export class SeoTemplateService {
     if (input.publishedPublicationId !== undefined &&
       (typeof input.publishedPublicationId !== 'string' || !/^[a-zA-Z0-9_-]{0,200}$/.test(input.publishedPublicationId))) {
       throw new BadRequestException('Укажите идентификатор опубликованного снимка');
+    }
+    if (input.reviewId !== undefined && (input.startReview || typeof input.reviewId !== 'string' || !REVIEW_ID.test(input.reviewId))) {
+      throw new BadRequestException('Укажите идентификатор проверки маршрутов');
     }
     const currentSite = () => this.prisma.site.findUnique({
       where: { id: siteId }, select: { id: true, slug: true, workingRevision: true },
@@ -80,51 +148,90 @@ export class SeoTemplateService {
     const stale = () => new ConflictException('Рабочая ревизия изменилась; обновите SEO-шаблоны');
     if (site.workingRevision !== input.workingRevision) throw stale();
 
+    let report: SeoReview | undefined;
+    if (input.reviewId !== undefined) {
+      report = this.reviews.get(input.reviewId);
+      if (report && report.expiresAt <= Date.now()) {
+        this.removeReview(input.reviewId, report);
+        report = undefined;
+      }
+      if (!report || report.siteId !== siteId || report.kind !== input.kind || report.workingRevision !== site.workingRevision) {
+        throw new ConflictException('Проверка маршрутов устарела или недоступна. Нажмите «Проверить маршруты» ещё раз.');
+      }
+    }
+
+    const readPublished = (path: string | null) => readPublishedSeoDetail(this.prisma, site.slug, path).catch(error => {
+      if (error instanceof NotFoundException) return null;
+      throw error;
+    });
+    const publishedBefore = input.startReview
+      ? await readPublished(null).then(value => ({ value }), error => ({ error }))
+      : null;
+
     let working: Awaited<ReturnType<PublicationWorkflowService['getWorkingPreview']>> | null = null;
     let workingError: string | null = null;
-    try {
-      working = await this.publications.getWorkingPreview(siteId, 'SEO');
-    } catch (error) {
-      if ((await currentSite())?.workingRevision !== input.workingRevision) throw stale();
-      workingError = error instanceof Error ? error.message : 'Рабочий просмотр недоступен';
-    }
-    if (working && working.workingRevision !== input.workingRevision) throw stale();
-
-    const routes = ((working?.catalog.routes ?? []) as Array<{ id: string; path: string }>)
-      .filter(route => route.id === input.kind);
-    const offset = (input.page - 1) * ADMIN_ROUTE_PAGE_SIZE;
-    const page = routes.slice(offset, offset + ADMIN_ROUTE_PAGE_SIZE).map(route => route.path);
-    const requested = input.path ? routes.find(route => route.path === input.path) : undefined;
-    if (input.path && !requested && !workingError) throw new NotFoundException('URL не относится к текущему типу SEO-шаблона');
-    const path = requested?.path ?? page[0] ?? null;
-    const warnings = ((working?.catalog.seoWarnings ?? []) as Array<{ path: string }>).filter(warning => warning.path === path);
-    let published: Awaited<ReturnType<PublicationWorkflowService['getPublishedSnapshot']>> | null = null;
-    if (path) {
+    if (!report) {
       try {
-        published = await this.publications.getPublishedSnapshot(site.slug);
+        working = await this.publications.getWorkingPreview(siteId, 'SEO');
+      } catch (error) {
+        if ((await currentSite())?.workingRevision !== input.workingRevision) throw stale();
+        workingError = error instanceof Error ? error.message : 'Рабочий просмотр недоступен';
+      }
+      if (working && working.workingRevision !== input.workingRevision) throw stale();
+    }
+
+    const paths = report?.paths ?? ((working?.catalog.routes ?? []) as Array<{ id: string; path: string }>)
+      .filter(route => route.id === input.kind).map(route => route.path);
+    const offset = (input.page - 1) * ADMIN_ROUTE_PAGE_SIZE;
+    const page = paths.slice(offset, offset + ADMIN_ROUTE_PAGE_SIZE);
+    if (input.path && !(report ? report.details.has(input.path) : paths.includes(input.path)) && !workingError) {
+      throw new NotFoundException('URL не относится к текущему типу SEO-шаблона');
+    }
+    const requested = !workingError ? input.path : undefined;
+    const path = requested ?? page[0] ?? null;
+    const workingWarnings = (working?.catalog.seoWarnings ?? []) as RouteWarning[];
+    const atPath = (metadata: unknown) => path && metadata && typeof metadata === 'object'
+      ? (metadata as Record<string, unknown>)[path] ?? null : null;
+    let published: { id: string; metadata: unknown; catalogGeneration?: number } | null = null;
+    if (report || path) {
+      try {
+        if (input.startReview || report) published = await readPublished(path);
+        else {
+          const snapshot = await this.publications.getPublishedSnapshot(site.slug);
+          published = { id: snapshot.id, metadata: atPath(snapshot.catalog.seoByPath) };
+        }
       } catch (error) {
         if (!(error instanceof NotFoundException)) throw error;
       }
     }
-    if (path && input.publishedPublicationId !== undefined && (published?.id ?? '') !== input.publishedPublicationId) {
+    if (path && publishedBefore && 'error' in publishedBefore) throw publishedBefore.error;
+    const stamp = published && published.catalogGeneration !== undefined
+      ? { id: published.id, catalogGeneration: published.catalogGeneration } : null;
+    if ((report && !samePublishedStamp(report.published, stamp))
+      || (publishedBefore && 'value' in publishedBefore && path && !samePublishedStamp(publishedBefore.value ?? null, stamp))
+      || (path && input.publishedPublicationId !== undefined && (published?.id ?? '') !== input.publishedPublicationId)) {
       throw new ConflictException('Опубликованный снимок изменился; проверьте маршруты заново');
     }
-    const atPath = (metadata: unknown) => path && metadata && typeof metadata === 'object'
-      ? (metadata as Record<string, unknown>)[path] ?? null : null;
+    if ((input.startReview || report) && (await currentSite())?.workingRevision !== input.workingRevision) throw stale();
+    const workingMetadata = (working?.catalog.seoByPath ?? {}) as Record<string, unknown>;
+    const reviewId = input.reviewId ?? (input.startReview && path && !workingError
+      ? this.rememberReview(siteId, input, paths, workingMetadata, workingWarnings, stamp) : undefined);
+    const cachedDetail = path ? report?.details.get(path) : undefined;
     return {
       workingRevision: input.workingRevision,
       workingError,
       page: input.page,
       pageSize: ADMIN_ROUTE_PAGE_SIZE,
-      total: routes.length,
+      total: paths.length,
       routes: page,
       detail: path ? {
         path,
-        working: atPath(working?.catalog.seoByPath),
-        published: atPath(published?.catalog.seoByPath),
+        working: cachedDetail?.working ?? atPath(workingMetadata),
+        published: published?.metadata ?? null,
         publishedPublicationId: published?.id ?? null,
-        warnings,
+        warnings: cachedDetail?.warnings ?? workingWarnings.filter(warning => warning.path === path),
       } : null,
+      ...(reviewId ? { reviewId } : {}),
     };
   }
 

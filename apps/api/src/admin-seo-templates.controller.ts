@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Header, Param, Patch, Query, Req, UseGuards } from '@nestjs/common';
 import { readAdminRoutePage, readAdminWorkingRevision } from './admin-route-pagination';
 import { AdminTokenGuard } from './admin-token.guard';
 import { SeoTemplateService, type UpdateSeoTemplateInput } from './seo-template.service';
@@ -19,6 +19,7 @@ export class AdminSeoTemplatesController {
   }
 
   @Get('review')
+  @Header('Cache-Control', 'private, no-store')
   review(
     @Param('siteId') siteId: string,
     @Query('workingRevision') workingRevision: string,
@@ -26,8 +27,11 @@ export class AdminSeoTemplatesController {
     @Query('page') page?: string,
     @Query('path') path?: string,
     @Query('publishedPublicationId') publishedPublicationId?: string,
+    @Query('startReview') startReview?: string,
+    @Query('reviewId') reviewId?: string,
   ) {
-    return this.seo.review(siteId, { workingRevision: readAdminWorkingRevision(workingRevision), kind, page: readAdminRoutePage(page), path, publishedPublicationId });
+    return this.seo.review(siteId, { workingRevision: readAdminWorkingRevision(workingRevision), kind, page: readAdminRoutePage(page),
+      path, publishedPublicationId, startReview: startReview === 'true', reviewId });
   }
 
   @Patch(':kind')

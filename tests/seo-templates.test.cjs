@@ -337,3 +337,140 @@ test('explicit SEO review scopes page and URL, preserves old missing metadata an
   await assert.rejects(service.review('s', input), error => error.getStatus() === 409);
   assert.equal(reads, 6, 'stale inputs must fail before rendering the catalogue');
 });
+
+
+function seoContinuationFixture(t) {
+  const { SeoTemplateService } = require('../apps/api/dist/seo-template.service.js');
+  const provider = process.env.REBUILD_PROVIDER;
+  delete process.env.REBUILD_PROVIDER;
+  t.after(() => { if (provider !== undefined) process.env.REBUILD_PROVIDER = provider; });
+  const routes = [{ id: 'HOME', path: '/' }, ...Array.from({ length: 207 }, (_, index) => ({
+    id: 'CITY_HOME', path: `/city-${index + 1}`,
+  }))];
+  const working = { title: 'Одинаковый заголовок', indexState: 'NOINDEX', ogImage: '/images/home-connection-equipment.webp' };
+  const published = { title: 'Обслуживаемый заголовок', indexState: 'INDEX' };
+  const warning = { path: '/city-102', code: 'DUPLICATE_TITLE', relatedPath: '/city-2' };
+  const state = {
+    workingRevision: 8, generation: 1, publishedId: 'pub-8', renders: 0, fullPublishedReads: 0,
+    catalog: { routes, seoByPath: { '/city-102': working }, seoWarnings: [warning] },
+    publishedCatalog: { seoByPath: { '/city-102': published } }, queries: [],
+  };
+  const store = {
+    site: { findUnique: async ({ where }) => ({ id: where.id, slug: where.id, workingRevision: state.workingRevision }) },
+    $queryRaw: async query => {
+      assert.match(query.text, /s\.slug = .*p\.status = 'SUCCEEDED'/);
+      assert.equal(query.values.at(-1), 'site');
+      assert.doesNotMatch(query.text, /SELECT p\.catalog/);
+      const path = query.values.length > 1 ? query.values[0] : null;
+      state.queries.push(path ?? null);
+      state.onPublishedDetail?.(path);
+      return state.publishedId ? [{ id: state.publishedId, catalogGeneration: state.generation,
+        metadata: state.publishedCatalog.seoByPath?.[path] ?? null }] : [];
+    },
+  };
+  const publications = {
+    getWorkingPreview: async (_siteId, projection) => {
+      assert.equal(projection, 'SEO');
+      state.renders++;
+      state.onRender?.();
+      if (state.failure) throw new Error(state.failure);
+      return { workingRevision: state.workingRevision, catalog: state.catalog };
+    },
+    getPublishedSnapshot: async () => {
+      state.fullPublishedReads++;
+      return { id: state.publishedId, catalog: state.publishedCatalog };
+    },
+  };
+  return { service: new SeoTemplateService(store, publications), state, store, publications, working, published, warning };
+}
+
+test('explicit SEO review computes once and returns identical pages/details from one revision', async t => {
+  const { service, state, working, published, warning } = seoContinuationFixture(t);
+  const firstQuery = { kind: 'CITY_HOME', workingRevision: 8, page: 1 };
+  const detailQuery = { ...firstQuery, page: 3, path: '/city-102' };
+  const legacyFirst = await service.review('site', firstQuery);
+  const legacyDetail = await service.review('site', detailQuery);
+  const renders = state.renders;
+  const { reviewId, ...first } = await service.review('site', { ...firstQuery, startReview: true });
+  assert.match(reviewId, /^[a-f0-9-]{36}$/);
+  assert.deepEqual(first, legacyFirst);
+  const detail = await service.review('site', { ...detailQuery, reviewId, publishedPublicationId: 'pub-8' });
+  assert.deepEqual(detail, { ...legacyDetail, reviewId });
+  assert.deepEqual(detail.detail, { path: '/city-102', working, published, publishedPublicationId: 'pub-8', warnings: [warning] });
+  assert.equal(detail.routes.length, 50);
+  const lastPage = await service.review('site', { ...firstQuery, page: 5, reviewId });
+  assert.equal(lastPage.total, 207);
+  assert.deepEqual(lastPage.routes, Array.from({ length: 7 }, (_, index) => `/city-${201 + index}`));
+  assert.equal(state.renders - renders, 1);
+  assert.equal(state.fullPublishedReads, 2, 'Only the comparison with the old client reads full snapshots');
+  assert.deepEqual(state.queries, [null, '/city-1', '/city-102', '/city-201']);
+});
+
+test('SEO continuation rejects stale identity, generation, category, instance and expired review', async t => {
+  const { service, state, store, publications } = seoContinuationFixture(t);
+  const { SeoTemplateService } = require('../apps/api/dist/seo-template.service.js');
+  const query = { kind: 'CITY_HOME', workingRevision: 8, page: 1 };
+  const start = () => service.review('site', { ...query, startReview: true });
+  const expired = error => error.getStatus() === 409 && /устарела или недоступна/.test(error.message);
+  const publicationChanged = error => error.getStatus() === 409 && /Опубликованный снимок изменился/.test(error.message);
+  const { reviewId } = await start();
+  await assert.rejects(service.review('other-site', { ...query, reviewId }), expired);
+  await assert.rejects(service.review('site', { ...query, kind: 'HOME', reviewId }), expired);
+  await assert.rejects(new SeoTemplateService(store, publications).review('site', { ...query, reviewId }), expired);
+  await assert.rejects(service.review('site', { ...query, reviewId, path: '/' }), error => error.getStatus() === 404);
+  await assert.rejects(service.review('site', { ...query, reviewId: 'invalid' }), error => error.getStatus() === 400);
+  state.generation++;
+  await assert.rejects(service.review('site', { ...query, reviewId, page: 6 }), publicationChanged);
+  const next = (await start()).reviewId;
+  state.publishedId = 'pub-9';
+  await assert.rejects(service.review('site', { ...query, reviewId: next }), publicationChanged);
+  state.workingRevision++;
+  await assert.rejects(service.review('site', { ...query, reviewId }), error => error.getStatus() === 409 && /Рабочая ревизия/.test(error.message));
+  state.workingRevision--;
+  const oldest = (await start()).reviewId;
+  for (let n = 0; n < 4; n++) await start();
+  await assert.rejects(service.review('site', { ...query, reviewId: oldest }), expired);
+  t.mock.timers.enable({ apis: ['Date'], now: Date.now() });
+  const timed = (await start()).reviewId;
+  t.mock.timers.tick(5 * 60_000);
+  await assert.rejects(service.review('site', { ...query, reviewId: timed }), expired);
+});
+
+test('SEO cannot start a report across a serving switch or continue across a working change', async t => {
+  const { service, state } = seoContinuationFixture(t);
+  const query = { kind: 'CITY_HOME', workingRevision: 8, page: 1 };
+  state.onRender = () => state.generation++;
+  await assert.rejects(service.review('site', { ...query, startReview: true }), error =>
+    error.getStatus() === 409 && /Опубликованный снимок изменился/.test(error.message));
+  state.onRender = null;
+  const { reviewId } = await service.review('site', { ...query, startReview: true });
+  state.onPublishedDetail = () => state.workingRevision++;
+  await assert.rejects(service.review('site', { ...query, reviewId }), error =>
+    error.getStatus() === 409 && /Рабочая ревизия/.test(error.message));
+});
+
+test('SEO explicit report preserves historical absence and global working errors', async t => {
+  const { service, state } = seoContinuationFixture(t);
+  const query = { kind: 'CITY_HOME', workingRevision: 8, page: 1 };
+  state.publishedCatalog = {};
+  const initial = await service.review('site', { ...query, startReview: true });
+  assert.equal(initial.detail.published, null);
+  assert.equal(initial.detail.publishedPublicationId, 'pub-8');
+  const detail = await service.review('site', { ...query, reviewId: initial.reviewId, path: '/city-102' });
+  assert.equal(detail.detail.published, null);
+  state.failure = 'Ошибка блоков другого города';
+  const blocked = await service.review('site', { ...query, startReview: true, path: '/city-102' });
+  assert.equal(blocked.workingError, state.failure);
+  assert.equal(blocked.detail, null);
+  assert.equal(blocked.reviewId, undefined);
+});
+
+test('SEO can still serve the compatibility page if the report exceeds the retained weight budget', async t => {
+  const { service, state } = seoContinuationFixture(t);
+  state.catalog.seoByPath['/city-207'] = { title: 'x'.repeat(8 * 1024 * 1024) };
+  const result = await service.review('site', { kind: 'CITY_HOME', workingRevision: 8, page: 1, startReview: true });
+  assert.equal(result.total, 207);
+  assert.equal(result.routes.length, 50);
+  assert.equal(result.reviewId, undefined);
+  assert.equal(state.renders, 1);
+});

@@ -22,6 +22,8 @@ test('SEO templates have a protected admin route and cookie-auth React editor', 
   assert.match(editor, /detail\.working/);
   assert.match(editor, /detail\.published/);
   assert.match(editor, /publishedPublicationId/);
+  assert.match(editor, /if \(restart\) query.set\("startReview", "true"\)/);
+  assert.match(editor, /else if \(review\?\.reviewId\) query.set\("reviewId", review.reviewId\)/);
   assert.match(editor, /review\.total/);
   assert.match(editor, /affectedCount !== null/);
   assert.match(editor, /confirmNoindexCount/);
