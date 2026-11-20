@@ -65,3 +65,23 @@ test('bulk site values use the canonical formatter and readiness, preserve empty
   assert.equal(Reflect.getMetadata('path', AdminSitesController.prototype.listValues), 'values');
   assert.ok(Reflect.getMetadata('__guards__', AdminSitesController).length);
 });
+
+test('published variable settings extract the latest confirmed JSONB context once', async () => {
+  const { publishedVariableContext } = require('../apps/api/dist/published-variable-context');
+  const queries = [];
+  const projected = { publicationId: 'latest', variableUsageVersion: 2, publishedUsageAvailable: true, cities: [] };
+  const prisma = { async $queryRaw(query) { queries.push(query); return [{ catalog: projected }]; } };
+
+  assert.equal(await publishedVariableContext(prisma, 'fixture', 'city', false), projected);
+  await publishedVariableContext(prisma, 'fixture', undefined, true);
+
+  for (const { text } of queries) {
+    assert.match(text, /p\.status = 'SUCCEEDED'/);
+    assert.match(text, /ORDER BY p\."releaseSequence" DESC LIMIT 1/);
+    assert.match(text, /LEFT JOIN LATERAL JSON_TABLE\(p\.catalog, 'strict \$ \? \(@\.type\(\) == "object"\)'/);
+    assert.doesNotMatch(text, /p\.catalog\s*->/);
+  }
+  assert.deepEqual(queries.map((query) => query.values), [['city', 'fixture'], [null, 'fixture']]);
+  assert.match(queries[0].text, /'publishedUsageAvailable', COALESCE\(jsonb_typeof/);
+  assert.match(queries[1].text, /'variableUsages', fields\."variableUsages"/);
+});

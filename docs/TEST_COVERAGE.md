@@ -270,7 +270,7 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 | --- | --- |
 | `tests/rate-limit-request-target.test.cjs` | Реальный установленный Fastify/@fastify/rate-limit и raw TCP POST: origin/absolute targets делят строгие лимиты, excess 429 не достигает handler, buckets изолированы; dot/percent raw path сохраняется. |
 | `tests/admin-navigation-performance.test.mjs` | Совпадающие одновременные GET объединяются, завершённые/после mutation/401 остаются свежими; Обычные ссылки и React Aria menu используют один dirty guard. Проверяются Back/Forward, отмена и подтверждение, позиции прокрутки, отдельные документы, прямой HTML каждого рабочего маршрута с тем же заголовком и резервный переход при смене версии. Preview сохраняет отдельную границу CSP. |
-| `tests/variable-context-performance.test.cjs` | Serializable typed context без рендера Page/SEO graph, published city/ACTIVE tariff filters, Decimal и нулевая цена; summary без graph сохраняет legacy GET, guarded bulk values соответствует одиночному formatter. |
+| `tests/variable-context-performance.test.cjs` | Serializable typed context без рендера Page/SEO graph, published city/ACTIVE tariff filters, Decimal и нулевая цена. Summary без graph сохраняет legacy GET, guarded bulk values соответствует одиночному formatter. Опубликованные значения используют одну JSONB-проекцию последнего `SUCCEEDED` по `releaseSequence` для компактного и полного ответа. |
 
 ## CITY_HOME / #193
 
@@ -291,12 +291,12 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 
 | Файл | Что проверяет |
 | --- | --- |
-| `tests/admin-navigation-cache.test.mjs` | Быстрый повторный read с обязательной revalidation; исключение editorial/PII DTO; сброс на начало/конец write и publishedRevision; logout/401/смена пользователя, поздние ответы, явная ошибка проверки в фоне, независимые display copies, TTL 30 секунд и предел 32 ответов. |
+| `tests/admin-navigation-cache.test.mjs` | Быстрый повторный read с обязательной revalidation; исключение editorial/PII DTO; сброс на начало/конец write и publishedRevision; logout/401/смена пользователя, поздние ответы, явная ошибка проверки в фоне, независимые display copies, TTL 30 секунд и предел 32 ответов. Начало свежего GET настроек до ответа auth/site, блокировка показа до серверного подтверждения, подбор актуального сайта, явное обновление, прерывание по 401, logout и смене пользователя. |
 | `tests/admin-read-projections.test.cjs` | Настоящий PostgreSQL 18 в отдельном временном контейнере через `scripts/rehearse-admin-read-projections.mjs`: эквивалентность пяти variable contexts, latest SUCCEEDED вместо PENDING, HOME/CITY_HOME из immutable source, legacy unavailable evidence и hero fallback, site/status и параметризованная граница, отсутствие других городских тарифов и полного snapshot в результате. |
 | `tests/first-screen-editor.test.cjs` | Published reader дополнительно проверяет новую SQL-проекцию immutable pageTemplates; optimistic write и миграционный rehearsal сохраняются. |
 | `tests/variable-catalog.test.cjs` | Полный DTO сохраняет usage evidence и ошибки контекста. Компактные значения не запускают рабочий scan. Отдельный usage проверяет тот же сайт, ревизию и ID последнего `SUCCEEDED` по `releaseSequence`, сохраняет счётчики, дубликаты, ссылки, пагинацию и nullable evidence. |
 | `tests/admin-publication-indicator.test.mjs` | Publication events остаются только для успешных CMS-мутаций; отдельная navigation invalidation происходит после каждой завершённой мутации, включая ошибку/неопределённый исход. |
-| `tests/admin-redirects-ui.test.mjs`, `tests/admin-seo-templates-ui.test.mjs` | Cookie-auth экраны используют общий requestSession; API/editor/unsaved guard контракты сохраняются. |
+| `tests/admin-redirects-ui.test.mjs`, `tests/admin-seo-templates-ui.test.mjs` | Cookie-auth экраны используют общий HTTP-клиент. SEO получает настройки через readSiteSettings. Сверяются контракты API, редактора и защиты черновика. |
 | `tests/block-passports.test.cjs` | Read-only guarded registry подключён через useNavigationQuery; состав паспортов и запрет записи в реестре сохраняются. |
 | `tests/tariff-template-ui.test.mjs` | Общий requestSession используется для cookie-auth; read-only quote не вызывает publication-change или сброс каталога. |
 

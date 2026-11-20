@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { CircleAlert, Save } from "lucide-react"
-import { AdminApiError, requestJson, requestSession } from "../lib/admin-api.mjs"
+import { AdminApiError, readSiteSettings, requestJson } from "../lib/admin-api.mjs"
 import { insertVariableAtSelection } from "../lib/variable-insertion.mjs"
 import { AdminShell } from "./AdminShell"
 import { useUnsavedChanges } from "./useUnsavedChanges"
@@ -54,6 +54,7 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
   const [reviewError, setReviewError] = useState<string | null>(null)
   const [reviewing, setReviewing] = useState(false)
   const reviewRequest = useRef<AbortController | null>(null)
+  const settingsRequest = useRef(0)
   const [titleTemplate, setTitleTemplate] = useState("")
   const [descriptionTemplate, setDescriptionTemplate] = useState("")
   const [ogTitleTemplate, setOgTitleTemplate] = useState("")
@@ -76,17 +77,21 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
     setReview(null); setReviewError(null); setReviewing(false); setPath("")
   }
 
-  const load = useCallback(async (selectedKind?: Kind) => {
+  const load = useCallback(async (selectedKind?: Kind, fresh = true) => {
+    const request = ++settingsRequest.current
     invalidateReview()
     setLoading(true); setError(null)
     try {
-      const [session, sites] = await Promise.all([
-        requestSession<{ user: Administrator }>(apiUrl),
-        requestJson<Site[]>(apiUrl, "/admin/sites?summary=true"),
-      ])
-      if (sites.length !== 1) throw new Error("Редактор SEO ожидает единственный сайт Дом.ру")
-      const data = await requestJson<Workspace>(apiUrl, `/admin/sites/${sites[0].id}/seo-templates/settings`)
-      setUser(session.user); setSite(sites[0]); setWorkspace(data)
+      const { user, current } = await readSiteSettings(
+        apiUrl,
+        (sites: Site[]) => sites.length === 1 ? sites[0] : null,
+        (siteId) => requestJson<Workspace>(apiUrl, `/admin/sites/${encodeURIComponent(siteId)}/seo-templates/settings`),
+        { fresh },
+      )
+      if (request !== settingsRequest.current) return
+      if (!current) throw new Error("Редактор SEO ожидает единственный сайт Дом.ру")
+      const { site, data } = current
+      setUser(user); setSite(site); setWorkspace(data)
       const nextKind = selectedKind || kind
       const template = data.templates.find((item) => item.kind === nextKind)
       if (!template) throw new Error(`Не найден обязательный SEO-шаблон ${nextKind}`)
@@ -94,17 +99,18 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
       setOgTitleTemplate(template.ogTitleTemplate || ""); setOgDescriptionTemplate(template.ogDescriptionTemplate || ""); setOgImageUrl(template.ogImageUrl || "")
       setConfirmed(false)
     } catch (caught) {
+      if (request !== settingsRequest.current) return
       if (caught instanceof AdminApiError && caught.status === 401) { window.location.replace("/login"); return }
       setError(caught instanceof Error ? caught.message : "Данные SEO недоступны")
-    } finally { setLoading(false) }
+    } finally { if (request === settingsRequest.current) setLoading(false) }
   }, [apiUrl, kind])
 
   useEffect(() => {
     const requestedKind = new URLSearchParams(window.location.search).get("kind")
     const nextKind = requestedKind && Object.prototype.hasOwnProperty.call(labels, requestedKind) ? requestedKind as Kind : "HOME"
     setKind(nextKind)
-    void load(nextKind)
-    return () => reviewRequest.current?.abort()
+    void load(nextKind, false)
+    return () => { settingsRequest.current++; reviewRequest.current?.abort() }
   }, [])
 
   const template = workspace?.templates.find((item) => item.kind === kind)

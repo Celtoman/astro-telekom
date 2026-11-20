@@ -9,6 +9,7 @@ export class AdminApiError extends Error {
 
 const pendingReads = new Map()
 let readGeneration = 0
+let sessionGeneration = 0
 let activeWrites = 0
 const navigationReads = new Map()
 const verifiedSessions = new Map()
@@ -28,7 +29,7 @@ function sessionKey(baseUrl) { return baseUrl.replace(/\/$/, '') }
 function signal(name) { if (typeof window !== 'undefined') window.dispatchEvent(new Event(name)) }
 export function clearNavigationData(clearSession = false) {
   readGeneration++; pendingReads.clear(); navigationReads.clear()
-  if (clearSession) { verifiedSessions.clear(); publishedRevisions.clear() }
+  if (clearSession) { sessionGeneration++; verifiedSessions.clear(); publishedRevisions.clear() }
 }
 
 /** @template T @param {string} baseUrl @param {string} route @returns {T | null} */
@@ -73,6 +74,46 @@ export function requestSession(baseUrl) {
     },
   })
 }
+
+/**
+ * A verified navigation entry can start the protected GET early. The caller
+ * receives its result only after the server confirms the current session and site.
+ * @template {{id: string}} Site
+ * @template Data
+ * @param {string} baseUrl
+ * @param {(sites: Site[]) => Site | null} selectSite
+ * @param {(siteId: string) => Promise<Data>} readSettings
+ * @param {{fresh?: boolean}} [options]
+ * @returns {Promise<{user: {id: string, email: string}, sites: Site[], current: {site: Site, data: Data} | null}>}
+ */
+export async function readSiteSettings(baseUrl, selectSite, readSettings, { fresh = false } = {}) {
+  const generation = sessionGeneration
+  const sitesRoute = '/admin/sites?summary=true'
+  const cachedSession = peekNavigationJson(baseUrl, '/auth/me')
+  const cachedSites = fresh ? null : /** @type {Site[] | null} */ (peekNavigationJson(baseUrl, sitesRoute))
+  const hint = cachedSites ? selectSite(cachedSites) : null
+  const auth = /** @type {Promise<{user: {id: string, email: string}}> } */ (requestJson(baseUrl, '/auth/me')).catch(error => {
+    if (cachedSession && error.status !== 401 && generation === sessionGeneration) {
+      clearNavigationData(true)
+      signal('admin:session-verification-failed')
+    }
+    throw error
+  })
+  const sitesRead = /** @type {Promise<Site[]>} */ (requestJson(baseUrl, sitesRoute))
+  // Record a speculative failure without blocking a fresher, different site.
+  const earlySettings = hint ? readSettings(hint.id).then(data => ({ data }), error => ({ error })) : null
+
+  const [{ user }, sites] = await Promise.all([auth, sitesRead])
+  if (generation !== sessionGeneration) throw new Error('Сессия изменилась. Обновите страницу.')
+  const site = selectSite(sites)
+  if (!site) return { user, sites, current: null }
+
+  const result = earlySettings && hint?.id === site.id ? await earlySettings : { data: await readSettings(site.id) }
+  if (generation !== sessionGeneration) throw new Error('Сессия изменилась. Обновите страницу.')
+  if ('error' in result) throw result.error
+  return { user, sites, current: { site, data: result.data } }
+}
+
 
 function rememberRead(baseUrl, route, payload, generation) {
   if (typeof window === 'undefined' || generation !== readGeneration || activeWrites) return

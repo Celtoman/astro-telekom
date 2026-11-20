@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { CheckCircle2, CircleAlert, FileSearch, RefreshCw, Save } from "lucide-react"
-import { AdminApiError, requestJson, requestSession } from "../lib/admin-api.mjs"
+import { AdminApiError, readSiteSettings, requestJson } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
 import { useUnsavedChanges } from "./useUnsavedChanges"
 import { PublicationStatusCard } from "./PublicationStatusCard"
@@ -42,6 +42,7 @@ export function SitemapApp({ apiUrl }: { apiUrl: string }) {
   const [inventoryStale, setInventoryStale] = useState(false)
   const [showXml, setShowXml] = useState(false)
   const inventoryRequest = useRef<AbortController | null>(null)
+  const settingsRequest = useRef(0)
   const [draft, setDraft] = useState<Draft>({})
   const [group, setGroup] = useState<Group>("PAGES")
   const [search, setSearch] = useState("")
@@ -51,28 +52,32 @@ export function SitemapApp({ apiUrl }: { apiUrl: string }) {
   const [error, setError] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
 
-  const loadWorkspace = useCallback(async (selectedSiteId?: string) => {
+  const loadWorkspace = useCallback(async (selectedSiteId = siteId, fresh = true) => {
+    const request = ++settingsRequest.current
     inventoryRequest.current?.abort()
     inventoryRequest.current = null
     setInventory(null); setDraft({}); setPage(1); setChecking(false); setInventoryStale(false); setShowXml(false)
     setLoading(true); setError(null)
     try {
-      const [session, availableSites] = await Promise.all([
-        requestSession<{ user: Administrator }>(apiUrl),
-        requestJson<Site[]>(apiUrl, "/admin/sites?summary=true"),
-      ])
-      const nextSiteId = selectedSiteId || siteId || availableSites[0]?.id || ""
-      const data = nextSiteId ? await requestJson<Workspace>(apiUrl, `/admin/sites/${nextSiteId}/sitemap/settings`) : null
-      setUser(session.user); setSites(availableSites); setSiteId(nextSiteId); setWorkspace(data)
+      const { user, sites, current } = await readSiteSettings(
+        apiUrl,
+        (availableSites: Site[]) => selectedSiteId ? availableSites.find((site) => site.id === selectedSiteId) ?? null : availableSites[0] ?? null,
+        (id) => requestJson<Workspace>(apiUrl, `/admin/sites/${encodeURIComponent(id)}/sitemap/settings`),
+        { fresh },
+      )
+      if (request !== settingsRequest.current) return
+      if (selectedSiteId && !current) throw new Error("Выбранный сайт недоступен.")
+      setUser(user); setSites(sites); setSiteId(current?.site.id ?? ""); setWorkspace(current?.data ?? null)
     } catch (caught) {
+      if (request !== settingsRequest.current) return
       if (caught instanceof AdminApiError && caught.status === 401) { window.location.replace("/login"); return }
       setError(caught instanceof Error ? caught.message : "API недоступен")
-    } finally { setLoading(false) }
+    } finally { if (request === settingsRequest.current) setLoading(false) }
   }, [apiUrl, siteId])
 
   useEffect(() => {
-    void loadWorkspace()
-    return () => inventoryRequest.current?.abort()
+    void loadWorkspace(undefined, false)
+    return () => { settingsRequest.current++; inventoryRequest.current?.abort() }
   }, [])
   useEffect(() => { setPage(1) }, [group, search])
 
