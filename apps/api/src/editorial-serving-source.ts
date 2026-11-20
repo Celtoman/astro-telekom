@@ -5,6 +5,7 @@ import { readStoredProjection, servingPublication, servingPublicationProof } fro
 import type { CatalogSource } from './site-catalog.service';
 import { emptyEditorial, type EditorialKind, type EditorialSource } from './editorial-publication-model';
 import { editorialPreviewShell } from './editorial-preview-model';
+import { editorialPublicUrl } from './editorial-live-url';
 import type { NewsRouteSource } from './news-projection';
 
 type EditorialClient = PrismaService | Prisma.TransactionClient;
@@ -125,6 +126,32 @@ async function readEditorialView<T>(client: EditorialClient, site: EditorialSite
   const identity = options.compactLegacy ? await resolveEditorialWorkingPreviewPublication(client, site)
     : { ...await resolveEditorialPublication(client, site), verifiedCatalogDigest: null };
   return { ...identity, data: await readProjection<T>(client, site, identity.validationId, columns, options.missing) };
+}
+
+export async function editorialServingSettings(client: EditorialClient, site: EditorialSite,
+  kind: Extract<EditorialKind, 'NEWS_SETTINGS' | 'NOT_FOUND'>) {
+  const field = kind === 'NEWS_SETTINGS' ? 'settings' : 'notFound';
+  type SettingsSource = {
+    domain: CatalogSource['site']['domain'];
+    editorial?: Pick<EditorialSource, 'newsEnabled' | 'settings' | 'notFound'> | null;
+    requiresFullSource?: boolean;
+  };
+  const loadExactSource = async (validationId: string): Promise<SettingsSource> => {
+    const source = await fullEditorialSnapshot(client, site, validationId);
+    return { domain: source.site.domain, editorial: source.editorial };
+  };
+  const { data, validationId } = await readEditorialView<SettingsSource>(client, site, Prisma.sql`
+    source.site -> 'domain' AS domain,
+    CASE WHEN jsonb_typeof(source.editorial) = 'object' THEN jsonb_build_object(
+      'newsEnabled', source.editorial -> 'newsEnabled', ${field}::text, source.editorial -> ${field}::text
+    ) END AS editorial,
+    COALESCE(jsonb_typeof(source.editorial), 'null') NOT IN ('object', 'null') AS "requiresFullSource"
+  `, { compactLegacy: true, missing: loadExactSource });
+  const { domain, editorial } = data.requiresFullSource ? await loadExactSource(validationId) : data;
+  if (kind === 'NOT_FOUND') return { published: editorial?.notFound ?? null, publicUrl: null };
+  return editorial && editorial.newsEnabled !== false
+    ? { published: editorial.settings ?? null, publicUrl: editorialPublicUrl(domain, '/news') }
+    : { published: null, publicUrl: null };
 }
 
 export async function editorialServingPreview(

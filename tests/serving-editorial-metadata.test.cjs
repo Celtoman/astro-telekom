@@ -4,6 +4,7 @@ const { createHash } = require('node:crypto');
 const {
   editorialServingArticles, editorialServingPreview, editorialServingRouteInventory, editorialServingWorkingPreviewBase,
 } = require('../apps/api/dist/editorial-serving-source.js');
+const { EditorialPublicationService } = require('../apps/api/dist/editorial-publication.service.js');
 
 const site = { id: 'site-1', slug: 'domru-site' };
 const digest = catalog => createHash('sha256').update(JSON.stringify(catalog)).digest('hex');
@@ -208,4 +209,132 @@ test('general working preview uses the verified serving digest and pins incomple
   assert.equal(legacy.publication.id, historical.id);
   assert.equal(legacyReads, 1);
   assert.equal(activeReads, readsBeforeLegacy);
+});
+
+test('settings workspace preserves source values, availability and URL from the exact serving validation', async t => {
+  const env = { REBUILD_PROVIDER: 'static', ADMIN_API_TOKEN: 'fixture-token', PUBLIC_SITE_URL: '',
+    STATIC_PUBLICATION_URL: 'http://fixture:8081', SERVING_CATALOG_PROJECTIONS_ENABLED: 'true' };
+  const oldEnv = Object.fromEntries(Object.keys(env).map(key => [key, process.env[key]]));
+  Object.assign(process.env, env);
+  t.after(() => {
+    for (const [key, value] of Object.entries(oldEnv)) {
+      if (value === undefined) delete process.env[key]; else process.env[key] = value;
+    }
+  });
+
+  const catalog = { site: { ...site, domain: 'catalog.example' }, editorial: { settings: { heading: 'Unused catalog settings' } } };
+  const publication = { id: 'active', siteId: site.id, siteRevision: 7, releaseSequence: 9, status: 'RUNNING',
+    validationId: 'source-active', catalogGeneration: 1, catalog };
+  const historical = { ...publication, id: 'history', status: 'SUCCEEDED', siteRevision: 6, releaseSequence: 8,
+    validationId: 'source-history' };
+  const fullSource = (editorial, extra) => ({
+    site: { ...site, domain: 'source.example' }, cities: [], globalPages: [], editorial, ...extra,
+  });
+  const snapshots = new Map([
+    [publication.validationId, fullSource({ settings: { heading: 'Working news', revision: 4 },
+      notFound: { heading: 'Published 404', revision: 2 } })],
+    [historical.validationId, fullSource({ articles: 'malformed', settings: { heading: 'Historical news', revision: 1 } })],
+  ]);
+  let active = publication, activeDigest = digest(catalog), complete = true, everPublished = true;
+  let activeReads = 0, fullCatalogReads = 0;
+  const sourceReads = [], compactReads = [];
+  t.mock.method(global, 'fetch', async () => {
+    activeReads++;
+    const { siteId, siteRevision, releaseSequence, id } = active;
+    return Response.json({ publicationId: id, siteId, siteSlug: site.slug, siteRevision, releaseSequence, catalogDigest: activeDigest });
+  });
+  function data(validationId, field) {
+    compactReads.push(validationId);
+    const source = snapshots.get(validationId);
+    if (!source?.site || source.site.id !== site.id || !Array.isArray(source.cities) || !Array.isArray(source.globalPages)
+      || (source.editorial?.articles != null && !Array.isArray(source.editorial.articles))) return null;
+    const editorial = source.editorial;
+    return { domain: source.site.domain,
+      editorial: editorial && typeof editorial === 'object' && !Array.isArray(editorial)
+        ? { newsEnabled: editorial.newsEnabled, [field]: editorial[field] ?? null } : null,
+      requiresFullSource: editorial != null && (typeof editorial !== 'object' || Array.isArray(editorial)),
+    };
+  }
+  const prisma = {
+    async $queryRaw(query) {
+      const field = query.values.find(value => ['settings', 'notFound'].includes(value));
+      assert.ok(field);
+      if (!query.text.includes('"SitePublicationProjection"')) {
+        const validationId = query.values.find(value => snapshots.has(value));
+        assert.equal(validationId, active.validationId);
+        const selection = data(validationId, field);
+        return selection ? [selection] : [];
+      }
+      assert.match(query.text, /validation\.id = p\."validationId"/);
+      assert.match(query.text, /p\."catalogGeneration" = projection\."catalogGeneration"/);
+      assert.equal(query.values.at(-1), active.id);
+      const { catalog, ...metadata } = active;
+      return [{ ...metadata, catalogSiteSlug: site.slug, digest: digest(catalog), complete,
+        data: complete ? data(active.validationId, field) : null }];
+    },
+    sitePublication: {
+      async findUnique({ where }) { fullCatalogReads++; assert.equal(where.id, active.id); return active; },
+      async findFirst({ select }) {
+        assert.equal(select.catalog, undefined);
+        assert.equal(process.env.REBUILD_PROVIDER, 'webhook');
+        return historical;
+      },
+    },
+    sitePublicationValidation: {
+      async findUnique({ where }) {
+        sourceReads.push(where.id);
+        return { sourceSnapshot: snapshots.get(where.id) };
+      },
+    },
+  };
+  const contents = { NEWS_SETTINGS: { heading: 'Working news' }, NOT_FOUND: { heading: 'Working 404' } };
+  const service = new EditorialPublicationService(prisma, {
+    async read(_site, kind) { return { id: kind, content: contents[kind], revision: 5, updatedAt: null, missingFields: [] }; },
+    async row() { return { everPublished }; },
+    async requireSite() { return site; },
+  });
+  const workspace = kind => service.workspace(site.id, kind, 'settings');
+  const expected = (kind, state, published, revision, publicUrl, publishedAvailable = true) => ({
+    id: kind, content: contents[kind], revision: 5, updatedAt: null, missingFields: [], published,
+    publishedAvailable, publishedRevision: revision, state, publicUrl, pendingRemoval: false, categoryNames: {},
+  });
+
+  assert.deepEqual(await workspace('NEWS_SETTINGS'),
+    expected('NEWS_SETTINGS', 'PUBLISHED', contents.NEWS_SETTINGS, 4, 'https://source.example/news'));
+  assert.deepEqual(await workspace('NOT_FOUND'),
+    expected('NOT_FOUND', 'CHANGED', { heading: 'Published 404' }, 2, null));
+  assert.equal(fullCatalogReads, 0);
+  assert.deepEqual(sourceReads, []);
+
+  activeDigest = '0'.repeat(64);
+  assert.deepEqual(await workspace('NEWS_SETTINGS'), expected('NEWS_SETTINGS', 'UNKNOWN', null, null, null, false));
+  assert.equal(fullCatalogReads, 0);
+  assert.deepEqual(sourceReads, []);
+  activeDigest = digest(catalog);
+
+  active = historical;
+  complete = false;
+  const beforeFallback = activeReads;
+  assert.deepEqual(await workspace('NEWS_SETTINGS'),
+    expected('NEWS_SETTINGS', 'CHANGED', { heading: 'Historical news' }, 1, 'https://source.example/news'));
+  assert.equal(activeReads - beforeFallback, 1);
+  assert.equal(fullCatalogReads, 1);
+  assert.deepEqual(sourceReads, [historical.validationId]);
+  assert.equal(compactReads.at(-1), historical.validationId);
+
+  complete = true;
+  snapshots.set(historical.validationId, fullSource({ newsEnabled: false, settings: { heading: 'Disabled' } }));
+  assert.deepEqual(await workspace('NEWS_SETTINGS'), expected('NEWS_SETTINGS', 'WITHDRAWN', null, null, null));
+  everPublished = false;
+  snapshots.set(historical.validationId, fullSource({ settings: null }));
+  process.env.PUBLIC_SITE_URL = 'https://configured.example';
+  assert.deepEqual(await workspace('NEWS_SETTINGS'), expected('NEWS_SETTINGS', 'DRAFT', null, null, 'https://configured.example/news'));
+  assert.deepEqual(await workspace('NOT_FOUND'), expected('NOT_FOUND', 'DRAFT', null, null, null));
+
+  process.env.REBUILD_PROVIDER = 'webhook';
+  const beforeLegacy = activeReads;
+  snapshots.set(historical.validationId, fullSource('legacy malformed editorial'));
+  assert.deepEqual(await workspace('NEWS_SETTINGS'), expected('NEWS_SETTINGS', 'DRAFT', null, null, 'https://configured.example/news'));
+  assert.deepEqual(sourceReads, [historical.validationId, historical.validationId]);
+  assert.equal(activeReads, beforeLegacy);
 });

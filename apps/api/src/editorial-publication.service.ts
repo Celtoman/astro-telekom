@@ -8,7 +8,7 @@ import { EditorialStoreService, editorialMissing } from './editorial-store.servi
 import { SiteCatalogService } from './site-catalog.service';
 import { EditorialMediaRegistryService } from './editorial-media-registry.service';
 import { RebuildQueueService } from './rebuild-queue.service';
-import { editorialServingArticles, editorialServingArticleOptions, editorialServingCategories, editorialServingPreview, editorialServingSource } from './editorial-serving-source';
+import { editorialServingArticles, editorialServingArticleOptions, editorialServingCategories, editorialServingPreview, editorialServingSettings, editorialServingSource } from './editorial-serving-source';
 import { applyEditorialChangeToCandidate, type EditorialChange, type EditorialKind } from './editorial-publication-model';
 import { editorialDigest } from './editorial-revisions';
 import { newsRoutes, relatedNewsOptions } from './news-projection';
@@ -194,9 +194,13 @@ export class EditorialPublicationService {
     const site=await this.store.requireSite(siteId);
     let publishedAvailable=true,published:Record<string,any>|null=null,publicUrl:string|null=null;
     try{
-      const baseline=(await editorialServingSource(this.prisma,site)).source,source=baseline.editorial;
-      publicUrl=editorialLiveUrl(baseline,kind,id);
-      published=kind==='ARTICLE'?source?.articles.find(a=>a.id===id)??null:kind==='CATEGORY'?source?.categories.find(c=>c.id===id)??null:kind==='NEWS_SETTINGS'?source&&source.newsEnabled!==false?source.settings:null:source?.notFound??null;
+      if(kind==='NEWS_SETTINGS'||kind==='NOT_FOUND'){
+        ({published,publicUrl}=await editorialServingSettings(this.prisma,site,kind));
+      }else{
+        const baseline=(await editorialServingSource(this.prisma,site)).source,source=baseline.editorial;
+        publicUrl=editorialLiveUrl(baseline,kind,id);
+        published=kind==='ARTICLE'?source?.articles.find(a=>a.id===id)??null:source?.categories.find(c=>c.id===id)??null;
+      }
     }catch{publishedAvailable=false}
     const content=published?Object.fromEntries(Object.keys(working.content as object).map(key=>[key,published![key]])):null;
     const state=!publishedAvailable?'UNKNOWN':published?editorialDigest(content)===editorialDigest(working.content)?'PUBLISHED':'CHANGED':row?.everPublished?'WITHDRAWN':'DRAFT';
