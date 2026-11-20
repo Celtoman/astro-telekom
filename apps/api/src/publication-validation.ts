@@ -16,6 +16,7 @@ import { materializeCityHomeSource } from './page-template';
 import type { CatalogSource } from './site-catalog.service';
 import { sitePhoneReadinessErrors } from './site-phone';
 import { resolveSeoTemplates, SeoRouteCache } from './seo-templates';
+import { VariableTextTemplates } from './variable-registry';
 import { tariffPreviewDiagnostics } from './tariff-preview-diagnostics';
 import { firstScreenFromTemplate, validateFirstScreen } from './first-screen';
 import { contentErrorLocation } from './content-validation-error';
@@ -92,13 +93,18 @@ function routeSources(source: CatalogSource): RouteSource[] {
   return routes;
 }
 
+export interface PublicationResolutionContext {
+  seo: SeoRouteCache;
+  variableTemplates: VariableTextTemplates;
+}
+
 export function validatePublicationSource(
   rawSource: CatalogSource,
   input: { appVersion: string; requestedById?: string | null; siteRevision: number; now?: Date },
-  renderSource: (source: CatalogSource, now: Date, seoCache: SeoRouteCache) => unknown,
+  renderSource: (source: CatalogSource, now: Date, resolution: PublicationResolutionContext) => unknown,
 ): { report: PublicationValidationReport; catalog: unknown | null } {
   const now = input.now || new Date();
-  const seoCache = new SeoRouteCache();
+  const resolution = { seo: new SeoRouteCache(), variableTemplates: new VariableTextTemplates() };
   const issues: PublicationValidationIssue[] = [];
   const issueKeys = new Set<string>();
   const add = (severity: PublicationValidationIssue['severity'], code: string, path: string, detail: string, relatedPath?: string,
@@ -279,7 +285,7 @@ export function validatePublicationSource(
         site: { ...publicDisplay, connectionPhone: site.connectionPhone, supportPhone: site.supportPhone, corporatePhone: readCorporatePhone(site.settings) },
         provider: { name: provider.name },
         now,
-      });
+      }, resolution.variableTemplates);
       if(route.id==='CITY_SUPPORT'&&resolved.cities[0]?.pages[0])validateSupportPage(resolved.cities[0].pages[0].content);
       if (route.id === 'SPEED_TEST' && resolved.globalPages[0]) validateSpeedTestPage(resolved.globalPages[0].content);
       if (route.id === 'OFFICIAL_SITE' && resolved.globalPages[0]) validateOfficialSitePage(resolved.globalPages[0].content);
@@ -301,7 +307,7 @@ export function validatePublicationSource(
         site: { connectionPhone: site.connectionPhone, supportPhone: site.supportPhone },
         provider: { name: provider.name },
         now,
-      }, seoCache);
+      }, resolution.seo);
       for (const warning of seo.warnings) add('WARNING', `SEO_${warning.code}`, route.path, `SEO ${warning.code}${warning.length ? `: ${warning.length}` : ''}`);
     } catch (error) {
       add('BLOCKING', 'SEO_RESOLUTION', route.path, message(error));
@@ -323,7 +329,7 @@ export function validatePublicationSource(
   let catalog: unknown | null = null;
   if (!issues.some((issue) => issue.severity === 'BLOCKING')) {
     try {
-      catalog = renderSource(rawSource, now, seoCache);
+      catalog = renderSource(rawSource, now, resolution);
       const rendered = catalog as { routes?: PublicRoute[]; variableWarnings?: Array<{ code: string; path: string; reason: string }>; seoWarnings?: Array<{ code: string; path: string; relatedPath?: string; length?: number }> };
       if (!Array.isArray(rendered.routes) || rendered.routes.length !== routes.length) {
         add('BLOCKING', 'CATALOG_ROUTE_COUNT', '/', 'Состав собранных маршрутов отличается от проверенного inventory');

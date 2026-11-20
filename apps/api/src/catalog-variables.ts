@@ -6,7 +6,7 @@ import { SUPPORT_PAGE_SCHEMA } from './support-page-model';
 import { OFFICIAL_SITE_PAGE_SCHEMA } from './official-site-page-model';
 import { BadRequestException } from '@nestjs/common';
 import { ACCOUNT_PAGE_SCHEMA } from './account-page-model';
-import { resolveVariableText, type VariableContext, type VariableWarning } from './variable-registry';
+import { resolveVariableText, type VariableContext, type VariableTextResolution, type VariableTextTemplates, type VariableWarning } from './variable-registry';
 import { HOME_HERO_VERSION, parseRedTitle } from './home-hero-model';
 import { validateFirstScreen } from './first-screen';
 import { GENERAL_HOME_SCHEMAS, CITY_HOME_SCHEMAS, type GeneralHomeBlockType, type GeneralHomeFieldRule } from './general-home-model';
@@ -35,17 +35,23 @@ function object(value: unknown): JsonObject {
   return value && typeof value === 'object' && !Array.isArray(value) ? value as JsonObject : {};
 }
 
-export function resolveCatalogVariables<T extends JsonObject>(catalog: T, sources: VariableContext): T & { variableWarnings: VariableWarning[]; variableUsages: VariableUsage[]; variableSources: { providerName: string | null; resolvedAt: string } } {
+export function resolveCatalogVariables<T extends JsonObject>(catalog: T, sources: VariableContext, templates?: VariableTextTemplates): T & { variableWarnings: VariableWarning[]; variableUsages: VariableUsage[]; variableSources: { providerName: string | null; resolvedAt: string } } {
   const warnings: VariableWarning[] = [];
   const usages: VariableUsage[] = [];
+  const resolveText = (input: string, context: VariableContext, path: string) =>
+    templates ? templates.resolve(input, context, path) : resolveVariableText(input, context, { path, field: 'TEXT' });
   const resolveField = (value: unknown, path: string, context: VariableContext, owner: UsageOwner): unknown => {
     if (typeof value !== 'string') return value;
     const segments = path === 'homeHero.title' && catalog.homeHeroVersion === HOME_HERO_VERSION ? parseRedTitle(value) : null;
-    const parts = segments?.map(segment => ({ ...segment, resolved: resolveVariableText(segment.text, context, { path, field: 'TEXT' }) }));
-    const result = parts ? { text: parts.map(part => part.red ? `<red>${part.resolved.text}</red>` : part.resolved.text).join(''), warnings: parts.flatMap(part => part.resolved.warnings) } : resolveVariableText(value, context, { path, field: 'TEXT' });
+    const parts = segments?.map(segment => ({ ...segment, resolved: resolveText(segment.text, context, path) }));
+    const result: VariableTextResolution = parts
+      ? { text: parts.map(part => part.red ? `<red>${part.resolved.text}</red>` : part.resolved.text).join(''), warnings: parts.flatMap(part => part.resolved.warnings) }
+      : resolveText(value, context, path);
     warnings.push(...result.warnings);
-    for (const match of value.matchAll(/\{([A-Z][A-Z0-9_]*)\}/g)) {
-      usages.push({ code: match[1], path, template: value, ...owner });
+    if (result.codes) {
+      for (const code of result.codes) usages.push({ code, path, template: value, ...owner });
+    } else {
+      for (const match of value.matchAll(/\{([A-Z][A-Z0-9_]*)\}/g)) usages.push({ code: match[1], path, template: value, ...owner });
     }
     return result.text;
   };

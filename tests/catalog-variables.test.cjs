@@ -75,3 +75,56 @@ test('catalog snapshot value is fixed after source changes', () => {
   assert.equal(first.globalPages[0].content.text, 'Звоните +7 (800) 555-72-44');
   assert.equal(second.globalPages[0].content.text, 'Звоните +7 (800) 555-35-35');
 });
+
+test('shared text templates use the current source values, paths and usage owners', () => {
+  const resolve = resolver();
+  const { VariableTextTemplates } = require('../apps/api/dist/variable-registry.js');
+  const templates = new VariableTextTemplates();
+  const input = catalog();
+  const text = '{CITY_NAME}: {TARIFF_NAME}, {TARIFF_CHANNELS} и {TARIFF_CHANNELS}. {CONNECTION_PHONE}';
+  input.globalPages[0].content.text = text;
+  input.cities[0].tariffs[0].promoText = text;
+  const first = resolve(input, sources(), templates);
+  assert.deepEqual(first, resolve(input, sources()));
+  assert.match(first.cities[0].tariffs[0].promoText, /Казань: Гига, 150 и 150/);
+  assert.equal(first.variableWarnings.filter(item => item.code === 'TARIFF_CHANNELS' && item.reason === 'OUT_OF_CONTEXT').length, 2);
+
+  const next = structuredClone(input);
+  next.cities.unshift({ id: 'another-city', name: 'Уфа', pages: [], tariffs: [] });
+  next.cities[1].name = 'Самара';
+  delete next.cities[1].tariffs[0].attributes.tv_channels_total;
+  const nextSources = sources();
+  nextSources.site.connectionPhone = '78005553535';
+  const second = resolve(next, nextSources, templates);
+  assert.deepEqual(second, resolve(next, nextSources));
+  assert.match(second.cities[1].tariffs[0].promoText, /Самара: Гига.*555-35-35/);
+  assert.deepEqual(second.variableWarnings.filter(item => item.reason === 'EMPTY'), [
+    { code: 'TARIFF_CHANNELS', path: 'cities[1].tariffs[0].promoText', reason: 'EMPTY' },
+    { code: 'TARIFF_CHANNELS', path: 'cities[1].tariffs[0].promoText', reason: 'EMPTY' },
+  ]);
+});
+
+test('shared text templates keep error precedence and the failing field path', () => {
+  const resolve = resolver();
+  const { VariableTextTemplates } = require('../apps/api/dist/variable-registry.js');
+  const templates = new VariableTextTemplates();
+  const input = catalog();
+  const tariff = input.cities[0].tariffs[0];
+  const path = 'cities[0].tariffs[0].promoText';
+  const expectedError = (text, message) => {
+    tariff.promoText = text;
+    assert.throws(() => resolve(input, sources()), { message: `${message}: ${path}` });
+    assert.throws(() => resolve(input, sources(), templates), { message: `${message}: ${path}` });
+  };
+
+  expectedError('{UNKNOWN} {', 'Неверный формат скобок переменной');
+  expectedError('<b>{UNKNOWN}</b>', 'HTML-разметка запрещена при подстановке');
+  expectedError('https://example.test/{UNKNOWN}', 'Подстановка в ссылки запрещена');
+  expectedError('{UNKNOWN}', 'Неизвестный код переменной {UNKNOWN}');
+  tariff.promoText = 'Скорость {TARIFF_SPEED}';
+  resolve(input, sources(), templates);
+  tariff.speed = -1;
+  assert.throws(() => resolve(input, sources(), templates), {
+    message: `Недопустимое значение переменной {TARIFF_SPEED} в ${path}`,
+  });
+});

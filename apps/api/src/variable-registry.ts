@@ -94,6 +94,12 @@ export interface VariableWarning {
   reason: 'EMPTY' | 'OUT_OF_CONTEXT';
 }
 
+export interface VariableTextResolution {
+  text: string;
+  warnings: VariableWarning[];
+  codes?: readonly VariableCode[];
+}
+
 export function listVariableDefinitions(): VariableDefinition[] {
   return DEFINITIONS.map((definition) => ({ ...definition, allowedContexts: [...definition.allowedContexts], allowedFields: [...new Set([
     ...definition.allowedFields, ...(definition.scope === 'SITE' ? [...HOME_VARIABLE_FIELDS, ...SPEED_TEST_VARIABLE_FIELDS] : []), ...(['SITE', 'CITY'].includes(definition.scope) ? SUPPORT_VARIABLE_FIELDS : []),
@@ -170,41 +176,108 @@ function formatValue(value: unknown, definition: VariableDefinition, path: strin
   return value;
 }
 
+const VARIABLE_TOKEN = /\{([^{}]*)\}/g;
+const VARIABLE_BRACE = /[{}]/;
+const COMPILED_TEXT_LIMIT = 256;
+const NO_CODES: readonly VariableCode[] = [];
+
+function variableTextSyntaxIssue(input: string, hasTokens: boolean, field: 'TEXT' | 'URL') {
+  if (hasTokens && /[<>]/.test(input)) return 'HTML-разметка запрещена при подстановке';
+  if (field === 'URL') return 'Переменные запрещены в URL';
+  if (hasTokens && /(?:https?:\/\/|www\.|\/\/)\S*\{[A-Z_]+\}/i.test(input)) return 'Подстановка в ссылки запрещена';
+  return null;
+}
+
+function variableDefinition(code: string) {
+  const definition = BY_CODE.get(code);
+  return definition && /^[A-Z][A-Z0-9_]*$/.test(code) ? definition : undefined;
+}
+
+function resolveToken(
+  definition: VariableDefinition,
+  context: VariableContext,
+  path: string,
+  warnings: VariableWarning[],
+) {
+  if ((definition.scope === 'CITY' && !context.city) || (definition.scope === 'TARIFF' && !context.tariff)) {
+    warnings.push({ code: definition.code, path, reason: 'OUT_OF_CONTEXT' });
+    return '';
+  }
+  const value = sourceValue(definition.code, context);
+  if (value === null || value === undefined || (typeof value === 'string' && !value.trim())) {
+    warnings.push({ code: definition.code, path, reason: 'EMPTY' });
+    return '';
+  }
+  return formatValue(value, definition, path);
+}
+
 export function resolveVariableText(
   input: string,
   context: VariableContext,
   location: { path: string; field: 'TEXT' | 'URL' },
-): { text: string; warnings: VariableWarning[] } {
+): VariableTextResolution {
   if (!input.includes('{') && !input.includes('}')) return { text: input, warnings: [] };
 
-  const matches = [...input.matchAll(/\{([^{}]*)\}/g)];
-  if (matches.length && /[<>]/.test(input)) {
-    throw new BadRequestException(`HTML-разметка запрещена при подстановке: ${location.path}`);
+  const matches = [...input.matchAll(VARIABLE_TOKEN)];
+  const syntaxIssue = variableTextSyntaxIssue(input, matches.length > 0, location.field);
+  if (syntaxIssue) throw new BadRequestException(`${syntaxIssue}: ${location.path}`);
+  if (VARIABLE_BRACE.test(input.replace(VARIABLE_TOKEN, ''))) {
+    throw new BadRequestException(`Неверный формат скобок переменной: ${location.path}`);
   }
-  if (location.field === 'URL' && /[{}]/.test(input)) {
-    throw new BadRequestException(`Переменные запрещены в URL: ${location.path}`);
-  }
-  if (matches.length && /(?:https?:\/\/|www\.|\/\/)\S*\{[A-Z_]+\}/i.test(input)) {
-    throw new BadRequestException(`Подстановка в ссылки запрещена: ${location.path}`);
-  }
-  const remainder = input.replace(/\{[^{}]*\}/g, '');
-  if (/[{}]/.test(remainder)) throw new BadRequestException(`Неверный формат скобок переменной: ${location.path}`);
   const warnings: VariableWarning[] = [];
-  const text = input.replace(/\{([^{}]*)\}/g, (_token, rawCode: string) => {
-    const definition = BY_CODE.get(rawCode);
-    if (!definition || !/^[A-Z][A-Z0-9_]*$/.test(rawCode)) {
+  const text = input.replace(VARIABLE_TOKEN, (_token, rawCode: string) => {
+    const definition = variableDefinition(rawCode);
+    if (!definition) {
       throw new BadRequestException(`Неизвестный код переменной {${rawCode}}: ${location.path}`);
     }
-    if ((definition.scope === 'CITY' && !context.city) || (definition.scope === 'TARIFF' && !context.tariff)) {
-      warnings.push({ code: definition.code, path: location.path, reason: 'OUT_OF_CONTEXT' });
-      return '';
-    }
-    const value = sourceValue(definition.code, context);
-    if (value === null || value === undefined || (typeof value === 'string' && !value.trim())) {
-      warnings.push({ code: definition.code, path: location.path, reason: 'EMPTY' });
-      return '';
-    }
-    return formatValue(value, definition, location.path);
+    return resolveToken(definition, context, location.path, warnings);
   });
   return { text, warnings };
+}
+
+interface CompiledVariableText {
+  parts: Array<string | VariableDefinition>;
+  codes: VariableCode[];
+}
+
+function compileVariableText(input: string): CompiledVariableText | null {
+  if (variableTextSyntaxIssue(input, true, 'TEXT')) return null;
+  const parts: CompiledVariableText['parts'] = [];
+  const codes: VariableCode[] = [];
+  let end = 0;
+  for (const match of input.matchAll(VARIABLE_TOKEN)) {
+    const literal = input.slice(end, match.index);
+    const definition = variableDefinition(match[1]);
+    if (!definition || VARIABLE_BRACE.test(literal)) return null;
+    parts.push(literal, definition);
+    codes.push(definition.code);
+    end = match.index + match[0].length;
+  }
+  const tail = input.slice(end);
+  if (VARIABLE_BRACE.test(tail)) return null;
+  parts.push(tail);
+  return { parts, codes };
+}
+
+/** Reuse syntax within one publication check. Values and diagnostic paths belong to each use. */
+export class VariableTextTemplates {
+  private readonly compiled = new Map<string, CompiledVariableText>();
+
+  resolve(input: string, context: VariableContext, path: string): VariableTextResolution {
+    if (!input.includes('{') && !input.includes('}')) return { text: input, warnings: [], codes: NO_CODES };
+
+    let template = this.compiled.get(input);
+    if (!template) {
+      const parsed = compileVariableText(input);
+      if (!parsed) return resolveVariableText(input, context, { path, field: 'TEXT' });
+      if (this.compiled.size < COMPILED_TEXT_LIMIT) this.compiled.set(input, parsed);
+      template = parsed;
+    }
+    const warnings: VariableWarning[] = [];
+    let text = '';
+    for (const part of template.parts) {
+      text += typeof part === 'string' ? part : resolveToken(part, context, path, warnings);
+    }
+    return { text, warnings, codes: template.codes };
+  }
 }

@@ -17,7 +17,8 @@ import { validateAddressPageComposition } from './address-page';
 import { normalizeRedirectPath } from './redirect-path';
 import { materializeCityHomeSource } from './page-template';
 import { formatSitePhone } from './site-phone';
-import { resolveSeoTemplates, type SeoRouteCache } from './seo-templates';
+import { resolveSeoTemplates } from './seo-templates';
+import type { PublicationResolutionContext } from './publication-validation';
 import { collectSeoTemplateUsages } from './seo-template-usages';
 import { firstScreenFromTemplate, validateFirstScreen } from './first-screen';
 import { generalHomeFromTemplate } from './general-home-template';
@@ -128,7 +129,7 @@ export class SiteCatalogService {
     return { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates, pageTemplates, ...(Object.keys(supportMedia).length?{supportMedia}:{}), ...(editorial?{editorial}:{}),...(publicationBaseId?{publicationBaseId}:{}) };
   }
 
-  renderSource(source: CatalogSource, now = new Date(), seoCache?: SeoRouteCache) {
+  renderSource(source: CatalogSource, now = new Date(), resolution?: PublicationResolutionContext) {
     const { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates } = materializeCityHomeSource(source);
     const homeTemplate = source.pageTemplates?.find(template => template.kind === 'HOME');
     const homeScreen = homeTemplate ? firstScreenFromTemplate(homeTemplate) : undefined;
@@ -167,7 +168,7 @@ export class SiteCatalogService {
       site: { ...publicDisplay, connectionPhone: site.connectionPhone, supportPhone: site.supportPhone, corporatePhone: readCorporatePhone(site.settings) },
       provider: { name: site.provider.name },
       now,
-    });
+    }, resolution?.variableTemplates);
     for (const page of resolved.globalPages) { if (page.type === 'ACCOUNT') validateAccountPage(page.content); if (page.type === 'SPEED_TEST') validateSpeedTestPage(page.content); if (page.type === 'OFFICIAL_SITE') validateOfficialSitePage(page.content); }
     for (const city of resolved.cities) for (const page of city.pages) if (page.type === 'CITY_SUPPORT') { validateSupportPage(page.content); assertSupportMedia(page.content,source.supportMedia); }
     const seo = resolveSeoTemplates({
@@ -177,7 +178,7 @@ export class SiteCatalogService {
       site: { connectionPhone: site.connectionPhone, supportPhone: site.supportPhone },
       provider: { name: site.provider.name },
       now,
-    }, seoCache);
+    }, resolution?.seo);
     const noindexPaths = Object.entries(seo.byPath).filter(([, meta]) => meta.indexState === 'NOINDEX').map(([path]) => path);
     return {
       ...resolved,

@@ -129,9 +129,9 @@ test('catalog rendering reuses SEO substitutions from validation and keeps cross
   };
   try {
     const service = new SiteCatalogService({});
-    const actual = validatePublicationSource(source, input, (value, now, seoCache) => {
+    const actual = validatePublicationSource(source, input, (value, now, resolution) => {
       rendering = true;
-      try { return service.renderSource(value, now, seoCache); }
+      try { return service.renderSource(value, now, resolution); }
       finally { rendering = false; }
     });
     assert.deepEqual(actual, expected);
@@ -148,11 +148,11 @@ test('catalog rendering reuses SEO substitutions from validation and keeps cross
 test('a changed SEO input during rendering is resolved again at the same path', () => {
   const source = publicationSource([city('kazan', ['giga'])]);
   const service = new SiteCatalogService({});
-  const actual = validatePublicationSource(source, input, (value, now, seoCache) => {
+  const actual = validatePublicationSource(source, input, (value, now, resolution) => {
     const updated = structuredClone(value);
     updated.cities[0].name = 'Казань';
     updated.seoTemplates.find((template) => template.kind === 'CITY_TARIFF_DETAIL').titleTemplate = '{CITY_NAME} · {TARIFF_NAME}';
-    return service.renderSource(updated, now, seoCache);
+    return service.renderSource(updated, now, resolution);
   });
   assert.equal(actual.catalog.seoByPath['/kazan/giga'].title, 'Казань · giga');
   assert.equal(actual.catalog.seoByPath['/kazan'].title, 'Заголовок CITY_HOME Казань');
@@ -173,7 +173,7 @@ test('validation retains separate SEO errors and validates even templates withou
   const unused = publicationSource([city('kazan', ['giga'])]);
   unused.seoTemplates.push({ kind: 'ACCOUNT', indexState: 'INVALID', titleTemplate: 'Аккаунт', descriptionTemplate: 'Описание' });
   const service = new SiteCatalogService({});
-  const unrenderable = validatePublicationSource(unused, input, (value, now, seoCache) => service.renderSource(value, now, seoCache));
+  const unrenderable = validatePublicationSource(unused, input, (value, now, resolution) => service.renderSource(value, now, resolution));
   assert.equal(unrenderable.report.outcome, 'BLOCKED');
   assert.deepEqual(unrenderable.report.issues.find((issue) => issue.code === 'CATALOG_RENDER'), {
     severity: 'BLOCKING', code: 'CATALOG_RENDER', path: '/', message: 'Неизвестное состояние индексации: ACCOUNT',
