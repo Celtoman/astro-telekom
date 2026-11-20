@@ -1,3 +1,5 @@
+import { describePublicationState } from "./publication-display.mjs"
+
 export function publicationScope(section) {
   return ['news', 'news-categories', 'pages-news', 'pages-not-found'].includes(section) ? 'editorial' : 'legacy'
 }
@@ -7,7 +9,5 @@ export function resolvePublicationSite(sites) {
 }
 
 export function publicationRefreshDelay(state) {
-  if (!state) return null
-  if (["PENDING", "RUNNING"].includes(state.latestPublication?.status)) return 3000
-  return null
+  return state && describePublicationState(state).kind === "publishing" ? 3000 : null
 }

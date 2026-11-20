@@ -4,10 +4,11 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { CheckCircle2, CircleAlert, FileCheck2, History, RefreshCw } from "lucide-react"
 import { AdminApiError, requestJson, requestSession } from "../lib/admin-api.mjs"
 import { publicationChangeLabel, type PublicationReview } from "../lib/publication-review.mjs"
-import { describePublicationState, type PublicationState } from "../lib/publication-display.mjs"
+import { describePublicationState } from "../lib/publication-display.mjs"
 import { statusPresentation } from "../lib/status-presentation.mjs"
 import { AdminShell } from "./AdminShell"
 import { PublicationStatusCard } from "./PublicationStatusCard"
+import { usePublicationState } from "./usePublicationState"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { Button } from "./ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
@@ -20,12 +21,12 @@ export function PublicationApp({ apiUrl }: { apiUrl: string }) {
   const [user, setUser] = useState<Administrator | null>(null)
   const [site, setSite] = useState<Site | null>(null)
   const [review, setReview] = useState<PublicationReview | null>(null)
-  const [state, setState] = useState<PublicationState | null>(null)
+  const snapshot = usePublicationState(apiUrl, site?.id)
+  const state = snapshot.status === "ready" ? snapshot.publication : null
   const [loadingSite, setLoadingSite] = useState(true)
   const [siteError, setSiteError] = useState<string | null>(null)
   const [checking, setChecking] = useState(false)
   const [reviewError, setReviewError] = useState<string | null>(null)
-  const [refreshKey, setRefreshKey] = useState(0)
   const [visibleIssues, setVisibleIssues] = useState(20)
   const siteRequest = useRef(0)
   const reviewRequest = useRef(0)
@@ -52,11 +53,6 @@ export function PublicationApp({ apiUrl }: { apiUrl: string }) {
     } finally { if (request === siteRequest.current) setLoadingSite(false) }
   }, [apiUrl])
 
-  const refreshState = useCallback(() => {
-    setState(null)
-    setRefreshKey((value) => value + 1)
-  }, [])
-
   async function checkPublication() {
     if (!site || checking) return
     const request = ++reviewRequest.current
@@ -68,7 +64,6 @@ export function PublicationApp({ apiUrl }: { apiUrl: string }) {
       if (request !== reviewRequest.current) return
       setReview(result)
       setVisibleIssues(20)
-      refreshState()
       window.dispatchEvent(new Event("admin:publication-refresh"))
     } catch (caught) {
       if (request !== reviewRequest.current) return
@@ -84,17 +79,10 @@ export function PublicationApp({ apiUrl }: { apiUrl: string }) {
 
   useEffect(() => {
     if (!site) return
-    const focus = () => {
-      void loadSite()
-      refreshState()
-    }
-    window.addEventListener("admin:publication-changed", refreshState)
+    const focus = () => { void loadSite() }
     window.addEventListener("focus", focus)
-    return () => {
-      window.removeEventListener("admin:publication-changed", refreshState)
-      window.removeEventListener("focus", focus)
-    }
-  }, [site, loadSite, refreshState])
+    return () => window.removeEventListener("focus", focus)
+  }, [site, loadSite])
 
   const siteUnavailable = siteError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Публикация недоступна</AlertTitle><AlertDescription>{siteError}</AlertDescription><Button className="min-h-11" onClick={() => void loadSite()}>Повторить</Button></Alert> : null
   if (!user) return <div className="mx-auto flex min-h-screen max-w-5xl flex-col gap-6 p-6" aria-busy={loadingSite}>
@@ -149,7 +137,7 @@ export function PublicationApp({ apiUrl }: { apiUrl: string }) {
           </CardContent></Card>
         </div>
         <aside id="publication-launch" tabIndex={-1} className="min-w-0 scroll-mt-4 space-y-4" aria-label="Запуск и результат публикации">
-          {site ? <PublicationStatusCard apiUrl={apiUrl} siteId={site.id} publicationRefreshKey={refreshKey} review={currentReview} reviewUnavailable={checking || Boolean(reviewError)} onStateChange={setState} /> : null}
+          {site ? <PublicationStatusCard apiUrl={apiUrl} siteId={site.id} review={currentReview} reviewUnavailable={checking || Boolean(reviewError)} /> : null}
           {currentReview ? <p className="text-xs text-muted-foreground">Проверена версия {currentReview.workingRevision} · {new Date(currentReview.validation.validatedAt).toLocaleString("ru-RU")}.</p> : null}
         </aside>
       </div>

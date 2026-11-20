@@ -8,6 +8,7 @@ import { statusOptions } from "../lib/status-presentation.mjs"
 import { AdminShell } from "./AdminShell"
 import { FilterResetButton } from "./FilterResetButton"
 import { PublicationStatusCard } from "./PublicationStatusCard"
+import { refreshPublicationState } from "../lib/publication-state.mjs"
 import { ServerPagination } from "./ServerPagination"
 import { StatusBadge } from "./StatusBadge"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
@@ -160,9 +161,9 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
 
   return <AdminShell apiUrl={apiUrl} user={state.user} active="cities">
     <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-6 p-6 lg:p-8">
-      <div className="flex flex-wrap items-start justify-between gap-4"><div><h1 className="font-heading text-2xl font-semibold">Города</h1><p className="mt-1 text-sm text-muted-foreground">Эксплуатационный каталог городов Дом.ру.</p></div><div className="flex gap-2"><Button disabled={metadataBusy || listBusy} onClick={openCreate}><Plus data-icon="inline-start" />Добавить город</Button><Button variant="outline" asChild><a href="/cities/import"><FileUp data-icon="inline-start" />Импорт</a></Button><Button variant="outline" disabled={metadataBusy || listBusy} onClick={() => { void loadWorkspace(); setListRevision((value) => value + 1) }}><RefreshCw data-icon="inline-start" />Обновить</Button></div></div>
+      <div className="flex flex-wrap items-start justify-between gap-4"><div><h1 className="font-heading text-2xl font-semibold">Города</h1><p className="mt-1 text-sm text-muted-foreground">Эксплуатационный каталог городов Дом.ру.</p></div><div className="flex gap-2"><Button disabled={metadataBusy || listBusy} onClick={openCreate}><Plus data-icon="inline-start" />Добавить город</Button><Button variant="outline" asChild><a href="/cities/import"><FileUp data-icon="inline-start" />Импорт</a></Button><Button variant="outline" disabled={metadataBusy || listBusy} onClick={() => { void loadWorkspace(); setListRevision((value) => value + 1); void refreshPublicationState(apiUrl, state.site.id) }}><RefreshCw data-icon="inline-start" />Обновить</Button></div></div>
       {message ? <Alert variant={message.kind === "error" ? "destructive" : "default"}><AlertTitle>{message.kind === "error" ? "Не удалось сохранить" : "Изменения приняты"}</AlertTitle><AlertDescription>{message.text}</AlertDescription></Alert> : null}
-      <PublicationStatusCard apiUrl={apiUrl} siteId={state.site.id} publicationRefreshKey={listRevision} />
+      <PublicationStatusCard apiUrl={apiUrl} siteId={state.site.id} />
       <Card><CardHeader><CardTitle>Справочник</CardTitle><CardDescription>{page.pageInfo.total.toLocaleString("ru-RU")} городов соответствует фильтрам.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4">
         <div className="grid gap-3 lg:grid-cols-4"><Input className="lg:col-span-2" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Название, slug или legacy URL" aria-label="Поиск города" />
           <Select value={filters.regionId} onChange={(value) => { setFilters((current) => ({ ...current, regionId: value })); setCursorStack([""]) }} label="Все регионы" options={state.regions.map((region) => ({ value: region.id, label: region.name }))} />

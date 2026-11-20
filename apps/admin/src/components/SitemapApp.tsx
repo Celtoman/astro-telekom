@@ -43,7 +43,6 @@ export function SitemapApp({ apiUrl }: { apiUrl: string }) {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
-  const [publicationRefreshKey, setPublicationRefreshKey] = useState(0)
 
   const loadWorkspace = useCallback(async (selectedSiteId?: string) => {
     setLoading(true); setError(null)
@@ -93,7 +92,6 @@ export function SitemapApp({ apiUrl }: { apiUrl: string }) {
         method: "PUT", body: { expectedWorkingRevision: workspace.workingRevision, exclusions: Object.entries(draft).map(([path, reason]) => ({ path, reason })) },
       })
       setMessage(result.changed ? `Рабочая версия ${result.workingRevision} сохранена. Опубликуйте ее отдельно.` : "Изменений нет.")
-      setPublicationRefreshKey((value) => value + 1)
       await loadWorkspace(siteId)
     } catch (caught) { setError(caught instanceof Error ? caught.message : "Исключения не сохранены") }
     finally { setBusy(false) }
@@ -108,7 +106,7 @@ export function SitemapApp({ apiUrl }: { apiUrl: string }) {
     {error ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Операция не выполнена</AlertTitle><AlertDescription>{error}</AlertDescription></Alert> : null}
     {message ? <Alert><CheckCircle2 /><AlertTitle>Изменения сохранены</AlertTitle><AlertDescription>{message}</AlertDescription></Alert> : null}
     {workspace ? <>
-      <PublicationStatusCard apiUrl={apiUrl} siteId={siteId} publicationRefreshKey={publicationRefreshKey} />
+      <PublicationStatusCard apiUrl={apiUrl} siteId={siteId} />
       <section className="grid gap-4 md:grid-cols-2"><Card size="sm"><CardHeader><CardDescription>Текущий origin</CardDescription><CardTitle className="break-all text-base">{workspace.origin}</CardTitle></CardHeader></Card><Card size="sm"><CardHeader><CardDescription>Последняя генерация</CardDescription><CardTitle className="text-base">{workspace.lastGeneration ? <StatusBadge kind="sitePublicationStatus" value={workspace.lastGeneration.status} /> : "Еще не запускалась"}</CardTitle>{workspace.lastGeneration ? <CardDescription>Версия {workspace.lastGeneration.siteRevision} · {new Date(workspace.lastGeneration.generatedAt).toLocaleString("ru-RU")}</CardDescription> : null}</CardHeader></Card></section>
       {workspace.validation.errors.map((item) => <Alert key={item} variant="destructive"><CircleAlert /><AlertTitle>Ошибка перед публикацией</AlertTitle><AlertDescription>{item}</AlertDescription></Alert>)}
       {workspace.validation.warnings.map((item) => <Alert key={item}><CircleAlert /><AlertTitle>Требуется внимание</AlertTitle><AlertDescription>{item}</AlertDescription></Alert>)}

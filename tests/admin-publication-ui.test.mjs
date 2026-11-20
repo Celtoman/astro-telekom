@@ -46,23 +46,22 @@ test('publication state presentation distinguishes published, unpublished, runni
   });
 });
 
-test('publication card loads state, publishes the exact working revision and polls active work', () => {
+test('publication card shares site state and publishes the exact reviewed working revision', () => {
   const component = source('apps/admin/src/components/PublicationStatusCard.tsx');
 
-  assert.match(component, /\/admin\/sites\/\$\{siteId\}\/publication-state/);
+  assert.match(component, /usePublicationState\(apiUrl, siteId\)/);
   assert.match(component, /\/admin\/sites\/\$\{siteId\}\/publications/);
   assert.match(component, /expectedWorkingRevision:\s*review\.workingRevision/);
-  assert.match(component, /setInterval/);
+  assert.doesNotMatch(component, /setInterval/);
   assert.match(component, /Опубликовать изменения/);
   assert.match(component, /canPublishReviewedRevision/);
   assert.doesNotMatch(component, /Предыдущая опубликованная версия остается на сайте/);
-  assert.match(component, /const message = caught instanceof Error[\s\S]*await loadState\(\)[\s\S]*setError\(message\)/);
+  assert.match(component, /const message = caught instanceof Error[\s\S]*await refreshPublicationState\(apiUrl, siteId\)[\s\S]*setPublishFailure\(\{ siteId, message \}\)/);
 });
 
 test('manual tariff, city and redirect workspaces expose the shared publication control', () => {
   for (const file of ['TariffEditorApp.tsx', 'CitiesApp.tsx', 'RedirectsApp.tsx']) {
     const component = source(`apps/admin/src/components/${file}`);
-    assert.match(component, /PublicationStatusCard/, file);
-    assert.match(component, /publicationRefreshKey/, file);
+    assert.match(component, /<PublicationStatusCard apiUrl=\{apiUrl\} siteId=\{/, file);
   }
 });

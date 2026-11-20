@@ -110,7 +110,6 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [confirmed, setConfirmed] = useState(false)
   const [savedWorkingRevision, setSavedWorkingRevision] = useState<number | null>(null)
-  const [publicationRefreshKey, setPublicationRefreshKey] = useState(0)
   const [isCreate, setIsCreate] = useState(false)
   const [insertionError, setInsertionError] = useState<string | null>(null)
   const promoInput = useRef<HTMLTextAreaElement>(null)
@@ -250,7 +249,6 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
       setInitialForm(savedForm)
       setConfirmed(false)
       setSavedWorkingRevision(result.workingRevision)
-      setPublicationRefreshKey((current) => current + 1)
       if (isCreate) {
         setIsCreate(false)
         window.history.replaceState(window.history.state, "", `/tariffs/edit?id=${encodeURIComponent(result.tariff.id)}`)
@@ -279,7 +277,7 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
       <div className="flex flex-wrap items-start justify-between gap-4"><div><Button type="button" variant="ghost" className="-ml-2 mb-2" onClick={leaveEditor}><ArrowLeft data-icon="inline-start" />К тарифам</Button><h1 className="font-heading text-2xl font-semibold">{isCreate ? "Создание тарифа" : "Редактирование тарифа"}</h1><p className="mt-1 text-sm text-muted-foreground">{tariff.provider.name} · {tariff.city.name}{tariff.publicPath ? ` · ${tariff.publicPath}` : ""}</p></div><div className="flex gap-2"><Button type="button" variant="outline" onClick={leaveEditor}>Отмена</Button>{renderSaveButton()}</div></div>
       {error ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Не удалось сохранить</AlertTitle><AlertDescription>{error}</AlertDescription></Alert> : null}
       {savedWorkingRevision ? <Alert><Save /><AlertTitle>Рабочая версия {savedWorkingRevision} сохранена</AlertTitle><AlertDescription>Изменения еще не опубликованы. Проверьте состояние ниже и запустите публикацию отдельно.</AlertDescription></Alert> : null}
-      {!isCreate ? <PublicationStatusCard apiUrl={apiUrl} siteId={tariff.city.siteId} publicationRefreshKey={publicationRefreshKey} /> : null}
+      {!isCreate ? <PublicationStatusCard apiUrl={apiUrl} siteId={tariff.city.siteId} /> : null}
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="flex min-w-0 flex-col gap-6">

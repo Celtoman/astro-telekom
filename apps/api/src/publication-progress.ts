@@ -52,23 +52,55 @@ export function advanceCmsProgress(current: CmsProgress, event: Record<string, u
     ...(event.rendererId ? { rendererId: String(event.rendererId) } : {}),
     totalPages, completedPages, ...(workTimings ? { workTimings } : {}) };
 }
-export function estimatePublicationRemaining(current: CmsProgress, history: CmsProgress[], now = Date.now()) {
+export type PublicationEstimate = Partial<Record<PublicationStage, {
+  minMs: number;
+  maxMs: number;
+  overdueAfterMs: number;
+  sampleCount: number;
+}>>;
+
+export function preparePublicationEstimate(
+  current: Pick<CmsProgress, 'rendererId' | 'totalPages'>,
+  history: CmsProgress[],
+): PublicationEstimate | null {
+  const { rendererId, totalPages } = current;
+  if (!rendererId || !totalPages) return null;
+  const samples = history.flatMap(sample => {
+    if (!sample.sampleEligible || !sample.completedAt || sample.rendererId !== rendererId
+      || !sample.totalPages || !(Math.abs(sample.totalPages / totalPages - 1) <= 0.2)) return [];
+    const durations = PUBLICATION_STAGES.map(stage => {
+      const timing = sample.stages[stage];
+      return Date.parse(timing?.completedAt || '') - Date.parse(timing?.startedAt || '');
+    });
+    return durations.every(ms => Number.isFinite(ms) && ms >= 0 && ms <= 30 * 60_000) ? [durations] : [];
+  });
+  if (samples.length < 3) return null;
+  return Object.fromEntries(PUBLICATION_STAGES.map((stage, index) => {
+    const remaining = samples.map(durations => durations.slice(index).reduce((sum, ms) => sum + ms, 0));
+    return [stage, {
+      minMs: Math.min(...remaining), maxMs: Math.max(...remaining),
+      overdueAfterMs: Math.max(...samples.map(durations => durations[index])),
+      sampleCount: samples.length,
+    }];
+  }));
+}
+
+export function estimatePublicationRemaining(
+  current: CmsProgress,
+  history: CmsProgress[] | PublicationEstimate | null,
+  now = Date.now(),
+) {
   const unavailable = { estimate: null, overdue: false };
   if (!current.sampleEligible || current.completedAt || current.waitingReason || !current.rendererId || !current.totalPages) return unavailable;
-  const stageIndex = PUBLICATION_STAGES.indexOf(current.stage);
   const stageStart = Date.parse(current.stages[current.stage]?.startedAt || '');
   if (!Number.isFinite(stageStart)) return unavailable;
-  const samples = history.filter(sample => sample.sampleEligible && sample.completedAt
-    && sample.rendererId === current.rendererId && sample.totalPages
-    && Math.abs(sample.totalPages / current.totalPages! - 1) <= 0.2
-    && PUBLICATION_STAGES.every(stage => {
-      const timing = sample.stages[stage]; const duration = Date.parse(timing?.completedAt || '') - Date.parse(timing?.startedAt || '');
-      return Number.isFinite(duration) && duration >= 0 && duration <= 30 * 60_000;
-    }));
-  if (samples.length < 3) return unavailable;
+  const baseline = (Array.isArray(history) ? preparePublicationEstimate(current, history) : history)?.[current.stage];
+  if (!baseline) return unavailable;
   const elapsed = Math.max(0, now - stageStart);
-  const duration = (sample: CmsProgress, stage: PublicationStage) => Date.parse(sample.stages[stage]!.completedAt!) - Date.parse(sample.stages[stage]!.startedAt);
-  if (elapsed > Math.max(...samples.map(sample => duration(sample, current.stage)))) return { estimate: null, overdue: true };
-  const remaining = samples.map(sample => PUBLICATION_STAGES.slice(stageIndex).reduce((sum, stage) => sum + duration(sample, stage), 0) - elapsed).sort((a, b) => a - b);
-  return { estimate: { minSeconds: Math.max(1, Math.ceil(remaining[0] / 1000)), maxSeconds: Math.max(1, Math.ceil(remaining.at(-1)! / 1000)), sampleCount: samples.length }, overdue: false };
+  if (elapsed > baseline.overdueAfterMs) return { estimate: null, overdue: true };
+  return { estimate: {
+    minSeconds: Math.max(1, Math.ceil((baseline.minMs - elapsed) / 1000)),
+    maxSeconds: Math.max(1, Math.ceil((baseline.maxMs - elapsed) / 1000)),
+    sampleCount: baseline.sampleCount,
+  }, overdue: false };
 }

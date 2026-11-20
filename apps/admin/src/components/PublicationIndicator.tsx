@@ -1,22 +1,20 @@
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { CheckCircle2, CircleAlert, CloudUpload, LoaderCircle, RefreshCw } from "lucide-react"
 import { Button as AriaButton, Dialog, DialogTrigger, Popover } from "react-aria-components"
 import { requestJson } from "../lib/admin-api.mjs"
-import { describePublicationState, describePublicationProgress, type PublicationState } from "../lib/publication-display.mjs"
-import { publicationRefreshDelay, resolvePublicationSite } from "../lib/publication-indicator.mjs"
+import { describePublicationState, describePublicationProgress } from "../lib/publication-display.mjs"
+import { resolvePublicationSite } from "../lib/publication-indicator.mjs"
+import { refreshPublicationState } from "../lib/publication-state.mjs"
+import { usePublicationState } from "./usePublicationState"
 import { statusPresentation } from "../lib/status-presentation.mjs"
 import { StatusBadge } from "./StatusBadge"
 import { Badge } from "./ui/badge"
 import { Button, buttonVariants } from "./ui/button"
 
 interface SiteSummary { id: string; name: string }
-type IndicatorState =
-  | { status: "loading" }
-  | { status: "unavailable"; reason: string }
-  | { status: "ready"; site: SiteSummary; publication: PublicationState }
 
 export function PublicationIndicator({ apiUrl, editorial=false }: { apiUrl: string; editorial?:boolean }) {
-  const [state, setState] = useState<IndicatorState>({ status: "loading" })
+  const [siteError, setSiteError] = useState<string | null>(null)
   const [site, setSite] = useState<SiteSummary | null>(null)
   const [open, setOpen] = useState(false)
   useEffect(() => {
@@ -24,91 +22,54 @@ export function PublicationIndicator({ apiUrl, editorial=false }: { apiUrl: stri
     document.addEventListener("admin:workspace-navigated", close)
     return () => document.removeEventListener("admin:workspace-navigated", close)
   }, [])
-  const requestSequence = useRef(0)
-
-  const loadState = useCallback(async (currentSite: SiteSummary) => {
-    const sequence = ++requestSequence.current
-    try {
-      const publication = await requestJson<PublicationState>(apiUrl, `/admin/sites/${encodeURIComponent(currentSite.id)}/publication-state`)
-      if (sequence === requestSequence.current) setState({ status: "ready", site: currentSite, publication })
-    } catch {
-      if (sequence === requestSequence.current) setState({ status: "unavailable", reason: "Не удалось получить состояние публикации. Попробуйте обновить." })
-    }
-  }, [apiUrl])
-
+  const snapshot = usePublicationState(apiUrl, site?.id)
   const loadSite = useCallback(async () => {
     try {
       const sites = editorial ? [await requestJson<SiteSummary>(apiUrl, "/admin/sites/editorial-context")] : await requestJson<SiteSummary[]>(apiUrl, "/admin/sites?summary=true")
       const selected = resolvePublicationSite(sites)
-      if (!selected) {
-        setSite(null)
-        setState({ status: "unavailable", reason: sites.length === 0 ? "Сайт не найден." : "Нельзя однозначно выбрать сайт." })
-        return
-      }
+      setSiteError(selected ? null : sites.length === 0 ? "Сайт не найден." : "Нельзя однозначно выбрать сайт.")
       setSite(selected)
-      await loadState(selected)
     } catch {
       setSite(null)
-      setState({ status: "unavailable", reason: "Не удалось получить список сайтов. Попробуйте обновить." })
+      setSiteError("Не удалось получить список сайтов. Попробуйте обновить.")
     }
-  }, [apiUrl, loadState, editorial])
+  }, [apiUrl, editorial])
 
   useEffect(() => { void loadSite() }, [loadSite])
+  const publication = snapshot.publication
+  const reason = siteError ?? snapshot.error
+  const loading = !reason && snapshot.status === "loading"
+  const available = snapshot.status === "ready" && !reason
 
-  useEffect(() => {
-    if (!site) return
-    const refresh = () => { void loadState(site) }
-    window.addEventListener("focus", refresh)
-    window.addEventListener("admin:publication-changed", refresh)
-    window.addEventListener("admin:publication-refresh", refresh)
-    return () => {
-      window.removeEventListener("focus", refresh)
-      window.removeEventListener("admin:publication-changed", refresh)
-      window.removeEventListener("admin:publication-refresh", refresh)
-    }
-  }, [site, loadState])
-
-  useEffect(() => {
-    if (state.status === "unavailable" && site) {
-      const retry = window.setTimeout(() => { void loadState(site) }, 5000)
-      return () => window.clearTimeout(retry)
-    }
-    if (state.status !== "ready") return
-    const delay = publicationRefreshDelay(state.publication)
-    if (delay === null) return
-    const timer = window.setTimeout(() => { void loadState(state.site) }, delay)
-    return () => window.clearTimeout(timer)
-  }, [state, site, loadState])
-
-  const presentation = state.status === "ready" ? describePublicationState(state.publication) : null
+  const presentation = publication && available ? describePublicationState(publication) : null
   const status = presentation ? statusPresentation("publicationView", presentation.kind) : null
-  const progress = state.status === "ready" ? describePublicationProgress(state.publication) : null
-  const Icon = state.status === "loading" ? LoaderCircle
+  const progress = publication && available ? describePublicationProgress(publication) : null
+  const Icon = loading ? LoaderCircle
     : presentation?.kind === "published" ? CheckCircle2
     : presentation?.kind === "failed" ? CircleAlert
       : presentation?.kind === "publishing" ? LoaderCircle
         : presentation?.kind === "unpublished" ? CloudUpload : CircleAlert
 
   return <DialogTrigger isOpen={open} onOpenChange={setOpen}>
-      <AriaButton className={`${buttonVariants({ size: "sm", variant: "outline" })} min-h-11`} aria-label={`Публикация сайта: ${status?.label ?? (state.status === "loading" ? "проверяем" : "статус недоступен")}. Открыть подробности`}>
-        <Icon className={state.status === "loading" || presentation?.kind === "publishing" ? "animate-spin motion-reduce:animate-none" : undefined} data-icon="inline-start" />
+      <AriaButton className={`${buttonVariants({ size: "sm", variant: "outline" })} min-h-11`} aria-label={`Публикация сайта: ${status?.label ?? (loading ? "проверяем" : "статус недоступен")}. Открыть подробности`}>
+        <Icon className={loading || presentation?.kind === "publishing" ? "animate-spin motion-reduce:animate-none" : undefined} data-icon="inline-start" />
         <span className="hidden sm:inline">Сайт:</span>
-        {status ? <Badge variant={status.tone}>{status.label}</Badge> : <Badge variant={state.status === "loading" ? "neutral" : "destructive"}>{state.status === "loading" ? "Проверяем…" : "Недоступен"}</Badge>}
+        {status ? <Badge variant={status.tone}>{status.label}</Badge> : <Badge variant={loading ? "neutral" : "destructive"}>{loading ? "Проверяем…" : "Недоступен"}</Badge>}
       </AriaButton>
       <Popover placement="bottom end" offset={8} className="z-50 w-80 max-w-[calc(100vw-2rem)] rounded-lg border bg-background p-4 text-foreground shadow-lg outline-none">
         <Dialog aria-label="Состояние публикации сайта" className="outline-none">
         <div className="space-y-3 text-sm">
-          <div><p className="font-heading font-semibold">{presentation?.title ?? "Статус публикации недоступен"}</p><p className="mt-1 text-muted-foreground">{presentation?.description ?? (state.status === "unavailable" ? state.reason : "Получаем состояние сайта.")}</p></div>
-          {state.status === "ready" ? <>
+          <div><p className="font-heading font-semibold">{presentation?.title ?? (loading ? "Проверяем состояние" : "Статус публикации недоступен")}</p><p className="mt-1 text-muted-foreground">{presentation?.description ?? (reason ?? "Получаем состояние сайта.")}</p></div>
+          {publication && available ? <>
             <div className="grid grid-cols-2 gap-2 rounded-md bg-muted/50 p-3">
-              <div><p className="text-xs text-muted-foreground">Рабочая версия</p><p className="font-medium">{state.publication.workingRevision}</p></div>
-              <div><p className="text-xs text-muted-foreground">На сайте</p><p className="font-medium">{state.publication.publishedRevision}</p></div>
+              <div><p className="text-xs text-muted-foreground">Рабочая версия</p><p className="font-medium">{publication.workingRevision}</p></div>
+              <div><p className="text-xs text-muted-foreground">На сайте</p><p className="font-medium">{publication.publishedRevision}</p></div>
             </div>
-            {state.publication.latestPublication ? <div className="flex flex-wrap items-center gap-2"><span className="text-muted-foreground">Последняя публикация · версия {state.publication.latestPublication.siteRevision}</span><StatusBadge kind="sitePublicationStatus" value={state.publication.latestPublication.status} /></div> : null}
+            {publication.latestPublication ? <div className="flex flex-wrap items-center gap-2"><span className="text-muted-foreground">Последняя публикация · версия {publication.latestPublication.siteRevision}</span><StatusBadge kind="sitePublicationStatus" value={publication.latestPublication.status} /></div> : null}
             {progress ? <div className="space-y-1"><p className="font-medium">{progress.stageLabel}</p>{progress.counterLabel ? <p className="text-muted-foreground">{progress.counterLabel}</p> : null}<p className="text-muted-foreground">Прошло: {progress.elapsedLabel}</p><p className="text-muted-foreground">{progress.remainingLabel}</p></div> : null}
-            {state.publication.latestPublication?.lastError || state.publication.rebuild?.lastError ? <p className="break-words text-destructive">Последняя ошибка: {state.publication.latestPublication?.lastError || state.publication.rebuild?.lastError}</p> : null}
+            {publication.latestPublication?.lastError || publication.rebuild?.lastError ? <p className="break-words text-destructive">Последняя ошибка: {publication.latestPublication?.lastError || publication.rebuild?.lastError}</p> : null}
           </> : null}
-          <Button type="button" size="sm" variant="outline" onClick={() => void (site ? loadState(site) : loadSite())}><RefreshCw data-icon="inline-start" />Обновить</Button>
+          <Button type="button" size="sm" variant="outline" onClick={() => void (site ? refreshPublicationState(apiUrl, site.id) : loadSite())}><RefreshCw data-icon="inline-start" />Обновить</Button>
           <Button asChild className="min-h-11 w-full"><a href={site ? `/publication?site=${encodeURIComponent(site.id)}` : "/publication"}>Проверить и опубликовать изменения</a></Button>
         </div>
         </Dialog>

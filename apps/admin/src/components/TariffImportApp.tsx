@@ -29,7 +29,6 @@ export function TariffImportApp({ apiUrl }: { apiUrl: string }) {
   const [confirmWarnings, setConfirmWarnings] = useState(false)
   const [selectedProviderId, setSelectedProviderId] = useState("")
   const [previewSearch, setPreviewSearch] = useState("")
-  const [publicationRefreshKey, setPublicationRefreshKey] = useState(0)
   const [busy, setBusy] = useState<"validate" | "apply" | "refresh" | null>(null)
   const [undoingRunId, setUndoingRunId] = useState<string | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
@@ -97,7 +96,6 @@ export function TariffImportApp({ apiUrl }: { apiUrl: string }) {
       setRunId(null)
       setFile(null)
       if (fileInput.current) fileInput.current.value = ""
-      setPublicationRefreshKey((current) => current + 1)
       await loadWorkspace("refresh")
     } catch (caught: unknown) {
       setActionError(caught instanceof Error ? caught.message : "Импорт не применен")
@@ -115,7 +113,6 @@ export function TariffImportApp({ apiUrl }: { apiUrl: string }) {
         body: { confirm: true },
       })
       setSelectedProviderId(item.providerId)
-      setPublicationRefreshKey((current) => current + 1)
       setActionMessage(`Импорт отменен. Создана рабочая версия ${result.workingRevisions.map((revision) => revision.workingRevision).join(", ") || "без изменений"}; опубликуйте ее отдельно.`)
       await loadWorkspace("refresh")
     } catch (caught: unknown) {
@@ -155,7 +152,7 @@ export function TariffImportApp({ apiUrl }: { apiUrl: string }) {
         </CardContent>
       </Card>
       <Card><CardHeader><CardTitle>Последние импорты</CardTitle><CardDescription>Сохраненные отчеты проверки. Состояние «Применено» означает, что данные сохранены в рабочей версии, но еще не обязательно опубликованы.</CardDescription></CardHeader><CardContent className="flex flex-col gap-3">{state.data.imports.length ? state.data.imports.slice(0, 12).map((item) => <div className="flex flex-wrap items-center justify-between gap-3" key={item.id}><div className="min-w-0 flex-1"><p className="truncate font-medium">{item.fileName}</p><p className="text-xs text-muted-foreground">{item.validRows}/{item.totalRows} строк</p></div><StatusBadge kind="importStatus" value={item.status} />{item.canUndo ? <Button type="button" size="sm" variant="outline" disabled={undoingRunId !== null} onClick={() => void undoImport(item)}>{undoingRunId === item.id ? "Отменяем…" : "Отменить импорт"}</Button> : null}</div>) : <p className="text-sm text-muted-foreground">Импортов еще не было.</p>}</CardContent></Card>
-      {selectedProvider?.sites.map((site) => <div className="flex flex-col gap-2" key={site.id}>{selectedProvider.sites.length > 1 ? <p className="text-sm font-medium">Сайт: {site.name}</p> : null}<PublicationStatusCard apiUrl={apiUrl} siteId={site.id} publicationRefreshKey={publicationRefreshKey} /></div>)}
+      {selectedProvider?.sites.map((site) => <div className="flex flex-col gap-2" key={site.id}>{selectedProvider.sites.length > 1 ? <p className="text-sm font-medium">Сайт: {site.name}</p> : null}<PublicationStatusCard apiUrl={apiUrl} siteId={site.id} /></div>)}
     </div>
   </AdminShell>
 }

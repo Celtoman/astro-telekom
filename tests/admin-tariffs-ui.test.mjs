@@ -33,9 +33,8 @@ test('tariff catalog and full-snapshot import are separate nested workspaces', (
   for (const endpoint of ['/admin/providers', '/admin/tariffs/imports', '/admin/tariffs/import/validate', '/admin/tariffs/import/apply']) {
     assert.ok(importer.includes(endpoint), `missing ${endpoint} integration`);
   }
-  assert.match(importer, /PublicationStatusCard/);
+  assert.match(importer, /<PublicationStatusCard apiUrl=\{apiUrl\} siteId=\{/);
   assert.match(importer, /provider\.sites|\.sites\.map/);
-  assert.match(importer, /publicationRefreshKey/);
   assert.doesNotMatch(importer, /\/admin\/rebuilds/);
   assert.match(importer, /\/admin\/tariffs\/imports\/\$\{item\.id\}\/undo/);
   assert.match(importer, /window\.confirm/);

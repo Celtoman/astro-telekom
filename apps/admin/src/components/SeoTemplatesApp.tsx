@@ -58,7 +58,6 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
-  const [publicationRefreshKey, setPublicationRefreshKey] = useState(0)
   const [activeField, setActiveField] = useState<TextField | null>(null)
   const [insertionError, setInsertionError] = useState<string | null>(null)
   const activeInput = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null)
@@ -146,7 +145,6 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
       })
       setMessage("Шаблон сохранён в рабочей версии. Публичный сайт изменится после общей публикации.")
       await load(kind)
-      setPublicationRefreshKey((value) => value + 1)
     } catch (caught) { setError(caught instanceof Error ? caught.message : "Шаблон не сохранён") }
     finally { setSaving(false) }
   }
@@ -160,7 +158,7 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
       {error ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка</AlertTitle><AlertDescription>{error}</AlertDescription><Button variant="outline" size="sm" onClick={() => void load(kind)}>Обновить</Button></Alert> : null}
       {message ? <Alert><Save /><AlertTitle>Сохранено</AlertTitle><AlertDescription>{message}</AlertDescription></Alert> : null}
       {workspace?.workingError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Публикация заблокирована</AlertTitle><AlertDescription>{workspace.workingError}. Исправьте шаблон или исходные данные; сохранённые поля остаются доступны.</AlertDescription></Alert> : null}
-      {site ? <PublicationStatusCard apiUrl={apiUrl} siteId={site.id} publicationRefreshKey={publicationRefreshKey} /> : null}
+      {site ? <PublicationStatusCard apiUrl={apiUrl} siteId={site.id} /> : null}
       <Card><CardHeader><CardTitle>Редактор</CardTitle><CardDescription>Рабочая версия {workspace?.workingRevision ?? "—"}; опубликована {workspace?.publishedRevision ?? "—"}. Title и Description обязательны. Большая длина и совпадения — предупреждения, не запрет.</CardDescription></CardHeader>
         <CardContent className="space-y-5">
           <Field><FieldLabel htmlFor="seo-kind">Тип страницы</FieldLabel><select id="seo-kind" className={selectClass} value={kind} onChange={(event) => selectKind(event.target.value as Kind)}>{(Object.keys(labels) as Kind[]).map((item) => <option key={item} value={item}>{labels[item]}</option>)}</select><FieldDescription>{affectedCount} опубликованных URL этого типа</FieldDescription></Field>

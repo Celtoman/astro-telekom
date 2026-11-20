@@ -11,13 +11,16 @@ import { sitePhoneReadinessErrors } from './site-phone';
 import { APP_VERSION } from './app-version';
 import { validatePublicationSource, type PublicationValidationReport } from './publication-validation';
 import { publicationChangeSummary } from './publication-change-summary';
-import { readCmsProgress, estimatePublicationRemaining, type CmsProgress } from './publication-progress';
+import {
+  readCmsProgress, estimatePublicationRemaining, preparePublicationEstimate, type CmsProgress, type PublicationEstimate,
+} from './publication-progress';
 
 type Transaction = Prisma.TransactionClient | PrismaService;
 type JsonObject = Record<string, unknown>;
 
 // Full publication catalogs share a bounded budget; ordinary CMS transactions keep their defaults.
 const PUBLICATION_CATALOG_TRANSACTION_TIMEOUT_MS = 60_000;
+const PUBLICATION_ETA_CACHE_LIMIT = 32;
 
 function auditFieldValue(snapshot: JsonObject, field: string): unknown {
   if (Object.hasOwn(snapshot, field)) return snapshot[field] ?? null;
@@ -62,6 +65,8 @@ type BlockedPublication = { blocked: true; validationId: string; report: Publica
 
 @Injectable()
 export class PublicationWorkflowService {
+  private readonly publicationEstimates = new Map<string, { key: string; result: Promise<PublicationEstimate | null> }>();
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly catalog: SiteCatalogService,
@@ -262,8 +267,50 @@ export class PublicationWorkflowService {
     return result.publication;
   }
 
+  private async getPublicationEstimate(siteId: string, current: CmsProgress): Promise<PublicationEstimate | null> {
+    const where = { siteId, status: 'SUCCEEDED' } as const;
+    // Compare only the metadata of the ordered sample window. Reading provider
+    // JSON and parsing all stage durations is necessary when its version changes.
+    const refs = await this.prisma.sitePublication.findMany({
+      where, orderBy: [{ publishedAt: 'desc' }, { id: 'desc' }], take: 20,
+      select: { id: true, updatedAt: true },
+    });
+    const key = JSON.stringify([current.publicationId, current.revision, current.runId, current.rendererId, current.totalPages, refs]);
+    const cached = this.publicationEstimates.get(siteId);
+    if (cached?.key === key) return cached.result;
+    if (refs.length < 3) {
+      this.publicationEstimates.delete(siteId);
+      return null;
+    }
+
+    const result = this.prisma.sitePublication.findMany({
+      where: { ...where, OR: refs },
+      select: { providerResponse: true },
+    }).then(rows => {
+      // A receipt can update a selected row between the two reads. Never
+      // cache an estimate for this version when the second read missed a row.
+      if (rows.length !== refs.length) {
+        if (this.publicationEstimates.get(siteId)?.result === result) this.publicationEstimates.delete(siteId);
+        return null;
+      }
+      const samples = rows.map(row => readCmsProgress(row.providerResponse)).filter((sample): sample is CmsProgress => Boolean(sample));
+      return preparePublicationEstimate(current, samples);
+    }).catch(error => {
+      if (this.publicationEstimates.get(siteId)?.result === result) this.publicationEstimates.delete(siteId);
+      throw error;
+    });
+    this.publicationEstimates.set(siteId, { key, result });
+    if (this.publicationEstimates.size > PUBLICATION_ETA_CACHE_LIMIT) {
+      const oldestSiteId = this.publicationEstimates.keys().next().value;
+      if (oldestSiteId !== undefined) this.publicationEstimates.delete(oldestSiteId);
+    }
+    return result;
+  }
+
   async getState(siteId: string) {
-    const site = await this.prisma.site.findUnique({ where: { id: siteId } });
+    const site = await this.prisma.site.findUnique({
+      where: { id: siteId }, select: { workingRevision: true, publishedRevision: true },
+    });
     if (!site) throw new NotFoundException('Site not found');
     const [latestPublication, rebuild, latestValidation] = await Promise.all([
       this.prisma.sitePublication.findFirst({
@@ -317,10 +364,9 @@ export class PublicationWorkflowService {
     const matchingProgress = currentProgress && latestPublication?.id === currentProgress.publicationId
       && currentProgress.revision === rebuild?.processingRevision ? currentProgress : null;
     const now = Date.now();
-    const history = matchingProgress?.rendererId && matchingProgress.sampleEligible && !matchingProgress.completedAt
-      ? await this.prisma.sitePublication.findMany({ where: { siteId, status: 'SUCCEEDED' },
-        orderBy: { publishedAt: 'desc' }, take: 20, select: { providerResponse: true } }) : [];
-    const samples = history.map(row => readCmsProgress(row.providerResponse)).filter((sample): sample is CmsProgress => Boolean(sample));
+    const estimate = matchingProgress?.rendererId && matchingProgress.totalPages && matchingProgress.sampleEligible
+      && !matchingProgress.completedAt && !matchingProgress.waitingReason
+      ? await this.getPublicationEstimate(siteId, matchingProgress) : null;
     const { providerResponse: _privateResponse, ...publicRebuild } = rebuild || {};
     return {
       siteId,
@@ -330,7 +376,7 @@ export class PublicationWorkflowService {
       latestPublication,
       latestValidation,
       rebuild: rebuild ? publicRebuild : null,
-      progress: matchingProgress ? { ...matchingProgress, ...estimatePublicationRemaining(matchingProgress, samples, now),
+      progress: matchingProgress ? { ...matchingProgress, ...estimatePublicationRemaining(matchingProgress, estimate, now),
         elapsedSeconds: Math.max(0, Math.floor(((matchingProgress.completedAt ? Date.parse(matchingProgress.completedAt) : now) - Date.parse(matchingProgress.startedAt)) / 1000)),
         stale: !matchingProgress.completedAt && now - Date.parse(matchingProgress.updatedAt) > 45_000,
       } : null,

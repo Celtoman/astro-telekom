@@ -45,7 +45,6 @@ export function RedirectsApp({ apiUrl }: { apiUrl: string }) {
   const [busy, setBusy] = useState<string | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
   const [actionMessage, setActionMessage] = useState<string | null>(null)
-  const [publicationRefreshKey, setPublicationRefreshKey] = useState(0)
 
   const loadWorkspace = useCallback(async (mode: "initial" | "refresh" = "initial") => {
     if (mode === "refresh") setBusy("refresh")
@@ -100,7 +99,6 @@ export function RedirectsApp({ apiUrl }: { apiUrl: string }) {
           : { siteId: state.data.sites[0].id, sourcePath, targetPath, status: "PUBLISHED" },
       })
       setActionMessage(`Рабочая версия ${result.workingRevision} сохранена. Редирект нужно опубликовать отдельно.`)
-      setPublicationRefreshKey((current) => current + 1)
       resetForm()
       await loadWorkspace("refresh")
     } catch (caught: unknown) {
@@ -121,7 +119,6 @@ export function RedirectsApp({ apiUrl }: { apiUrl: string }) {
         result = await requestJson(apiUrl, `/admin/redirects/${item.id}`, { method: "DELETE" })
       }
       setActionMessage(`Рабочая версия ${result.workingRevision} сохранена. Изменение статуса нужно опубликовать отдельно.`)
-      setPublicationRefreshKey((current) => current + 1)
       if (editingId === item.id) resetForm()
       await loadWorkspace("refresh")
     } catch (caught: unknown) {
@@ -142,7 +139,7 @@ export function RedirectsApp({ apiUrl }: { apiUrl: string }) {
         {actionError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Операция не выполнена</AlertTitle><AlertDescription>{actionError}</AlertDescription></Alert> : null}
         {actionMessage ? <Alert><Route /><AlertTitle>Рабочая версия сохранена</AlertTitle><AlertDescription>{actionMessage}</AlertDescription></Alert> : null}
         {sites.length !== 1 ? <Alert variant="destructive"><Route /><AlertTitle>Нельзя выбрать сайт однозначно</AlertTitle><AlertDescription>Управление в текущем интерфейсе доступно при ровно одном сайте. Сейчас найдено: {sites.length}.</AlertDescription></Alert> : null}
-        {sites.length === 1 ? <PublicationStatusCard apiUrl={apiUrl} siteId={sites[0].id} publicationRefreshKey={publicationRefreshKey} /> : null}
+        {sites.length === 1 ? <PublicationStatusCard apiUrl={apiUrl} siteId={sites[0].id} /> : null}
 
         <section className="grid gap-4 sm:grid-cols-3" aria-label="Состояние редиректов">
           <Card size="sm"><CardHeader><CardDescription>Всего</CardDescription><CardTitle>{redirects.length}</CardTitle></CardHeader></Card>

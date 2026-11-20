@@ -55,8 +55,7 @@ test('city import workspace implements validation report, guarded apply, history
   assert.match(source, /candidate\.key,\s*""/);
   assert.match(source, /body:\s*\{\s*runId,\s*actions,\s*confirmWarnings\s*\}/);
   assert.match(source, /sites\.length\s*!==\s*1/);
-  assert.match(source, /PublicationStatusCard/);
-  assert.match(source, /publicationRefreshKey/);
+  assert.match(source, /<PublicationStatusCard apiUrl=\{apiUrl\} siteId=\{/);
   assert.match(source, /canUndo/);
   assert.match(source, /\/admin\/cities\/imports\/\$\{item\.id\}\/undo/);
   assert.match(source, /Отменить импорт/);

@@ -63,7 +63,6 @@ export function CityImportApp({ apiUrl }: { apiUrl: string }) {
   const [runId, setRunId] = useState<string | null>(null)
   const [actions, setActions] = useState<Record<string, ImportAction | "">>({})
   const [confirmWarnings, setConfirmWarnings] = useState(false)
-  const [publicationRefreshKey, setPublicationRefreshKey] = useState(0)
   const [busy, setBusy] = useState<"validate" | "apply" | "refresh" | "undo" | null>(null)
   const [undoingRunId, setUndoingRunId] = useState<string | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
@@ -138,7 +137,6 @@ export function CityImportApp({ apiUrl }: { apiUrl: string }) {
       setRunId(null)
       setActions({})
       setFile(null)
-      setPublicationRefreshKey((current) => current + 1)
       setActionMessage(result.workingRevision
         ? `Рабочая версия ${result.workingRevision} сохранена. Опубликуйте ее отдельно.`
         : "Импорт применен без изменений; публиковать нечего.")
@@ -161,7 +159,6 @@ export function CityImportApp({ apiUrl }: { apiUrl: string }) {
         method: "POST",
         body: { confirm: true },
       })
-      setPublicationRefreshKey((current) => current + 1)
       setActionMessage(`Импорт отменен. Рабочая версия ${result.workingRevision} сохранена; опубликуйте ее отдельно.`)
       await loadWorkspace("refresh")
     } catch (caught: unknown) {
@@ -247,7 +244,7 @@ export function CityImportApp({ apiUrl }: { apiUrl: string }) {
         </Card>
 
         <Card><CardHeader><CardTitle>Последние импорты</CardTitle><CardDescription>Сохраненные отчеты проверки. Состояние «Применено» означает рабочую версию, а не публикацию на сайте. Безопасная отмена тоже создаёт новую рабочую версию.</CardDescription></CardHeader><CardContent className="flex flex-col gap-3">{imports.length ? imports.slice(0, 8).map((item) => <div className="flex flex-wrap items-center justify-between gap-3" key={item.id}><div className="min-w-0 flex-1"><p className="truncate font-medium">{item.fileName}</p><p className="text-xs text-muted-foreground">{item.validRows}/{item.totalRows} строк</p></div><StatusBadge kind="importStatus" value={item.status} />{item.canUndo ? <Button type="button" size="sm" variant="outline" disabled={busy !== null} onClick={() => void undoImport(item)}>{undoingRunId === item.id ? "Отменяем…" : "Отменить импорт"}</Button> : null}</div>) : <p className="text-sm text-muted-foreground">Импортов еще не было.</p>}</CardContent></Card>
-        {sites.length === 1 ? <PublicationStatusCard apiUrl={apiUrl} siteId={sites[0].id} publicationRefreshKey={publicationRefreshKey} /> : null}
+        {sites.length === 1 ? <PublicationStatusCard apiUrl={apiUrl} siteId={sites[0].id} /> : null}
       </div>
     </AdminShell>
   )
