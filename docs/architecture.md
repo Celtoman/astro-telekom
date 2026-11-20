@@ -135,6 +135,8 @@ CMS-поток городской HOME: `PageTemplate(CITY_HOME)` принадл
 
 Рабочая область записывает в историю идентификатор документа и индекс перехода. При попытке уйти из изменённой формы через Back/Forward она возвращает прежнюю запись, запрашивает подтверждение и только после него повторяет переход. Полная перезагрузка использует beforeunload. Фоновая сверка `/workspace-version.json` позволяет при смене сборки открыть актуальный документ. [Протокол #627](research/2026-11-20-admin-client-navigation.md).
 
+GET `/admin/cities` читает компактные строки с SQL-счётчиком действующих опубликованных тарифов. HOME и максимум ревизии выбираются для страницы, если поле не участвует в фильтре. Общий шаблон проверяется один раз за запрос. Фильтры, сортировка и детали страницы видят один снимок PostgreSQL через Repeatable Read. [Замеры #628](research/2026-11-20-admin-city-list-performance.md).
+
 GET sites?summary=true исключает provider/regions/cities graph. GET sites/values объединяет выбор сайта и чтение телефонов. Variable-catalog читает serializable typed context без рендера Page/SEO/блоков: опубликованные города и ACTIVE/PUBLISHED тарифы только выбранного города. Authoritative usage scan проверяет ту же workingRevision; published evidence читается из прежнего immutable snapshot. UNKNOWN/null сохраняются.
 
 ### Тарифный блок и переход композиции 2.0.0

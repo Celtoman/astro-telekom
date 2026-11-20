@@ -62,32 +62,91 @@ export class AdminCitiesController {
     const limit = pageSize(Number(query.limit));
     const q = searchQuery(query.q)?.toLocaleLowerCase('ru-RU');
     const offset = this.decodeListCursor(query.cursor);
-    const rows = await this.prisma.city.findMany({
+    // The compact selection and page details must refer to the same database snapshot.
+    return this.prisma.$transaction(
+      transaction => this.listCities(transaction, query, { limit, q, offset }),
+      { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead },
+    );
+  }
+
+  private async listCities(
+    transaction: Prisma.TransactionClient,
+    query: CityListQuery,
+    { limit, q, offset }: { limit: number; q: string | undefined; offset: number },
+  ) {
+    const rows = await transaction.city.findMany({
       where: {
         ...(query.regionId ? { regionId: query.regionId } : {}),
         ...(query.status ? { status: query.status } : {}),
       },
       include: {
         region: { select: { id: true, name: true, slug: true } },
-        site: { select: { id: true, name: true, slug: true, domain: true, workingRevision: true, publishedRevision: true, publications: { where: { status: 'SUCCEEDED' }, orderBy: { publishedAt: 'desc' }, take: 1, select: { publishedAt: true } } } },
-        tariffs: { where: { status: 'PUBLISHED', availability: 'ACTIVE' }, select: { id: true } },
-        pages: { where: { type: 'HOME' }, select: { type: true, slug: true, status: true, blocks: { where: { archivedAt: null }, orderBy: [{ position: 'asc' }, { id: 'asc' }] }, template: { select: { status: true, blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } } } } },
+        site: {
+          select: {
+            id: true, name: true, slug: true, domain: true, workingRevision: true, publishedRevision: true,
+            publications: { where: { status: 'SUCCEEDED' }, orderBy: { publishedAt: 'desc' }, take: 1, select: { publishedAt: true } },
+          },
+        },
+        _count: { select: { tariffs: { where: { status: 'PUBLISHED', availability: 'ACTIVE' } } } },
       },
     });
-    const revisions = rows.length ? await this.prisma.contentRevision.findMany({
-      where: { entityType: 'CITY', entityId: { in: rows.map((city) => city.id) } },
-      select: { entityId: true, siteRevision: true },
-    }) : [];
-    const changed = new Map<string, number>();
-    for (const revision of revisions) changed.set(revision.entityId, Math.max(changed.get(revision.entityId) || 0, revision.siteRevision));
-    let items = rows.map((city) => {
-      const readiness = evaluateCityReadiness({
-        ...city,
-        publishedTariffCount: city.tariffs.length,
-        homeTemplateReady: cityHomeTemplateReady(city.name, city.pages),
-      });
-      const profile = city.subscriberProfileKey ? defaultDomruProfileCatalog.resolveByKey(city.subscriberProfileKey) : null;
-      return {
+    let candidates = rows
+      .filter(city => !q || `${city.name} ${city.slug} ${city.legacyUrl || ''}`.toLocaleLowerCase('ru-RU').includes(q))
+      .map(city => ({
+        city,
+        profile: city.subscriberProfileKey ? defaultDomruProfileCatalog.resolveByKey(city.subscriberProfileKey) : null,
+        publishedTariffCount: city._count.tariffs,
+        lastSuccessfulPublicationAt: city.site.publications[0]?.publishedAt || null,
+      }))
+      .filter(({ profile, publishedTariffCount }) =>
+        (!query.profile || Boolean(profile) === (query.profile === 'CONFIGURED')) &&
+        (!query.tariffs || (publishedTariffCount > 0) === (query.tariffs === 'WITH')));
+
+    const hasUnpublishedChanges = (city: (typeof rows)[number], revisions: Map<string, number>) =>
+      (revisions.get(city.id) ?? 0) > city.site.publishedRevision;
+    let revisions = new Map<string, number>();
+    if (query.unpublished) {
+      revisions = await this.latestCityRevisions(transaction, candidates.map(({ city }) => city.id));
+      candidates = candidates.filter(({ city }) => hasUnpublishedChanges(city, revisions) === (query.unpublished === 'true'));
+    }
+
+    let readiness = new Map<string, ReturnType<typeof evaluateCityReadiness>>();
+    const readReadiness = async (items: typeof candidates) => {
+      const homes = await this.cityHomeReadiness(transaction, items.map(({ city }) => city.id));
+      return new Map(items.map(({ city, publishedTariffCount }) => [
+        city.id, evaluateCityReadiness({ ...city, publishedTariffCount, homeTemplateReady: homes.has(city.id) }),
+      ]));
+    };
+    if (query.readiness) {
+      readiness = await readReadiness(candidates);
+      candidates = candidates.filter(({ city }) => readiness.get(city.id)?.ready === (query.readiness === 'READY'));
+    }
+
+    const direction = query.direction === 'desc' ? -1 : 1;
+    // Keep the original Russian ordering and ID tie-breaker for existing cursors.
+    const sortValue = ({ city, publishedTariffCount, lastSuccessfulPublicationAt }: (typeof candidates)[number]) => {
+      switch (query.sort) {
+        case 'region': return city.region.name;
+        case 'status': return city.status;
+        case 'tariffs': return publishedTariffCount;
+        case 'lastPublication': return lastSuccessfulPublicationAt?.getTime() || 0;
+        default: return city.name;
+      }
+    };
+    candidates.sort((left, right) => {
+      const leftValue = sortValue(left), rightValue = sortValue(right);
+      const compared = typeof leftValue === 'number' && typeof rightValue === 'number'
+        ? leftValue - rightValue
+        : String(leftValue).localeCompare(String(rightValue), 'ru');
+      return direction * (compared || left.city.id.localeCompare(right.city.id));
+    });
+
+    const total = candidates.length;
+    const page = candidates.slice(offset, offset + limit);
+    if (!query.unpublished) revisions = await this.latestCityRevisions(transaction, page.map(({ city }) => city.id));
+    if (!query.readiness) readiness = await readReadiness(page);
+    return {
+      items: page.map(({ city, profile, publishedTariffCount, lastSuccessfulPublicationAt }) => ({
         id: city.id,
         siteId: city.siteId,
         workingRevision: city.site.workingRevision,
@@ -107,35 +166,57 @@ export class AdminCitiesController {
         region: city.region,
         site: { id: city.site.id, name: city.site.name, slug: city.site.slug },
         publicUrl: city.site.domain ? `https://${city.site.domain}/${city.slug}` : `/${city.slug}`,
-        readiness,
-        publishedTariffCount: city.tariffs.length,
+        readiness: readiness.get(city.id)!,
+        publishedTariffCount,
         subscriberProfileReady: Boolean(profile),
         subscriberProfile: profile ? { key: profile.key, city: profile.city, region: profile.region } : null,
-        hasUnpublishedChanges: (changed.get(city.id) || 0) > city.site.publishedRevision,
-        lastSuccessfulPublicationAt: city.site.publications[0]?.publishedAt || null,
-      };
-    });
-    if (q) items = items.filter((city) => `${city.name} ${city.slug} ${city.legacyUrl || ''}`.toLocaleLowerCase('ru-RU').includes(q));
-    if (query.readiness) items = items.filter((city) => city.readiness.ready === (query.readiness === 'READY'));
-    if (query.profile) items = items.filter((city) => city.subscriberProfileReady === (query.profile === 'CONFIGURED'));
-    if (query.tariffs) items = items.filter((city) => (city.publishedTariffCount > 0) === (query.tariffs === 'WITH'));
-    if (query.unpublished) items = items.filter((city) => city.hasUnpublishedChanges === (query.unpublished === 'true'));
-    const direction = query.direction === 'desc' ? -1 : 1;
-    const sort = query.sort || 'city';
-    items.sort((left, right) => {
-      const leftValue = sort === 'region' ? left.region.name : sort === 'status' ? left.status : sort === 'tariffs' ? left.publishedTariffCount : sort === 'lastPublication' ? left.lastSuccessfulPublicationAt?.getTime() || 0 : left.name;
-      const rightValue = sort === 'region' ? right.region.name : sort === 'status' ? right.status : sort === 'tariffs' ? right.publishedTariffCount : sort === 'lastPublication' ? right.lastSuccessfulPublicationAt?.getTime() || 0 : right.name;
-      const compared = typeof leftValue === 'number' && typeof rightValue === 'number'
-        ? leftValue - rightValue
-        : String(leftValue).localeCompare(String(rightValue), 'ru');
-      return direction * (compared || left.id.localeCompare(right.id));
-    });
-    const total = items.length;
-    const page = items.slice(offset, offset + limit);
-    return {
-      items: page,
+        hasUnpublishedChanges: hasUnpublishedChanges(city, revisions),
+        lastSuccessfulPublicationAt,
+      })),
       pageInfo: { limit, total, hasNextPage: offset + limit < total, nextCursor: offset + limit < total ? this.encodeListCursor(offset + limit) : null },
     };
+  }
+
+  private async latestCityRevisions(transaction: Prisma.TransactionClient, ids: string[]) {
+    if (!ids.length) return new Map<string, number>();
+    const revisions = await transaction.contentRevision.groupBy({
+      by: ['entityId'],
+      where: { entityType: 'CITY', entityId: { in: ids } },
+      _max: { siteRevision: true },
+    });
+    return new Map(revisions.map(({ entityId, _max }) => [entityId, Math.max(0, _max.siteRevision ?? 0)]));
+  }
+
+  private async cityHomeReadiness(transaction: Prisma.TransactionClient, ids: string[]) {
+    const ready = new Set<string>();
+    if (!ids.length) return ready;
+    // The (cityId, slug) key permits one canonical HOME for each city.
+    const pages = await transaction.page.findMany({
+      where: { cityId: { in: ids }, type: 'HOME', status: 'PUBLISHED', slug: '' },
+      select: { id: true, cityId: true, templateId: true },
+    });
+    const templateIds = [...new Set(pages.flatMap(page => page.templateId ? [page.templateId] : []))];
+    const legacyPageIds = pages.filter(page => !page.templateId).map(page => page.id);
+    const orderBy = [{ position: 'asc' }, { id: 'asc' }] as const;
+    const select = { blockType: true, position: true, visible: true, data: true } as const;
+    const templates = templateIds.length ? await transaction.pageTemplate.findMany({
+      where: { id: { in: templateIds } },
+      select: { id: true, status: true, blocks: { orderBy: [...orderBy], select } },
+    }) : [];
+    const legacyPages = legacyPageIds.length ? await transaction.page.findMany({
+      where: { id: { in: legacyPageIds } },
+      select: { id: true, blocks: { where: { archivedAt: null }, orderBy: [...orderBy], select } },
+    }) : [];
+    const canonicalHome = { type: 'HOME', slug: '', status: 'PUBLISHED' };
+    // The city name only affects validation messages, which this boolean check does not expose.
+    const templateReady = new Map(templates.map(({ id, status, blocks }) =>
+      [id, cityHomeTemplateReady('', [{ ...canonicalHome, template: { status, blocks } }])]));
+    const legacyReady = new Map(legacyPages.map(({ id, blocks }) =>
+      [id, cityHomeTemplateReady('', [{ ...canonicalHome, blocks }])]));
+    for (const page of pages) {
+      if (page.cityId && (page.templateId ? templateReady.get(page.templateId) : legacyReady.get(page.id))) ready.add(page.cityId);
+    }
+    return ready;
   }
 
   @Get('profiles')
