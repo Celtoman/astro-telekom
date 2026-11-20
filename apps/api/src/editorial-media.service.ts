@@ -6,6 +6,8 @@ import { PrismaService } from './prisma.service';
 import { inspectEditorialImage, mediaHash, mediaCropKey, renderEditorialImage, safeMediaPath, type MediaDerivatives, type MediaVariant } from './editorial-media';
 import type { MediaUse } from './news-types';
 
+const READY_ASSET_BATCH_SIZE = 256;
+
 @Injectable()
 export class EditorialMediaService {
   constructor(private readonly prisma: PrismaService) {}
@@ -59,6 +61,19 @@ export class EditorialMediaService {
     const asset = await this.prisma.mediaAsset.findFirst({where:{siteId,id,ready:true}});
     if (!asset) throw new NotFoundException('Изображение не найдено');
     return asset;
+  }
+
+  async readReadyDerivatives(siteId: string, assetIds: readonly string[]) {
+    const uniqueIds = [...new Set(assetIds)];
+    const derivatives = new Map<string, Prisma.JsonValue>();
+    for (let offset = 0; offset < uniqueIds.length; offset += READY_ASSET_BATCH_SIZE) {
+      const assets = await this.prisma.mediaAsset.findMany({
+        where: { siteId, ready: true, id: { in: uniqueIds.slice(offset, offset + READY_ASSET_BATCH_SIZE) } },
+        select: { id: true, derivatives: true },
+      });
+      for (const asset of assets) derivatives.set(asset.id, asset.derivatives);
+    }
+    return derivatives;
   }
   async preview(siteId: string, id: string, kind: string, cropKey?: string, variantHash?: string) {
     const asset = await this.get(siteId,id);
