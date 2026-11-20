@@ -79,6 +79,46 @@ test('SEO length and duplicate diagnostics warn without blocking publication', (
   assert.ok(result.warnings.some((warning) => warning.code === 'DUPLICATE_DESCRIPTION' && warning.path === '/goroda-obsluzhivaniya'));
 });
 
+test('duplicate diagnostics preserve Unicode spacing, Russian locale and the first route', () => {
+  const { resolveSeoTemplates } = seoModule();
+  const source = input();
+  source.routes = source.routes.slice(0, 3);
+  source.templates[2].titleTemplate = 'ёж Σς İстанбул';
+  source.templates[0].titleTemplate = ' ЁЖ Σς \u0130СТАНБУЛ ';
+  const spacings = [' ', '  ', '\t', '\r\n', '\u0085', '\u00a0', '\u1680', '\u2000', '\u2003', '\u200b', '\u2028', '\u202f', '\u205f', '\u3000', '\ufeff', ' \t', '\u00a0 '];
+  const originalKey = value => value.trim().replace(/\s+/g, ' ').toLocaleLowerCase('ru');
+  for (const first of spacings) for (const second of spacings) {
+    const title = `Ёж${first}Σς${second}i\u0307СТАНБУЛ`;
+    source.templates[1].titleTemplate = title;
+    const { byPath, warnings } = resolveSeoTemplates(source);
+    assert.equal(byPath['/karta-pokrytiya-provaydera'].title, title);
+    const duplicate = { code: 'DUPLICATE_TITLE', path: '/karta-pokrytiya-provaydera', relatedPath: '/' };
+    assert.deepEqual(warnings.filter(warning => warning.code === 'DUPLICATE_TITLE'), [
+      ...(originalKey(title) === originalKey(source.templates[0].titleTemplate) ? [duplicate] : []),
+      { code: 'DUPLICATE_TITLE', path: '/goroda-obsluzhivaniya', relatedPath: '/' },
+    ]);
+  }
+});
+
+test('repeated SEO city lookup keeps the first matching city and tariff on every route', () => {
+  const { resolveSeoTemplates } = seoModule();
+  const source = input();
+  source.routes = source.routes.slice(-2);
+  const first = source.cities[0];
+  const tariff = first.tariffs[0];
+  first.tariffs.push({ ...tariff, name: 'Не подменять первый тариф' });
+  source.cities.push({ ...first, namePrepositional: 'другом городе', tariffs: [{ ...tariff, name: 'Другой город' }] });
+  let cityLookups = 0;
+  Object.defineProperty(first, 'slug', { get() { cityLookups++; return 'kazan'; } });
+  const { byPath } = resolveSeoTemplates(source);
+  assert.equal(byPath['/kazan'].title, 'Интернет в Казани');
+  assert.equal(byPath['/kazan/giga'].title, 'Гига в Казани');
+  assert.equal(cityLookups, 1);
+
+  first.tariffs = [];
+  assert.throws(() => resolveSeoTemplates(source), { message: 'Для SEO-маршрута /kazan/giga не найден тариф' });
+});
+
 test('single-route SEO diagnostics preserve length and exact syntax errors from compiled templates', () => {
   const { resolveSeoTemplates, SeoRouteCache } = seoModule();
   const source = input();

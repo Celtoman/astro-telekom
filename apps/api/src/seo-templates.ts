@@ -81,7 +81,7 @@ function resolveField(template: string, context: VariableContext, path: string, 
 }
 
 function normalizedDuplicateKey(value: string): string {
-  return value.trim().replace(/\s+/g, ' ').toLocaleLowerCase('ru');
+  return value.trim().replace(/\s{2,}|[^\S ]/g, ' ').toLocaleLowerCase('ru');
 }
 
 function resolveSeoRoute(template: SeoTemplateDefinition, context: VariableContext, path: string, compiled?: VariableTextTemplates): ResolvedSeoMetadata {
@@ -150,11 +150,19 @@ export function resolveSeoTemplates(input: SeoResolutionInput, routeCache?: SeoR
   const byPath: Record<string, ResolvedSeoMetadata> = {};
   const warnings: SeoDiagnostic[] = [];
   const duplicates = input.routes.length > 1 ? { titles: new Map<string, string>(), descriptions: new Map<string, string>() } : null;
+  const firstCityBySlug = input.routes.length > 1 ? new Map<string, SeoCity>() : null;
   for (const route of input.routes) {
     const template = templates.get(route.id);
     if (!template) throw new BadRequestException(`Отсутствует обязательный SEO-шаблон ${route.id}`);
-    const city = route.citySlug ? input.cities.find((item) => item.slug === route.citySlug) : undefined;
-    if (route.citySlug && !city) throw new BadRequestException(`Для SEO-маршрута ${route.path} не найден город`);
+    let city: SeoCity | undefined;
+    if (route.citySlug) {
+      city = firstCityBySlug?.get(route.citySlug);
+      if (!city) {
+        city = input.cities.find((item) => item.slug === route.citySlug);
+        if (!city) throw new BadRequestException(`Для SEO-маршрута ${route.path} не найден город`);
+        firstCityBySlug?.set(route.citySlug, city);
+      }
+    }
     const tariff = route.tariffSlug ? city?.tariffs?.find((item) => item.slug === route.tariffSlug) : undefined;
     if (route.tariffSlug && !tariff) throw new BadRequestException(`Для SEO-маршрута ${route.path} не найден тариф`);
     const context: VariableContext = { site: input.site, provider: input.provider, city, tariff, now: input.now };
