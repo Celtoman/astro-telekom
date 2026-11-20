@@ -67,7 +67,12 @@ const DEFINITIONS: readonly VariableDefinition[] = [
   { code: 'CITY_MAX_CHANNELS', type: 'number', source: 'City.tariffFacts.maxChannels', scope: 'CITY', name: 'Максимум каналов города', description: 'Максимальное известное число каналов опубликованных пакетов с ТВ.', example: '150', status: 'ACTIVE', allowedContexts: CITY_CONTEXTS, allowedFields: PAGE_FIELDS },
 ];
 
-const BY_CODE = new Map(DEFINITIONS.map((definition) => [definition.code, definition]));
+const BY_CODE = new Map<string, VariableDefinition>(DEFINITIONS.map((definition) => [definition.code, definition]));
+const VARIABLE_NUMBER_FORMAT = new Intl.NumberFormat('ru-RU', { useGrouping: false, maximumFractionDigits: 2 });
+
+export function getVariableScope(code: string): VariableScope | undefined {
+  return BY_CODE.get(code)?.scope;
+}
 
 export interface VariableContext {
   site?: { connectionPhone?: string | null; supportPhone?: string | null; corporatePhone?: string | null; connectionHours?: string | null; supportHours?: string | null; onlineApplicationsHours?: string | null; callbackWithinMinutes?: number | null };
@@ -144,7 +149,7 @@ function formatValue(value: unknown, definition: VariableDefinition, path: strin
     if (!/^\d+(?:\.\d{1,2})?$/.test(stringValue)) throw invalid();
     const numeric = Number(stringValue);
     if (!Number.isFinite(numeric)) throw invalid();
-    return new Intl.NumberFormat('ru-RU', { useGrouping: false, maximumFractionDigits: 2 }).format(numeric);
+    return VARIABLE_NUMBER_FORMAT.format(numeric);
   }
   if (typeof value !== 'string' || /[<>\r\n{}]|https?:\/\/|www\./i.test(value)) throw invalid();
   return value;
@@ -169,7 +174,7 @@ export function resolveVariableText(
   if (/[{}]/.test(remainder)) throw new BadRequestException(`Неверный формат скобок переменной: ${location.path}`);
   const warnings: VariableWarning[] = [];
   const text = input.replace(/\{([^{}]*)\}/g, (_token, rawCode: string) => {
-    const definition = BY_CODE.get(rawCode as VariableCode);
+    const definition = BY_CODE.get(rawCode);
     if (!definition || !/^[A-Z][A-Z0-9_]*$/.test(rawCode)) {
       throw new BadRequestException(`Неизвестный код переменной {${rawCode}}: ${location.path}`);
     }

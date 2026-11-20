@@ -1,7 +1,7 @@
 import { ContentValidationError, validateContentText } from './content-validation-error';
 import { validateFirstScreen } from './first-screen';
 import { HOME_HERO_VERSION, HOME_HERO_TEXT_LIMITS } from './home-hero-model';
-import { listVariableDefinitions, resolveVariableText } from './variable-registry';
+import { getVariableScope, resolveVariableText } from './variable-registry';
 import {
   GENERAL_HOME_VERSION, GENERAL_HOME_BLOCK_TYPES, GENERAL_HOME_BLOCK_ORDER, GENERAL_HOME_SCHEMAS,
   type GeneralHomeBlockType, type GeneralHomeFieldRule, type GeneralHomeMissingField,
@@ -47,9 +47,9 @@ function checkVariables(value: string, allowed: boolean, block: string, path: st
   // Validate syntax and URL interpolation using the existing registry, without storing resolved values.
   try { resolveVariableText(value, { now: new Date(0) }, { path, field: 'TEXT' }); }
   catch (error) { fail(block, path, 'VARIABLE', error instanceof Error ? error.message : 'Некорректная переменная.'); }
-  const definitions = listVariableDefinitions();
   for (const token of value.matchAll(/\{([^{}]+)\}/g)) {
-    if (!definitions.some(definition => definition.code === token[1] && scopes.includes(definition.scope))) {
+    const scope = getVariableScope(token[1]);
+    if (!scope || !scopes.includes(scope)) {
       fail(block, path, 'VARIABLE', scopes.length === 1 ? 'В общей HOME доступны только разрешённые переменные сайта.' : 'Доступны только разрешённые переменные сайта и города.');
     }
   }

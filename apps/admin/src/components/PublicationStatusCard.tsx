@@ -17,7 +17,7 @@ interface PublicationStatusCardProps {
   publicationRefreshKey?: number
   review?: PublicationReview | null
   reviewUnavailable?: boolean
-  onStateChange?: (state: PublicationState) => void
+  onStateChange?: (state: PublicationState | null) => void
 }
 
 export function PublicationStatusCard({ apiUrl, siteId, publicationRefreshKey = 0, review, reviewUnavailable = false, onStateChange }: PublicationStatusCardProps) {
@@ -47,7 +47,7 @@ export function PublicationStatusCard({ apiUrl, siteId, publicationRefreshKey = 
   }, [apiUrl, siteId])
 
   useEffect(() => { setState(null); void loadState(true); return () => { requestSequence.current++ } }, [loadState, publicationRefreshKey])
-  useEffect(() => { if (state) onStateChange?.(state) }, [state, onStateChange])
+  useEffect(() => { onStateChange?.(loading || stateUnavailable ? null : state) }, [loading, stateUnavailable, state, onStateChange])
 
   useEffect(() => {
     if (!stateUnavailable && (!state || describePublicationState(state).kind !== "publishing")) return

@@ -1,6 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
 import { ContentValidationError, validateContentText } from './content-validation-error';
-import { listVariableDefinitions, resolveVariableText } from './variable-registry';
+import { getVariableScope, resolveVariableText } from './variable-registry';
 import { HOME_HERO_VERSION, HOME_HERO_IMPLEMENTATION, HOME_HERO_TEXT_LIMITS, parseRedTitle } from './home-hero-model';
 
 export type FirstScreenKind = 'HOME' | 'CITY_HOME';
@@ -34,8 +34,8 @@ export function validateFirstScreen(kind: FirstScreenKind, raw: unknown, draft =
       try { resolveVariableText(value, { now: new Date() }, { path: key, field: 'TEXT' }); }
       catch (error) { throw new ContentValidationError(key, 'VARIABLE', error instanceof Error ? error.message : String(error)); }
       for (const token of value.matchAll(/\{([^{}]+)\}/g)) {
-        const definition = listVariableDefinitions().find(item => item.code === token[1]);
-        if (!definition || definition.scope === 'TARIFF' || (kind === 'HOME' && definition.scope === 'CITY')) throw new ContentValidationError(key, 'VARIABLE', `Переменная {${token[1]}} недоступна для этого первого экрана. Выберите переменную из списка редактора.`);
+        const scope = getVariableScope(token[1]);
+        if (!scope || scope === 'TARIFF' || (kind === 'HOME' && scope === 'CITY')) throw new ContentValidationError(key, 'VARIABLE', `Переменная {${token[1]}} недоступна для этого первого экрана. Выберите переменную из списка редактора.`);
       }
     } else if (/[{}]/.test(value)) throw new ContentValidationError(key, 'VARIABLE', 'Переменные разрешены только в заголовке и описании.');
   }
@@ -86,8 +86,7 @@ function validateHomeHero(raw: unknown, draft: boolean): string[] {
         try { plain += resolveVariableText(segment.text, { now: new Date() }, { path: key, field: 'TEXT' }).text; }
         catch (error) { throw new ContentValidationError(key, 'VARIABLE', (error as Error).message); }
         for (const token of segment.text.matchAll(/\{([^{}]+)\}/g)) {
-          const definition = listVariableDefinitions().find(item => item.code === token[1]);
-          if (!definition || definition.scope !== 'SITE') throw new ContentValidationError(key, 'VARIABLE', 'Переменная недоступна для общей главной.');
+          if (getVariableScope(token[1]) !== 'SITE') throw new ContentValidationError(key, 'VARIABLE', 'Переменная недоступна для общей главной.');
         }
       }
       if (key === 'title' && segments.map(segment => segment.text).join('').length > 120) throw new ContentValidationError(key, 'TOO_LONG', 'Заголовок без маркеров должен быть не длиннее 120 символов.');

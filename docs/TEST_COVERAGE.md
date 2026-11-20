@@ -1,5 +1,7 @@
 # Покрытие тестами
 
+20 ноября 2026, первый пакет ускорения админки [#631](https://github.com/Celtoman/astro-telekom/issues/631) и [#632](https://github.com/Celtoman/astro-telekom/issues/632). Полный `pnpm check --test-concurrency=2` на Node 24.22.3 прошёл с кодом 0. Из 1 161 теста 1 160 прошли, один пропущен из-за отсутствия права на symlink в Windows. Встроенный Chromium подтвердил явный запуск ревью, блокировку при смене ревизии и при недоступности состояния. [Протокол и измерения](research/2026-11-20-admin-performance-first-package.md).
+
 17 ноября 2026 для исправлений SUPPORT #613 и #614 полный локальный `pnpm check --test-concurrency=2` дал 1155 успешных тестов и один пропуск Windows symlink. Изменение инициализации редактора отдельно прошло проверку типов, сборку и проверку предпросмотра. Linux CI для `703df070` прошёл все 1156 тестов. Внешний аудит охватил 207 маршрутов, 38 изображений и четыре адаптива. [CI](https://github.com/Celtoman/astro-telekom/actions/runs/44109814569), [протокол](research/2026-11-17-support-implementation.md).
 
 17 ноября2026, SUPPORT #611: полный `pnpm check --test-concurrency=2` на Node24.22.3 —1155tests/1154pass/0fail/1Windows-symlinkskip, exit0,665724ms. Exact-SHA Linux [CI44097798216](https://github.com/Celtoman/astro-telekom/actions/runs/44097798216) для `f114518a3fe559d0391a83d7b29d44dfa8593105` —1155pass/0fail/0skip. [Протокол](research/2026-11-17-support-implementation.md).

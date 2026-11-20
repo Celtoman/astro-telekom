@@ -1,6 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
 import { ContentValidationError, validateContentText } from './content-validation-error';
-import { listVariableDefinitions, resolveVariableText } from './variable-registry';
+import { getVariableScope, resolveVariableText } from './variable-registry';
 export function validateTariffCollection(raw: unknown, draft = false): string[] {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw new BadRequestException('Контент тарифного блока должен быть объектом');
   const data = raw as Record<string, unknown>;
@@ -15,8 +15,8 @@ export function validateTariffCollection(raw: unknown, draft = false): string[] 
       try { resolveVariableText(value, { now: new Date() }, { path: key, field: 'TEXT' }); }
       catch (error) { throw new ContentValidationError(key, 'VARIABLE', error instanceof Error ? error.message : String(error)); }
       for (const token of value.matchAll(/\{([^{}]+)\}/g)) {
-        const definition = listVariableDefinitions().find(item => item.code === token[1]);
-        if (!definition || definition.scope === 'TARIFF') throw new ContentValidationError(key, 'VARIABLE', `Переменная {${token[1]}} недоступна для тарифного блока города. Используйте переменные сайта или города.`);
+        const scope = getVariableScope(token[1]);
+        if (!scope || scope === 'TARIFF') throw new ContentValidationError(key, 'VARIABLE', `Переменная {${token[1]}} недоступна для тарифного блока города. Используйте переменные сайта или города.`);
       }
     } else if (/[{}]/.test(value)) throw new ContentValidationError(key, 'VARIABLE', 'Переменные разрешены только в заголовке и описании. Уберите переменную из подписи кнопки.');
   }

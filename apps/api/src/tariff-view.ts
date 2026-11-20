@@ -164,8 +164,10 @@ function numberValue(value: unknown): number | null {
   return Number.isFinite(amount) && amount >= 0 ? amount : null;
 }
 
+const TARIFF_PRICE_FORMAT = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 });
+
 function money(value: number, suffix = ''): string {
-  const formatted = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 })
+  const formatted = TARIFF_PRICE_FORMAT
     .format(value)
     .replace(/[\u00a0\u202f]/g, ' ');
   return `${formatted} ₽${suffix}`;
