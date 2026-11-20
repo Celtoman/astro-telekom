@@ -3,7 +3,7 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { publishedVariableContext, publishedVariableUsages, type PublishedVariableUsagePage } from './published-variable-context';
 import { readCorporatePhone } from './site-contact-settings';
 import { createHash } from 'node:crypto';
-import { servingPublication } from './serving-publication-context';
+import { selectFrozenCity, servingCityProjection, servingPublication } from './serving-publication-context';
 import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
 import { SiteCatalogService } from './site-catalog.service';
@@ -570,11 +570,19 @@ export class PublicationWorkflowService {
   }
 
   async getPublishedCity(siteSlug: string, citySlug: string) {
-    const catalog = await this.getPublishedCatalog(siteSlug);
-    const cities = Array.isArray(catalog.cities) ? catalog.cities as Array<Record<string, unknown>> : [];
-    const city = cities.find((item) => item.slug === citySlug);
-    if (!city) throw new NotFoundException('City not found');
-    return city;
+    return this.getPublishedCityEntry(siteSlug, citySlug);
+  }
+
+  async getPublishedTariff(siteSlug: string, citySlug: string, tariffSlug: string) {
+    return this.getPublishedCityEntry(siteSlug, citySlug, tariffSlug);
+  }
+
+  private async getPublishedCityEntry(siteSlug: string, citySlug: string, tariffSlug?: string): Promise<JsonObject> {
+    const selected = await servingCityProjection(this.prisma, siteSlug, citySlug, tariffSlug)
+      ?? selectFrozenCity(await this.getPublishedCatalog(siteSlug), citySlug, tariffSlug);
+    if (!selected.cityFound) throw new NotFoundException('City not found');
+    if (!selected.value) throw new NotFoundException('Published tariff not found');
+    return selected.value;
   }
 
   async markSucceeded(publicationId: string, result: { deploymentId?: string; [key: string]: unknown }, existingTransaction?: Prisma.TransactionClient) {

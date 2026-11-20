@@ -22,10 +22,11 @@ try {
   checked(docker(['run', '--rm', '-d', '--name', container, '-p', '127.0.0.1::5432', '-e', 'POSTGRES_PASSWORD=postgres', '-e', 'POSTGRES_DB=provider', 'postgres:18.6-alpine'])); owned = true;
   let ready = false;
   for (let attempt = 0; attempt < 60; attempt++) {
-    if (docker(['exec', container, 'pg_isready', '-U', 'postgres', '-d', 'provider'], { timeout: 5000 }).status === 0) { ready = true; break; }
+    // The image initializes PostgreSQL on a Unix socket before its final TCP server starts.
+    if (docker(['exec', container, 'pg_isready', '-h', '127.0.0.1', '-U', 'postgres', '-d', 'provider'], { timeout: 5000 }).status === 0) { ready = true; break; }
     Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 200);
   }
-  assert.ok(ready);
+  assert.ok(ready, 'The test database did not become ready over TCP');
   const port = checked(docker(['port', container, '5432/tcp'])).match(/:(\d+)\s*$/)[1];
   process.env.DATABASE_URL = `postgresql://postgres:postgres@127.0.0.1:${port}/provider`;
   checked(spawnSync('pnpm', ['--filter', '@provider/database', 'migrate:deploy'], { shell: process.platform === 'win32', env: process.env, encoding: 'utf8', timeout: 120000, windowsHide: true }));

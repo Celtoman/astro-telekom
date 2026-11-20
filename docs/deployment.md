@@ -2,7 +2,7 @@
 
 Действующий внешний контур `astro-telekom` запускает готовые образы из GHCR. Команды сборки, правила commit/push, закрепление Compose в Coolify, проверка и откат приведены в [runbook выпуска](runbooks/ghcr-release.md). Датированные выпуски ниже описывают конфигурацию на момент каждой операции.
 
-В дереве 78 каталогов миграций. Текущая голова `0078_global_faq` разрешает одну глобальную страницу FAQ на сайт и сохраняет городские записи. `0077_faq_seo_kind` добавляет тип SEO-шаблона FAQ. Миграции меняют схему, а начальное содержимое сохраняется редактором.
+В дереве 79 каталогов миграций. `0080_serving_catalog_projection` добавляет версионированные проекции для точечного чтения опубликованного каталога. Их чтение включается отдельно. `0078_global_faq` разрешает одну глобальную страницу FAQ на сайт и сохраняет городские записи. `0077_faq_seo_kind` добавляет тип SEO-шаблона FAQ. Миграции меняют схему, а начальное содержимое сохраняется редактором.
 
 На 17 ноября 2026 последняя из 76 миграций — `0076_support_page`. Миграция 0075 добавляет enum CITY_SUPPORT, а 0076 создаёт рабочий шаблон, городские страницы и SEO только для Дом.ру. После проверки полного списка изменений отдельно опубликована ревизия 34 с 207 страницами поддержки. Развёртывание `703df070` и CODE-пересборка подтверждены. Рабочий каталог и опубликованный снимок остались на ревизии 34. [Протокол выпуска](research/2026-11-17-support-implementation.md).
 
@@ -139,6 +139,7 @@ Seed не становится автоматической операцией �
 | Coolify bootstrap/access | `RUN_BOOTSTRAP_SEED` (обязательный явный `true`/`false`), `TEST_BASIC_AUTH_USERS` (bcrypt verifier, Literal + Buildtime + Runtime; label escaping выключен) |
 | Локальная работа агента с Coolify MCP | `COOLIFY_MCP_TOKEN` — токен подключения из корневого `.env`; используется локальным MCP-клиентом, отдельно от runtime `COOLIFY_API_TOKEN` |
 | Auth/secrets | `ADMIN_API_TOKEN` (в Coolify: непустой случайный токен, Literal + Buildtime + Runtime), `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SUBSCRIBER_COOKIE_SECRET` |
+| Проекции опубликованного каталога | `SERVING_CATALOG_PROJECTIONS_ENABLED` включает чтение в API. `SERVING_CATALOG_PROJECTION_WARMER_ENABLED` включает отдельный процесс подготовки. Обе переменные по умолчанию `false`. |
 | Input security | `TRUST_PROXY`, `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_LOGIN_MAX`, `RATE_LIMIT_SUGGESTIONS_MAX`, `RATE_LIMIT_PUBLIC_WRITE_MAX`, `RATE_LIMIT_DEFAULT_MAX` |
 | PII retention | `PII_RETENTION_DAYS=180` (согласованный срок сырых заявок), `PII_RETENTION_BATCH_SIZE` (default 500), `PII_RETENTION_CRON` (default `0 3 * * *`, UTC) |
 | Address/coverage/phone | `DADATA_TOKEN`, `DADATA_SECRET`, `DADATA_SUGGEST_API_URL`, `DADATA_CLEAN_API_URL`, опциональные переопределения `DADATA_IPLOCATE_API_URL` и `DADATA_PHONE_CLEAN_API_URL`, `TARIFNIK_ADDRESS_CHECK_API_URL`, `TARIFNIK_API_KEY`, `TARIFNIK_TARGET_PROVIDER_ID`. IPLocate и DaData Phone по умолчанию используют официальные endpoints; credentials остаются только на сервере; target ID для Дом.ру сейчас `8`. |
@@ -153,6 +154,26 @@ docker compose -f docker-compose.coolify.yml exec api node -e "fetch('http://loc
 ```
 
 `configured` означает только, что обязательные переменные заданы. Endpoint не выполняет внешние запросы, не возвращает значения и не подтверждает корректность ключей, договоров, лимитов или SLA. Sandbox/rehearsal дает владельцу отдельное техническое доказательство работоспособности интеграции, но не принимает за него решение о трафике.
+
+### Автоматическая подготовка проекций опубликованных каталогов
+
+В Coolify отдельная роль `serving-projection-warmer` использует тот же закреплённый runtime-образ, что API. Она запускается после миграций, получает runtime `env_file`, обращается к приватному контроллеру на `http://web:8081` и работает без портов и томов. Начальные пределы составляют 0,5 CPU и 512 МиБ. При выключенном флаге процесс завершается с кодом 0. Состояние этой роли и событие `projection_ready` проверяются отдельно при включении.
+
+Внешнее включение выполняется по шагам.
+
+1. Применить `0080_serving_catalog_projection` с `SERVING_CATALOG_PROJECTIONS_ENABLED=false`. Убедиться, что активный ID, последовательность выпуска, дайджест каталога и все прежние тома сохранились.
+2. Включить `SERVING_CATALOG_PROJECTION_WARMER_ENABLED=true`. Проверить, что роль использует тот же API digest и опубликовала `projection_ready` для текущего ID с дайджестом из приватного `/active`. При повторном старте готовая проекция может уже существовать. В таком случае однократная команда проверки возвращает её точные `publicationId`, `generation` и `catalogDigest`.
+3. Включить `SERVING_CATALOG_PROJECTIONS_ENABLED=true` после проверки доказательства. Повторить read-only HTTP для каталога, новости и активного снимка. Отдельно проверить задержку и штатный fallback по exact ID. Для отката выключить чтение первым.
+
+После миграции 0080 запустите отдельный процесс на той же версии API и с тем же PostgreSQL. Для static-провайдера процессу нужны `DATABASE_URL`, `REBUILD_PROVIDER=static`, внутренний `STATIC_PUBLICATION_URL` и `ADMIN_API_TOKEN`. Роль подключения использует текущие разрешения API на публикации и проекции и право `TEMP` для промежуточных строк. HTTP-порт и Redis ему не требуются.
+
+```sh
+SERVING_CATALOG_PROJECTION_WARMER_ENABLED=true node --env-file=.env apps/api/dist/serving-projection-warmer-main.js
+```
+
+Наблюдайте `projection_ready` с ID, поколением, digest, числом городов и временем подготовки. `lockMs` измеряет от запроса `FOR UPDATE NOWAIT` до окончания записей в транзакции. Задержка commit в это поле не включена. Перед включением `SERVING_CATALOG_PROJECTIONS_ENABLED=true` подтвердите готовность проекции точного текущего ID и проверьте ответы нужных публичных маршрутов. Разовый запуск `node apps/api/dist/warm-serving-catalog-projection.js <publicationId>` остаётся доступен из окружения API с настроенным `DATABASE_URL`.
+
+Процесс использует уже сохранённые задания пересборки, включая ещё не обработанные запросы и retry. Точный `/active` позволяет подготовить исторический снимок после rollback. Ошибка прогрева оставляет точное полное чтение и не останавливает активацию или SQL acknowledgment. Можно выключить чтения флагом API и независимо остановить процесс. Отключение сохраняет подготовленные проекции и исходные каталоги.
 
 ## Известные эксплуатационные ограничения
 

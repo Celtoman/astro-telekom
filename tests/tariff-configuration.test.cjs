@@ -102,20 +102,35 @@ test('invalid selections and malformed tariff pricing are rejected instead of be
 
 test('public quote uses only the published city snapshot and rejects another tariff or forged option', async () => {
   const { CitiesController } = require('../apps/api/dist/cities.controller.js');
+  const { PublicationWorkflowService } = require('../apps/api/dist/publication-workflow.service.js');
   let publishedReads = 0;
-  const controller = new CitiesController({}, {
-    getPublishedCity: async (siteSlug, citySlug) => {
-      assert.deepEqual([siteSlug, citySlug], ['domru', 'kazan']);
+  const workflow = new PublicationWorkflowService({
+    site: { findUnique: async ({ where }) => {
+      assert.deepEqual(where, { slug: 'domru' });
+      return { id: 'site-1' };
+    } },
+    sitePublication: { findFirst: async ({ where, orderBy }) => {
+      assert.deepEqual(where, { siteId: 'site-1', status: 'SUCCEEDED' });
+      assert.deepEqual(orderBy, { releaseSequence: 'desc' });
       publishedReads++;
-      return { tariffs: [tariff] };
-    },
-  });
-  const quote = await controller.quoteTariff('domru', 'kazan', 'giga-500', { router: 'INSTALLMENT' });
-  assert.equal(quote.totals.monthly, 1100);
-  assert.match(quote.fingerprint, /^[a-f0-9]{64}$/);
-  assert.equal(publishedReads, 1);
-  await assert.rejects(() => controller.quoteTariff('domru', 'kazan', 'hidden', {}), /not found/i);
-  await assert.rejects(() => controller.quoteTariff('domru', 'kazan', 'giga-500', { services: ['ont'] }), /нельзя выбрать/);
+      return { catalog: { cities: [{ slug: 'kazan', tariffs: [tariff] }] } };
+    } },
+  }, {});
+  const previousProvider = process.env.REBUILD_PROVIDER;
+  process.env.REBUILD_PROVIDER = 'coolify';
+  const controller = new CitiesController({}, workflow);
+  try {
+    const quote = await controller.quoteTariff('domru', 'kazan', 'giga-500', { router: 'INSTALLMENT' });
+    assert.equal(quote.totals.monthly, 1100);
+    assert.match(quote.fingerprint, /^[a-f0-9]{64}$/);
+    assert.equal(publishedReads, 1);
+    await assert.rejects(() => controller.quoteTariff('domru', 'kazan', 'hidden', {}), /Published tariff not found/);
+    await assert.rejects(() => controller.quoteTariff('domru', 'hidden', 'giga-500', {}), /City not found/);
+    await assert.rejects(() => controller.quoteTariff('domru', 'kazan', 'giga-500', { services: ['ont'] }), /нельзя выбрать/);
+  } finally {
+    if (previousProvider === undefined) delete process.env.REBUILD_PROVIDER;
+    else process.env.REBUILD_PROVIDER = previousProvider;
+  }
 });
 
 test('read-only public quote responds with HTTP 200 and does not create a resource', async () => {
@@ -128,7 +143,7 @@ test('read-only public quote responds with HTTP 200 and does not create a resour
   class QuoteTestModule {}
   Module({ controllers: [CitiesController], providers: [
     { provide: SiteCatalogService, useValue: {} },
-    { provide: PublicationWorkflowService, useValue: { getPublishedCity: async () => ({ tariffs: [tariff] }) } },
+    { provide: PublicationWorkflowService, useValue: { getPublishedTariff: async () => tariff } },
   ] })(QuoteTestModule);
   const app = await NestFactory.create(QuoteTestModule, new FastifyAdapter(), { logger: false });
   try {

@@ -51,6 +51,7 @@ services:
       TRUST_PROXY: "true"
       REBUILD_PROVIDER: "static"
       STATIC_PUBLICATION_URL: http://web:8081
+      SERVING_CATALOG_PROJECTIONS_ENABLED: ${SERVING_CATALOG_PROJECTIONS_ENABLED:-false}
       PUBLIC_SITE_URL: https://${PUBLIC_DOMAIN:?Set PUBLIC_DOMAIN in Coolify}
       EDITORIAL_MEDIA_ROOT: /editorial-media
     volumes:
@@ -86,6 +87,24 @@ services:
       timeout: 5s
       retries: 3
       start_period: 20s
+
+  serving-projection-warmer:
+    exclude_from_hc: true
+    image: "${COOLIFY_RESOURCE_UUID:-astro-telekom}-api:runtime"
+    pull_policy: never
+    restart: "on-failure:5"
+    init: true
+    cpus: 0.5
+    mem_limit: 512m
+    env_file: ${ENV_FILE:-.env}
+    environment:
+      REBUILD_PROVIDER: "static"
+      STATIC_PUBLICATION_URL: http://web:8081
+      SERVING_CATALOG_PROJECTION_WARMER_ENABLED: ${SERVING_CATALOG_PROJECTION_WARMER_ENABLED:-false}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    command: ["node", "apps/api/dist/serving-projection-warmer-main.js"]
 
   bootstrap-seed:
     exclude_from_hc: true

@@ -49,6 +49,16 @@ export type ContentRevision = $Result.DefaultSelection<Prisma.$ContentRevisionPa
  */
 export type SitePublication = $Result.DefaultSelection<Prisma.$SitePublicationPayload>
 /**
+ * Model SitePublicationProjection
+ * 
+ */
+export type SitePublicationProjection = $Result.DefaultSelection<Prisma.$SitePublicationProjectionPayload>
+/**
+ * Model SitePublicationCityProjection
+ * 
+ */
+export type SitePublicationCityProjection = $Result.DefaultSelection<Prisma.$SitePublicationCityProjectionPayload>
+/**
  * Model NewsArticle
  * 
  */
@@ -770,6 +780,26 @@ export class PrismaClient<
     * ```
     */
   get sitePublication(): Prisma.SitePublicationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.sitePublicationProjection`: Exposes CRUD operations for the **SitePublicationProjection** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SitePublicationProjections
+    * const sitePublicationProjections = await prisma.sitePublicationProjection.findMany()
+    * ```
+    */
+  get sitePublicationProjection(): Prisma.SitePublicationProjectionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.sitePublicationCityProjection`: Exposes CRUD operations for the **SitePublicationCityProjection** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SitePublicationCityProjections
+    * const sitePublicationCityProjections = await prisma.sitePublicationCityProjection.findMany()
+    * ```
+    */
+  get sitePublicationCityProjection(): Prisma.SitePublicationCityProjectionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.newsArticle`: Exposes CRUD operations for the **NewsArticle** model.
@@ -1504,6 +1534,8 @@ export namespace Prisma {
     SiteRebuild: 'SiteRebuild',
     ContentRevision: 'ContentRevision',
     SitePublication: 'SitePublication',
+    SitePublicationProjection: 'SitePublicationProjection',
+    SitePublicationCityProjection: 'SitePublicationCityProjection',
     NewsArticle: 'NewsArticle',
     NewsCategory: 'NewsCategory',
     EditorialSettings: 'EditorialSettings',
@@ -1547,7 +1579,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "provider" | "site" | "seoTemplate" | "sitemapExclusion" | "siteRebuild" | "contentRevision" | "sitePublication" | "newsArticle" | "newsCategory" | "editorialSettings" | "editorialRevision" | "mediaAsset" | "editorialPublicationItem" | "sitePublicationValidation" | "auditEvent" | "region" | "city" | "page" | "pageTemplate" | "pageTemplateBlock" | "pageBlock" | "tariff" | "tariffImportRun" | "cityImportRun" | "addressCheck" | "lead" | "leadDecisionEvent" | "leadNotification" | "leadAccessToken" | "leadDeliveryAttempt" | "leadActivityEvent" | "redirect" | "leadStatusHistory" | "user" | "session"
+      modelProps: "provider" | "site" | "seoTemplate" | "sitemapExclusion" | "siteRebuild" | "contentRevision" | "sitePublication" | "sitePublicationProjection" | "sitePublicationCityProjection" | "newsArticle" | "newsCategory" | "editorialSettings" | "editorialRevision" | "mediaAsset" | "editorialPublicationItem" | "sitePublicationValidation" | "auditEvent" | "region" | "city" | "page" | "pageTemplate" | "pageTemplateBlock" | "pageBlock" | "tariff" | "tariffImportRun" | "cityImportRun" | "addressCheck" | "lead" | "leadDecisionEvent" | "leadNotification" | "leadAccessToken" | "leadDeliveryAttempt" | "leadActivityEvent" | "redirect" | "leadStatusHistory" | "user" | "session"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2066,6 +2098,154 @@ export namespace Prisma {
           count: {
             args: Prisma.SitePublicationCountArgs<ExtArgs>
             result: $Utils.Optional<SitePublicationCountAggregateOutputType> | number
+          }
+        }
+      }
+      SitePublicationProjection: {
+        payload: Prisma.$SitePublicationProjectionPayload<ExtArgs>
+        fields: Prisma.SitePublicationProjectionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SitePublicationProjectionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationProjectionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SitePublicationProjectionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationProjectionPayload>
+          }
+          findFirst: {
+            args: Prisma.SitePublicationProjectionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationProjectionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SitePublicationProjectionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationProjectionPayload>
+          }
+          findMany: {
+            args: Prisma.SitePublicationProjectionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationProjectionPayload>[]
+          }
+          create: {
+            args: Prisma.SitePublicationProjectionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationProjectionPayload>
+          }
+          createMany: {
+            args: Prisma.SitePublicationProjectionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SitePublicationProjectionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationProjectionPayload>[]
+          }
+          delete: {
+            args: Prisma.SitePublicationProjectionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationProjectionPayload>
+          }
+          update: {
+            args: Prisma.SitePublicationProjectionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationProjectionPayload>
+          }
+          deleteMany: {
+            args: Prisma.SitePublicationProjectionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SitePublicationProjectionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SitePublicationProjectionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationProjectionPayload>[]
+          }
+          upsert: {
+            args: Prisma.SitePublicationProjectionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationProjectionPayload>
+          }
+          aggregate: {
+            args: Prisma.SitePublicationProjectionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSitePublicationProjection>
+          }
+          groupBy: {
+            args: Prisma.SitePublicationProjectionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SitePublicationProjectionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SitePublicationProjectionCountArgs<ExtArgs>
+            result: $Utils.Optional<SitePublicationProjectionCountAggregateOutputType> | number
+          }
+        }
+      }
+      SitePublicationCityProjection: {
+        payload: Prisma.$SitePublicationCityProjectionPayload<ExtArgs>
+        fields: Prisma.SitePublicationCityProjectionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SitePublicationCityProjectionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationCityProjectionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SitePublicationCityProjectionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationCityProjectionPayload>
+          }
+          findFirst: {
+            args: Prisma.SitePublicationCityProjectionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationCityProjectionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SitePublicationCityProjectionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationCityProjectionPayload>
+          }
+          findMany: {
+            args: Prisma.SitePublicationCityProjectionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationCityProjectionPayload>[]
+          }
+          create: {
+            args: Prisma.SitePublicationCityProjectionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationCityProjectionPayload>
+          }
+          createMany: {
+            args: Prisma.SitePublicationCityProjectionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SitePublicationCityProjectionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationCityProjectionPayload>[]
+          }
+          delete: {
+            args: Prisma.SitePublicationCityProjectionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationCityProjectionPayload>
+          }
+          update: {
+            args: Prisma.SitePublicationCityProjectionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationCityProjectionPayload>
+          }
+          deleteMany: {
+            args: Prisma.SitePublicationCityProjectionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SitePublicationCityProjectionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SitePublicationCityProjectionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationCityProjectionPayload>[]
+          }
+          upsert: {
+            args: Prisma.SitePublicationCityProjectionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationCityProjectionPayload>
+          }
+          aggregate: {
+            args: Prisma.SitePublicationCityProjectionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSitePublicationCityProjection>
+          }
+          groupBy: {
+            args: Prisma.SitePublicationCityProjectionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SitePublicationCityProjectionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SitePublicationCityProjectionCountArgs<ExtArgs>
+            result: $Utils.Optional<SitePublicationCityProjectionCountAggregateOutputType> | number
           }
         }
       }
@@ -4271,6 +4451,8 @@ export namespace Prisma {
     siteRebuild?: SiteRebuildOmit
     contentRevision?: ContentRevisionOmit
     sitePublication?: SitePublicationOmit
+    sitePublicationProjection?: SitePublicationProjectionOmit
+    sitePublicationCityProjection?: SitePublicationCityProjectionOmit
     newsArticle?: NewsArticleOmit
     newsCategory?: NewsCategoryOmit
     editorialSettings?: EditorialSettingsOmit
@@ -4680,6 +4862,37 @@ export namespace Prisma {
    */
   export type SitePublicationCountOutputTypeCountEditorialItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EditorialPublicationItemWhereInput
+  }
+
+
+  /**
+   * Count Type SitePublicationProjectionCountOutputType
+   */
+
+  export type SitePublicationProjectionCountOutputType = {
+    cities: number
+  }
+
+  export type SitePublicationProjectionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cities?: boolean | SitePublicationProjectionCountOutputTypeCountCitiesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SitePublicationProjectionCountOutputType without action
+   */
+  export type SitePublicationProjectionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationProjectionCountOutputType
+     */
+    select?: SitePublicationProjectionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SitePublicationProjectionCountOutputType without action
+   */
+  export type SitePublicationProjectionCountOutputTypeCountCitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SitePublicationCityProjectionWhereInput
   }
 
 
@@ -13042,11 +13255,13 @@ export namespace Prisma {
   export type SitePublicationAvgAggregateOutputType = {
     siteRevision: number | null
     releaseSequence: number | null
+    catalogGeneration: number | null
   }
 
   export type SitePublicationSumAggregateOutputType = {
     siteRevision: number | null
     releaseSequence: number | null
+    catalogGeneration: number | null
   }
 
   export type SitePublicationMinAggregateOutputType = {
@@ -13058,6 +13273,7 @@ export namespace Prisma {
     basePublicationId: string | null
     changeSetDigest: string | null
     status: $Enums.SitePublicationStatus | null
+    catalogGeneration: number | null
     triggerEntity: string | null
     triggerEntityId: string | null
     requestedById: string | null
@@ -13078,6 +13294,7 @@ export namespace Prisma {
     basePublicationId: string | null
     changeSetDigest: string | null
     status: $Enums.SitePublicationStatus | null
+    catalogGeneration: number | null
     triggerEntity: string | null
     triggerEntityId: string | null
     requestedById: string | null
@@ -13099,6 +13316,7 @@ export namespace Prisma {
     changeSetDigest: number
     status: number
     catalog: number
+    catalogGeneration: number
     triggerEntity: number
     triggerEntityId: number
     requestedById: number
@@ -13116,11 +13334,13 @@ export namespace Prisma {
   export type SitePublicationAvgAggregateInputType = {
     siteRevision?: true
     releaseSequence?: true
+    catalogGeneration?: true
   }
 
   export type SitePublicationSumAggregateInputType = {
     siteRevision?: true
     releaseSequence?: true
+    catalogGeneration?: true
   }
 
   export type SitePublicationMinAggregateInputType = {
@@ -13132,6 +13352,7 @@ export namespace Prisma {
     basePublicationId?: true
     changeSetDigest?: true
     status?: true
+    catalogGeneration?: true
     triggerEntity?: true
     triggerEntityId?: true
     requestedById?: true
@@ -13152,6 +13373,7 @@ export namespace Prisma {
     basePublicationId?: true
     changeSetDigest?: true
     status?: true
+    catalogGeneration?: true
     triggerEntity?: true
     triggerEntityId?: true
     requestedById?: true
@@ -13173,6 +13395,7 @@ export namespace Prisma {
     changeSetDigest?: true
     status?: true
     catalog?: true
+    catalogGeneration?: true
     triggerEntity?: true
     triggerEntityId?: true
     requestedById?: true
@@ -13282,6 +13505,7 @@ export namespace Prisma {
     changeSetDigest: string | null
     status: $Enums.SitePublicationStatus
     catalog: JsonValue
+    catalogGeneration: number
     triggerEntity: string
     triggerEntityId: string
     requestedById: string | null
@@ -13323,6 +13547,7 @@ export namespace Prisma {
     changeSetDigest?: boolean
     status?: boolean
     catalog?: boolean
+    catalogGeneration?: boolean
     triggerEntity?: boolean
     triggerEntityId?: boolean
     requestedById?: boolean
@@ -13340,6 +13565,7 @@ export namespace Prisma {
     processingRebuilds?: boolean | SitePublication$processingRebuildsArgs<ExtArgs>
     publishedRebuilds?: boolean | SitePublication$publishedRebuildsArgs<ExtArgs>
     editorialItems?: boolean | SitePublication$editorialItemsArgs<ExtArgs>
+    servingProjection?: boolean | SitePublication$servingProjectionArgs<ExtArgs>
     _count?: boolean | SitePublicationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["sitePublication"]>
 
@@ -13353,6 +13579,7 @@ export namespace Prisma {
     changeSetDigest?: boolean
     status?: boolean
     catalog?: boolean
+    catalogGeneration?: boolean
     triggerEntity?: boolean
     triggerEntityId?: boolean
     requestedById?: boolean
@@ -13378,6 +13605,7 @@ export namespace Prisma {
     changeSetDigest?: boolean
     status?: boolean
     catalog?: boolean
+    catalogGeneration?: boolean
     triggerEntity?: boolean
     triggerEntityId?: boolean
     requestedById?: boolean
@@ -13403,6 +13631,7 @@ export namespace Prisma {
     changeSetDigest?: boolean
     status?: boolean
     catalog?: boolean
+    catalogGeneration?: boolean
     triggerEntity?: boolean
     triggerEntityId?: boolean
     requestedById?: boolean
@@ -13415,7 +13644,7 @@ export namespace Prisma {
     publishedAt?: boolean
   }
 
-  export type SitePublicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "siteRevision" | "releaseSequence" | "scopeKey" | "basePublicationId" | "changeSetDigest" | "status" | "catalog" | "triggerEntity" | "triggerEntityId" | "requestedById" | "validationId" | "lastError" | "providerDeploymentId" | "providerResponse" | "createdAt" | "updatedAt" | "publishedAt", ExtArgs["result"]["sitePublication"]>
+  export type SitePublicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "siteRevision" | "releaseSequence" | "scopeKey" | "basePublicationId" | "changeSetDigest" | "status" | "catalog" | "catalogGeneration" | "triggerEntity" | "triggerEntityId" | "requestedById" | "validationId" | "lastError" | "providerDeploymentId" | "providerResponse" | "createdAt" | "updatedAt" | "publishedAt", ExtArgs["result"]["sitePublication"]>
   export type SitePublicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     requestedBy?: boolean | SitePublication$requestedByArgs<ExtArgs>
@@ -13424,6 +13653,7 @@ export namespace Prisma {
     processingRebuilds?: boolean | SitePublication$processingRebuildsArgs<ExtArgs>
     publishedRebuilds?: boolean | SitePublication$publishedRebuildsArgs<ExtArgs>
     editorialItems?: boolean | SitePublication$editorialItemsArgs<ExtArgs>
+    servingProjection?: boolean | SitePublication$servingProjectionArgs<ExtArgs>
     _count?: boolean | SitePublicationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SitePublicationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13447,6 +13677,7 @@ export namespace Prisma {
       processingRebuilds: Prisma.$SiteRebuildPayload<ExtArgs>[]
       publishedRebuilds: Prisma.$SiteRebuildPayload<ExtArgs>[]
       editorialItems: Prisma.$EditorialPublicationItemPayload<ExtArgs>[]
+      servingProjection: Prisma.$SitePublicationProjectionPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -13458,6 +13689,7 @@ export namespace Prisma {
       changeSetDigest: string | null
       status: $Enums.SitePublicationStatus
       catalog: Prisma.JsonValue
+      catalogGeneration: number
       triggerEntity: string
       triggerEntityId: string
       requestedById: string | null
@@ -13869,6 +14101,7 @@ export namespace Prisma {
     processingRebuilds<T extends SitePublication$processingRebuildsArgs<ExtArgs> = {}>(args?: Subset<T, SitePublication$processingRebuildsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     publishedRebuilds<T extends SitePublication$publishedRebuildsArgs<ExtArgs> = {}>(args?: Subset<T, SitePublication$publishedRebuildsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     editorialItems<T extends SitePublication$editorialItemsArgs<ExtArgs> = {}>(args?: Subset<T, SitePublication$editorialItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EditorialPublicationItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    servingProjection<T extends SitePublication$servingProjectionArgs<ExtArgs> = {}>(args?: Subset<T, SitePublication$servingProjectionArgs<ExtArgs>>): Prisma__SitePublicationProjectionClient<$Result.GetResult<Prisma.$SitePublicationProjectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13907,6 +14140,7 @@ export namespace Prisma {
     readonly changeSetDigest: FieldRef<"SitePublication", 'String'>
     readonly status: FieldRef<"SitePublication", 'SitePublicationStatus'>
     readonly catalog: FieldRef<"SitePublication", 'Json'>
+    readonly catalogGeneration: FieldRef<"SitePublication", 'Int'>
     readonly triggerEntity: FieldRef<"SitePublication", 'String'>
     readonly triggerEntityId: FieldRef<"SitePublication", 'String'>
     readonly requestedById: FieldRef<"SitePublication", 'String'>
@@ -14452,6 +14686,25 @@ export namespace Prisma {
   }
 
   /**
+   * SitePublication.servingProjection
+   */
+  export type SitePublication$servingProjectionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationProjection
+     */
+    select?: SitePublicationProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationProjection
+     */
+    omit?: SitePublicationProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationProjectionInclude<ExtArgs> | null
+    where?: SitePublicationProjectionWhereInput
+  }
+
+  /**
    * SitePublication without action
    */
   export type SitePublicationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14467,6 +14720,2210 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: SitePublicationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SitePublicationProjection
+   */
+
+  export type AggregateSitePublicationProjection = {
+    _count: SitePublicationProjectionCountAggregateOutputType | null
+    _avg: SitePublicationProjectionAvgAggregateOutputType | null
+    _sum: SitePublicationProjectionSumAggregateOutputType | null
+    _min: SitePublicationProjectionMinAggregateOutputType | null
+    _max: SitePublicationProjectionMaxAggregateOutputType | null
+  }
+
+  export type SitePublicationProjectionAvgAggregateOutputType = {
+    catalogGeneration: number | null
+    formatVersion: number | null
+    cityCount: number | null
+  }
+
+  export type SitePublicationProjectionSumAggregateOutputType = {
+    catalogGeneration: number | null
+    formatVersion: number | null
+    cityCount: number | null
+  }
+
+  export type SitePublicationProjectionMinAggregateOutputType = {
+    publicationId: string | null
+    catalogGeneration: number | null
+    formatVersion: number | null
+    catalogDigest: string | null
+    cityCount: number | null
+  }
+
+  export type SitePublicationProjectionMaxAggregateOutputType = {
+    publicationId: string | null
+    catalogGeneration: number | null
+    formatVersion: number | null
+    catalogDigest: string | null
+    cityCount: number | null
+  }
+
+  export type SitePublicationProjectionCountAggregateOutputType = {
+    publicationId: number
+    catalogGeneration: number
+    formatVersion: number
+    catalogDigest: number
+    site: number
+    globalPages: number
+    addressCities: number
+    redirects: number
+    cityCount: number
+    _all: number
+  }
+
+
+  export type SitePublicationProjectionAvgAggregateInputType = {
+    catalogGeneration?: true
+    formatVersion?: true
+    cityCount?: true
+  }
+
+  export type SitePublicationProjectionSumAggregateInputType = {
+    catalogGeneration?: true
+    formatVersion?: true
+    cityCount?: true
+  }
+
+  export type SitePublicationProjectionMinAggregateInputType = {
+    publicationId?: true
+    catalogGeneration?: true
+    formatVersion?: true
+    catalogDigest?: true
+    cityCount?: true
+  }
+
+  export type SitePublicationProjectionMaxAggregateInputType = {
+    publicationId?: true
+    catalogGeneration?: true
+    formatVersion?: true
+    catalogDigest?: true
+    cityCount?: true
+  }
+
+  export type SitePublicationProjectionCountAggregateInputType = {
+    publicationId?: true
+    catalogGeneration?: true
+    formatVersion?: true
+    catalogDigest?: true
+    site?: true
+    globalPages?: true
+    addressCities?: true
+    redirects?: true
+    cityCount?: true
+    _all?: true
+  }
+
+  export type SitePublicationProjectionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SitePublicationProjection to aggregate.
+     */
+    where?: SitePublicationProjectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitePublicationProjections to fetch.
+     */
+    orderBy?: SitePublicationProjectionOrderByWithRelationInput | SitePublicationProjectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SitePublicationProjectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitePublicationProjections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitePublicationProjections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SitePublicationProjections
+    **/
+    _count?: true | SitePublicationProjectionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SitePublicationProjectionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SitePublicationProjectionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SitePublicationProjectionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SitePublicationProjectionMaxAggregateInputType
+  }
+
+  export type GetSitePublicationProjectionAggregateType<T extends SitePublicationProjectionAggregateArgs> = {
+        [P in keyof T & keyof AggregateSitePublicationProjection]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSitePublicationProjection[P]>
+      : GetScalarType<T[P], AggregateSitePublicationProjection[P]>
+  }
+
+
+
+
+  export type SitePublicationProjectionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SitePublicationProjectionWhereInput
+    orderBy?: SitePublicationProjectionOrderByWithAggregationInput | SitePublicationProjectionOrderByWithAggregationInput[]
+    by: SitePublicationProjectionScalarFieldEnum[] | SitePublicationProjectionScalarFieldEnum
+    having?: SitePublicationProjectionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SitePublicationProjectionCountAggregateInputType | true
+    _avg?: SitePublicationProjectionAvgAggregateInputType
+    _sum?: SitePublicationProjectionSumAggregateInputType
+    _min?: SitePublicationProjectionMinAggregateInputType
+    _max?: SitePublicationProjectionMaxAggregateInputType
+  }
+
+  export type SitePublicationProjectionGroupByOutputType = {
+    publicationId: string
+    catalogGeneration: number
+    formatVersion: number
+    catalogDigest: string
+    site: JsonValue
+    globalPages: JsonValue
+    addressCities: JsonValue
+    redirects: JsonValue
+    cityCount: number
+    _count: SitePublicationProjectionCountAggregateOutputType | null
+    _avg: SitePublicationProjectionAvgAggregateOutputType | null
+    _sum: SitePublicationProjectionSumAggregateOutputType | null
+    _min: SitePublicationProjectionMinAggregateOutputType | null
+    _max: SitePublicationProjectionMaxAggregateOutputType | null
+  }
+
+  type GetSitePublicationProjectionGroupByPayload<T extends SitePublicationProjectionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SitePublicationProjectionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SitePublicationProjectionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SitePublicationProjectionGroupByOutputType[P]>
+            : GetScalarType<T[P], SitePublicationProjectionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SitePublicationProjectionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    publicationId?: boolean
+    catalogGeneration?: boolean
+    formatVersion?: boolean
+    catalogDigest?: boolean
+    site?: boolean
+    globalPages?: boolean
+    addressCities?: boolean
+    redirects?: boolean
+    cityCount?: boolean
+    publication?: boolean | SitePublicationDefaultArgs<ExtArgs>
+    cities?: boolean | SitePublicationProjection$citiesArgs<ExtArgs>
+    _count?: boolean | SitePublicationProjectionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sitePublicationProjection"]>
+
+  export type SitePublicationProjectionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    publicationId?: boolean
+    catalogGeneration?: boolean
+    formatVersion?: boolean
+    catalogDigest?: boolean
+    site?: boolean
+    globalPages?: boolean
+    addressCities?: boolean
+    redirects?: boolean
+    cityCount?: boolean
+    publication?: boolean | SitePublicationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sitePublicationProjection"]>
+
+  export type SitePublicationProjectionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    publicationId?: boolean
+    catalogGeneration?: boolean
+    formatVersion?: boolean
+    catalogDigest?: boolean
+    site?: boolean
+    globalPages?: boolean
+    addressCities?: boolean
+    redirects?: boolean
+    cityCount?: boolean
+    publication?: boolean | SitePublicationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sitePublicationProjection"]>
+
+  export type SitePublicationProjectionSelectScalar = {
+    publicationId?: boolean
+    catalogGeneration?: boolean
+    formatVersion?: boolean
+    catalogDigest?: boolean
+    site?: boolean
+    globalPages?: boolean
+    addressCities?: boolean
+    redirects?: boolean
+    cityCount?: boolean
+  }
+
+  export type SitePublicationProjectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"publicationId" | "catalogGeneration" | "formatVersion" | "catalogDigest" | "site" | "globalPages" | "addressCities" | "redirects" | "cityCount", ExtArgs["result"]["sitePublicationProjection"]>
+  export type SitePublicationProjectionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    publication?: boolean | SitePublicationDefaultArgs<ExtArgs>
+    cities?: boolean | SitePublicationProjection$citiesArgs<ExtArgs>
+    _count?: boolean | SitePublicationProjectionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SitePublicationProjectionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    publication?: boolean | SitePublicationDefaultArgs<ExtArgs>
+  }
+  export type SitePublicationProjectionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    publication?: boolean | SitePublicationDefaultArgs<ExtArgs>
+  }
+
+  export type $SitePublicationProjectionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SitePublicationProjection"
+    objects: {
+      publication: Prisma.$SitePublicationPayload<ExtArgs>
+      cities: Prisma.$SitePublicationCityProjectionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      publicationId: string
+      catalogGeneration: number
+      formatVersion: number
+      catalogDigest: string
+      site: Prisma.JsonValue
+      globalPages: Prisma.JsonValue
+      addressCities: Prisma.JsonValue
+      redirects: Prisma.JsonValue
+      cityCount: number
+    }, ExtArgs["result"]["sitePublicationProjection"]>
+    composites: {}
+  }
+
+  type SitePublicationProjectionGetPayload<S extends boolean | null | undefined | SitePublicationProjectionDefaultArgs> = $Result.GetResult<Prisma.$SitePublicationProjectionPayload, S>
+
+  type SitePublicationProjectionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SitePublicationProjectionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SitePublicationProjectionCountAggregateInputType | true
+    }
+
+  export interface SitePublicationProjectionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SitePublicationProjection'], meta: { name: 'SitePublicationProjection' } }
+    /**
+     * Find zero or one SitePublicationProjection that matches the filter.
+     * @param {SitePublicationProjectionFindUniqueArgs} args - Arguments to find a SitePublicationProjection
+     * @example
+     * // Get one SitePublicationProjection
+     * const sitePublicationProjection = await prisma.sitePublicationProjection.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SitePublicationProjectionFindUniqueArgs>(args: SelectSubset<T, SitePublicationProjectionFindUniqueArgs<ExtArgs>>): Prisma__SitePublicationProjectionClient<$Result.GetResult<Prisma.$SitePublicationProjectionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SitePublicationProjection that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SitePublicationProjectionFindUniqueOrThrowArgs} args - Arguments to find a SitePublicationProjection
+     * @example
+     * // Get one SitePublicationProjection
+     * const sitePublicationProjection = await prisma.sitePublicationProjection.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SitePublicationProjectionFindUniqueOrThrowArgs>(args: SelectSubset<T, SitePublicationProjectionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SitePublicationProjectionClient<$Result.GetResult<Prisma.$SitePublicationProjectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SitePublicationProjection that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationProjectionFindFirstArgs} args - Arguments to find a SitePublicationProjection
+     * @example
+     * // Get one SitePublicationProjection
+     * const sitePublicationProjection = await prisma.sitePublicationProjection.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SitePublicationProjectionFindFirstArgs>(args?: SelectSubset<T, SitePublicationProjectionFindFirstArgs<ExtArgs>>): Prisma__SitePublicationProjectionClient<$Result.GetResult<Prisma.$SitePublicationProjectionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SitePublicationProjection that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationProjectionFindFirstOrThrowArgs} args - Arguments to find a SitePublicationProjection
+     * @example
+     * // Get one SitePublicationProjection
+     * const sitePublicationProjection = await prisma.sitePublicationProjection.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SitePublicationProjectionFindFirstOrThrowArgs>(args?: SelectSubset<T, SitePublicationProjectionFindFirstOrThrowArgs<ExtArgs>>): Prisma__SitePublicationProjectionClient<$Result.GetResult<Prisma.$SitePublicationProjectionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SitePublicationProjections that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationProjectionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SitePublicationProjections
+     * const sitePublicationProjections = await prisma.sitePublicationProjection.findMany()
+     * 
+     * // Get first 10 SitePublicationProjections
+     * const sitePublicationProjections = await prisma.sitePublicationProjection.findMany({ take: 10 })
+     * 
+     * // Only select the `publicationId`
+     * const sitePublicationProjectionWithPublicationIdOnly = await prisma.sitePublicationProjection.findMany({ select: { publicationId: true } })
+     * 
+     */
+    findMany<T extends SitePublicationProjectionFindManyArgs>(args?: SelectSubset<T, SitePublicationProjectionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationProjectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SitePublicationProjection.
+     * @param {SitePublicationProjectionCreateArgs} args - Arguments to create a SitePublicationProjection.
+     * @example
+     * // Create one SitePublicationProjection
+     * const SitePublicationProjection = await prisma.sitePublicationProjection.create({
+     *   data: {
+     *     // ... data to create a SitePublicationProjection
+     *   }
+     * })
+     * 
+     */
+    create<T extends SitePublicationProjectionCreateArgs>(args: SelectSubset<T, SitePublicationProjectionCreateArgs<ExtArgs>>): Prisma__SitePublicationProjectionClient<$Result.GetResult<Prisma.$SitePublicationProjectionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SitePublicationProjections.
+     * @param {SitePublicationProjectionCreateManyArgs} args - Arguments to create many SitePublicationProjections.
+     * @example
+     * // Create many SitePublicationProjections
+     * const sitePublicationProjection = await prisma.sitePublicationProjection.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SitePublicationProjectionCreateManyArgs>(args?: SelectSubset<T, SitePublicationProjectionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SitePublicationProjections and returns the data saved in the database.
+     * @param {SitePublicationProjectionCreateManyAndReturnArgs} args - Arguments to create many SitePublicationProjections.
+     * @example
+     * // Create many SitePublicationProjections
+     * const sitePublicationProjection = await prisma.sitePublicationProjection.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SitePublicationProjections and only return the `publicationId`
+     * const sitePublicationProjectionWithPublicationIdOnly = await prisma.sitePublicationProjection.createManyAndReturn({
+     *   select: { publicationId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SitePublicationProjectionCreateManyAndReturnArgs>(args?: SelectSubset<T, SitePublicationProjectionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationProjectionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SitePublicationProjection.
+     * @param {SitePublicationProjectionDeleteArgs} args - Arguments to delete one SitePublicationProjection.
+     * @example
+     * // Delete one SitePublicationProjection
+     * const SitePublicationProjection = await prisma.sitePublicationProjection.delete({
+     *   where: {
+     *     // ... filter to delete one SitePublicationProjection
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SitePublicationProjectionDeleteArgs>(args: SelectSubset<T, SitePublicationProjectionDeleteArgs<ExtArgs>>): Prisma__SitePublicationProjectionClient<$Result.GetResult<Prisma.$SitePublicationProjectionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SitePublicationProjection.
+     * @param {SitePublicationProjectionUpdateArgs} args - Arguments to update one SitePublicationProjection.
+     * @example
+     * // Update one SitePublicationProjection
+     * const sitePublicationProjection = await prisma.sitePublicationProjection.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SitePublicationProjectionUpdateArgs>(args: SelectSubset<T, SitePublicationProjectionUpdateArgs<ExtArgs>>): Prisma__SitePublicationProjectionClient<$Result.GetResult<Prisma.$SitePublicationProjectionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SitePublicationProjections.
+     * @param {SitePublicationProjectionDeleteManyArgs} args - Arguments to filter SitePublicationProjections to delete.
+     * @example
+     * // Delete a few SitePublicationProjections
+     * const { count } = await prisma.sitePublicationProjection.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SitePublicationProjectionDeleteManyArgs>(args?: SelectSubset<T, SitePublicationProjectionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SitePublicationProjections.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationProjectionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SitePublicationProjections
+     * const sitePublicationProjection = await prisma.sitePublicationProjection.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SitePublicationProjectionUpdateManyArgs>(args: SelectSubset<T, SitePublicationProjectionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SitePublicationProjections and returns the data updated in the database.
+     * @param {SitePublicationProjectionUpdateManyAndReturnArgs} args - Arguments to update many SitePublicationProjections.
+     * @example
+     * // Update many SitePublicationProjections
+     * const sitePublicationProjection = await prisma.sitePublicationProjection.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SitePublicationProjections and only return the `publicationId`
+     * const sitePublicationProjectionWithPublicationIdOnly = await prisma.sitePublicationProjection.updateManyAndReturn({
+     *   select: { publicationId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SitePublicationProjectionUpdateManyAndReturnArgs>(args: SelectSubset<T, SitePublicationProjectionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationProjectionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SitePublicationProjection.
+     * @param {SitePublicationProjectionUpsertArgs} args - Arguments to update or create a SitePublicationProjection.
+     * @example
+     * // Update or create a SitePublicationProjection
+     * const sitePublicationProjection = await prisma.sitePublicationProjection.upsert({
+     *   create: {
+     *     // ... data to create a SitePublicationProjection
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SitePublicationProjection we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SitePublicationProjectionUpsertArgs>(args: SelectSubset<T, SitePublicationProjectionUpsertArgs<ExtArgs>>): Prisma__SitePublicationProjectionClient<$Result.GetResult<Prisma.$SitePublicationProjectionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SitePublicationProjections.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationProjectionCountArgs} args - Arguments to filter SitePublicationProjections to count.
+     * @example
+     * // Count the number of SitePublicationProjections
+     * const count = await prisma.sitePublicationProjection.count({
+     *   where: {
+     *     // ... the filter for the SitePublicationProjections we want to count
+     *   }
+     * })
+    **/
+    count<T extends SitePublicationProjectionCountArgs>(
+      args?: Subset<T, SitePublicationProjectionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SitePublicationProjectionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SitePublicationProjection.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationProjectionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SitePublicationProjectionAggregateArgs>(args: Subset<T, SitePublicationProjectionAggregateArgs>): Prisma.PrismaPromise<GetSitePublicationProjectionAggregateType<T>>
+
+    /**
+     * Group by SitePublicationProjection.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationProjectionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SitePublicationProjectionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SitePublicationProjectionGroupByArgs['orderBy'] }
+        : { orderBy?: SitePublicationProjectionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SitePublicationProjectionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSitePublicationProjectionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SitePublicationProjection model
+   */
+  readonly fields: SitePublicationProjectionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SitePublicationProjection.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SitePublicationProjectionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    publication<T extends SitePublicationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SitePublicationDefaultArgs<ExtArgs>>): Prisma__SitePublicationClient<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    cities<T extends SitePublicationProjection$citiesArgs<ExtArgs> = {}>(args?: Subset<T, SitePublicationProjection$citiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationCityProjectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SitePublicationProjection model
+   */
+  interface SitePublicationProjectionFieldRefs {
+    readonly publicationId: FieldRef<"SitePublicationProjection", 'String'>
+    readonly catalogGeneration: FieldRef<"SitePublicationProjection", 'Int'>
+    readonly formatVersion: FieldRef<"SitePublicationProjection", 'Int'>
+    readonly catalogDigest: FieldRef<"SitePublicationProjection", 'String'>
+    readonly site: FieldRef<"SitePublicationProjection", 'Json'>
+    readonly globalPages: FieldRef<"SitePublicationProjection", 'Json'>
+    readonly addressCities: FieldRef<"SitePublicationProjection", 'Json'>
+    readonly redirects: FieldRef<"SitePublicationProjection", 'Json'>
+    readonly cityCount: FieldRef<"SitePublicationProjection", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SitePublicationProjection findUnique
+   */
+  export type SitePublicationProjectionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationProjection
+     */
+    select?: SitePublicationProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationProjection
+     */
+    omit?: SitePublicationProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationProjectionInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublicationProjection to fetch.
+     */
+    where: SitePublicationProjectionWhereUniqueInput
+  }
+
+  /**
+   * SitePublicationProjection findUniqueOrThrow
+   */
+  export type SitePublicationProjectionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationProjection
+     */
+    select?: SitePublicationProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationProjection
+     */
+    omit?: SitePublicationProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationProjectionInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublicationProjection to fetch.
+     */
+    where: SitePublicationProjectionWhereUniqueInput
+  }
+
+  /**
+   * SitePublicationProjection findFirst
+   */
+  export type SitePublicationProjectionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationProjection
+     */
+    select?: SitePublicationProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationProjection
+     */
+    omit?: SitePublicationProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationProjectionInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublicationProjection to fetch.
+     */
+    where?: SitePublicationProjectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitePublicationProjections to fetch.
+     */
+    orderBy?: SitePublicationProjectionOrderByWithRelationInput | SitePublicationProjectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SitePublicationProjections.
+     */
+    cursor?: SitePublicationProjectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitePublicationProjections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitePublicationProjections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SitePublicationProjections.
+     */
+    distinct?: SitePublicationProjectionScalarFieldEnum | SitePublicationProjectionScalarFieldEnum[]
+  }
+
+  /**
+   * SitePublicationProjection findFirstOrThrow
+   */
+  export type SitePublicationProjectionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationProjection
+     */
+    select?: SitePublicationProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationProjection
+     */
+    omit?: SitePublicationProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationProjectionInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublicationProjection to fetch.
+     */
+    where?: SitePublicationProjectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitePublicationProjections to fetch.
+     */
+    orderBy?: SitePublicationProjectionOrderByWithRelationInput | SitePublicationProjectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SitePublicationProjections.
+     */
+    cursor?: SitePublicationProjectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitePublicationProjections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitePublicationProjections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SitePublicationProjections.
+     */
+    distinct?: SitePublicationProjectionScalarFieldEnum | SitePublicationProjectionScalarFieldEnum[]
+  }
+
+  /**
+   * SitePublicationProjection findMany
+   */
+  export type SitePublicationProjectionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationProjection
+     */
+    select?: SitePublicationProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationProjection
+     */
+    omit?: SitePublicationProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationProjectionInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublicationProjections to fetch.
+     */
+    where?: SitePublicationProjectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitePublicationProjections to fetch.
+     */
+    orderBy?: SitePublicationProjectionOrderByWithRelationInput | SitePublicationProjectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SitePublicationProjections.
+     */
+    cursor?: SitePublicationProjectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitePublicationProjections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitePublicationProjections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SitePublicationProjections.
+     */
+    distinct?: SitePublicationProjectionScalarFieldEnum | SitePublicationProjectionScalarFieldEnum[]
+  }
+
+  /**
+   * SitePublicationProjection create
+   */
+  export type SitePublicationProjectionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationProjection
+     */
+    select?: SitePublicationProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationProjection
+     */
+    omit?: SitePublicationProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationProjectionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SitePublicationProjection.
+     */
+    data: XOR<SitePublicationProjectionCreateInput, SitePublicationProjectionUncheckedCreateInput>
+  }
+
+  /**
+   * SitePublicationProjection createMany
+   */
+  export type SitePublicationProjectionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SitePublicationProjections.
+     */
+    data: SitePublicationProjectionCreateManyInput | SitePublicationProjectionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SitePublicationProjection createManyAndReturn
+   */
+  export type SitePublicationProjectionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationProjection
+     */
+    select?: SitePublicationProjectionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationProjection
+     */
+    omit?: SitePublicationProjectionOmit<ExtArgs> | null
+    /**
+     * The data used to create many SitePublicationProjections.
+     */
+    data: SitePublicationProjectionCreateManyInput | SitePublicationProjectionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationProjectionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SitePublicationProjection update
+   */
+  export type SitePublicationProjectionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationProjection
+     */
+    select?: SitePublicationProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationProjection
+     */
+    omit?: SitePublicationProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationProjectionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SitePublicationProjection.
+     */
+    data: XOR<SitePublicationProjectionUpdateInput, SitePublicationProjectionUncheckedUpdateInput>
+    /**
+     * Choose, which SitePublicationProjection to update.
+     */
+    where: SitePublicationProjectionWhereUniqueInput
+  }
+
+  /**
+   * SitePublicationProjection updateMany
+   */
+  export type SitePublicationProjectionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SitePublicationProjections.
+     */
+    data: XOR<SitePublicationProjectionUpdateManyMutationInput, SitePublicationProjectionUncheckedUpdateManyInput>
+    /**
+     * Filter which SitePublicationProjections to update
+     */
+    where?: SitePublicationProjectionWhereInput
+    /**
+     * Limit how many SitePublicationProjections to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SitePublicationProjection updateManyAndReturn
+   */
+  export type SitePublicationProjectionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationProjection
+     */
+    select?: SitePublicationProjectionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationProjection
+     */
+    omit?: SitePublicationProjectionOmit<ExtArgs> | null
+    /**
+     * The data used to update SitePublicationProjections.
+     */
+    data: XOR<SitePublicationProjectionUpdateManyMutationInput, SitePublicationProjectionUncheckedUpdateManyInput>
+    /**
+     * Filter which SitePublicationProjections to update
+     */
+    where?: SitePublicationProjectionWhereInput
+    /**
+     * Limit how many SitePublicationProjections to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationProjectionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SitePublicationProjection upsert
+   */
+  export type SitePublicationProjectionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationProjection
+     */
+    select?: SitePublicationProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationProjection
+     */
+    omit?: SitePublicationProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationProjectionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SitePublicationProjection to update in case it exists.
+     */
+    where: SitePublicationProjectionWhereUniqueInput
+    /**
+     * In case the SitePublicationProjection found by the `where` argument doesn't exist, create a new SitePublicationProjection with this data.
+     */
+    create: XOR<SitePublicationProjectionCreateInput, SitePublicationProjectionUncheckedCreateInput>
+    /**
+     * In case the SitePublicationProjection was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SitePublicationProjectionUpdateInput, SitePublicationProjectionUncheckedUpdateInput>
+  }
+
+  /**
+   * SitePublicationProjection delete
+   */
+  export type SitePublicationProjectionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationProjection
+     */
+    select?: SitePublicationProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationProjection
+     */
+    omit?: SitePublicationProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationProjectionInclude<ExtArgs> | null
+    /**
+     * Filter which SitePublicationProjection to delete.
+     */
+    where: SitePublicationProjectionWhereUniqueInput
+  }
+
+  /**
+   * SitePublicationProjection deleteMany
+   */
+  export type SitePublicationProjectionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SitePublicationProjections to delete
+     */
+    where?: SitePublicationProjectionWhereInput
+    /**
+     * Limit how many SitePublicationProjections to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SitePublicationProjection.cities
+   */
+  export type SitePublicationProjection$citiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationCityProjection
+     */
+    select?: SitePublicationCityProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationCityProjection
+     */
+    omit?: SitePublicationCityProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationCityProjectionInclude<ExtArgs> | null
+    where?: SitePublicationCityProjectionWhereInput
+    orderBy?: SitePublicationCityProjectionOrderByWithRelationInput | SitePublicationCityProjectionOrderByWithRelationInput[]
+    cursor?: SitePublicationCityProjectionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SitePublicationCityProjectionScalarFieldEnum | SitePublicationCityProjectionScalarFieldEnum[]
+  }
+
+  /**
+   * SitePublicationProjection without action
+   */
+  export type SitePublicationProjectionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationProjection
+     */
+    select?: SitePublicationProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationProjection
+     */
+    omit?: SitePublicationProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationProjectionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SitePublicationCityProjection
+   */
+
+  export type AggregateSitePublicationCityProjection = {
+    _count: SitePublicationCityProjectionCountAggregateOutputType | null
+    _min: SitePublicationCityProjectionMinAggregateOutputType | null
+    _max: SitePublicationCityProjectionMaxAggregateOutputType | null
+  }
+
+  export type SitePublicationCityProjectionMinAggregateOutputType = {
+    publicationId: string | null
+    citySlug: string | null
+  }
+
+  export type SitePublicationCityProjectionMaxAggregateOutputType = {
+    publicationId: string | null
+    citySlug: string | null
+  }
+
+  export type SitePublicationCityProjectionCountAggregateOutputType = {
+    publicationId: number
+    citySlug: number
+    catalog: number
+    _all: number
+  }
+
+
+  export type SitePublicationCityProjectionMinAggregateInputType = {
+    publicationId?: true
+    citySlug?: true
+  }
+
+  export type SitePublicationCityProjectionMaxAggregateInputType = {
+    publicationId?: true
+    citySlug?: true
+  }
+
+  export type SitePublicationCityProjectionCountAggregateInputType = {
+    publicationId?: true
+    citySlug?: true
+    catalog?: true
+    _all?: true
+  }
+
+  export type SitePublicationCityProjectionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SitePublicationCityProjection to aggregate.
+     */
+    where?: SitePublicationCityProjectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitePublicationCityProjections to fetch.
+     */
+    orderBy?: SitePublicationCityProjectionOrderByWithRelationInput | SitePublicationCityProjectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SitePublicationCityProjectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitePublicationCityProjections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitePublicationCityProjections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SitePublicationCityProjections
+    **/
+    _count?: true | SitePublicationCityProjectionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SitePublicationCityProjectionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SitePublicationCityProjectionMaxAggregateInputType
+  }
+
+  export type GetSitePublicationCityProjectionAggregateType<T extends SitePublicationCityProjectionAggregateArgs> = {
+        [P in keyof T & keyof AggregateSitePublicationCityProjection]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSitePublicationCityProjection[P]>
+      : GetScalarType<T[P], AggregateSitePublicationCityProjection[P]>
+  }
+
+
+
+
+  export type SitePublicationCityProjectionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SitePublicationCityProjectionWhereInput
+    orderBy?: SitePublicationCityProjectionOrderByWithAggregationInput | SitePublicationCityProjectionOrderByWithAggregationInput[]
+    by: SitePublicationCityProjectionScalarFieldEnum[] | SitePublicationCityProjectionScalarFieldEnum
+    having?: SitePublicationCityProjectionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SitePublicationCityProjectionCountAggregateInputType | true
+    _min?: SitePublicationCityProjectionMinAggregateInputType
+    _max?: SitePublicationCityProjectionMaxAggregateInputType
+  }
+
+  export type SitePublicationCityProjectionGroupByOutputType = {
+    publicationId: string
+    citySlug: string
+    catalog: JsonValue
+    _count: SitePublicationCityProjectionCountAggregateOutputType | null
+    _min: SitePublicationCityProjectionMinAggregateOutputType | null
+    _max: SitePublicationCityProjectionMaxAggregateOutputType | null
+  }
+
+  type GetSitePublicationCityProjectionGroupByPayload<T extends SitePublicationCityProjectionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SitePublicationCityProjectionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SitePublicationCityProjectionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SitePublicationCityProjectionGroupByOutputType[P]>
+            : GetScalarType<T[P], SitePublicationCityProjectionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SitePublicationCityProjectionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    publicationId?: boolean
+    citySlug?: boolean
+    catalog?: boolean
+    projection?: boolean | SitePublicationProjectionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sitePublicationCityProjection"]>
+
+  export type SitePublicationCityProjectionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    publicationId?: boolean
+    citySlug?: boolean
+    catalog?: boolean
+    projection?: boolean | SitePublicationProjectionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sitePublicationCityProjection"]>
+
+  export type SitePublicationCityProjectionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    publicationId?: boolean
+    citySlug?: boolean
+    catalog?: boolean
+    projection?: boolean | SitePublicationProjectionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sitePublicationCityProjection"]>
+
+  export type SitePublicationCityProjectionSelectScalar = {
+    publicationId?: boolean
+    citySlug?: boolean
+    catalog?: boolean
+  }
+
+  export type SitePublicationCityProjectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"publicationId" | "citySlug" | "catalog", ExtArgs["result"]["sitePublicationCityProjection"]>
+  export type SitePublicationCityProjectionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    projection?: boolean | SitePublicationProjectionDefaultArgs<ExtArgs>
+  }
+  export type SitePublicationCityProjectionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    projection?: boolean | SitePublicationProjectionDefaultArgs<ExtArgs>
+  }
+  export type SitePublicationCityProjectionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    projection?: boolean | SitePublicationProjectionDefaultArgs<ExtArgs>
+  }
+
+  export type $SitePublicationCityProjectionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SitePublicationCityProjection"
+    objects: {
+      projection: Prisma.$SitePublicationProjectionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      publicationId: string
+      citySlug: string
+      catalog: Prisma.JsonValue
+    }, ExtArgs["result"]["sitePublicationCityProjection"]>
+    composites: {}
+  }
+
+  type SitePublicationCityProjectionGetPayload<S extends boolean | null | undefined | SitePublicationCityProjectionDefaultArgs> = $Result.GetResult<Prisma.$SitePublicationCityProjectionPayload, S>
+
+  type SitePublicationCityProjectionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SitePublicationCityProjectionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SitePublicationCityProjectionCountAggregateInputType | true
+    }
+
+  export interface SitePublicationCityProjectionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SitePublicationCityProjection'], meta: { name: 'SitePublicationCityProjection' } }
+    /**
+     * Find zero or one SitePublicationCityProjection that matches the filter.
+     * @param {SitePublicationCityProjectionFindUniqueArgs} args - Arguments to find a SitePublicationCityProjection
+     * @example
+     * // Get one SitePublicationCityProjection
+     * const sitePublicationCityProjection = await prisma.sitePublicationCityProjection.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SitePublicationCityProjectionFindUniqueArgs>(args: SelectSubset<T, SitePublicationCityProjectionFindUniqueArgs<ExtArgs>>): Prisma__SitePublicationCityProjectionClient<$Result.GetResult<Prisma.$SitePublicationCityProjectionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SitePublicationCityProjection that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SitePublicationCityProjectionFindUniqueOrThrowArgs} args - Arguments to find a SitePublicationCityProjection
+     * @example
+     * // Get one SitePublicationCityProjection
+     * const sitePublicationCityProjection = await prisma.sitePublicationCityProjection.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SitePublicationCityProjectionFindUniqueOrThrowArgs>(args: SelectSubset<T, SitePublicationCityProjectionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SitePublicationCityProjectionClient<$Result.GetResult<Prisma.$SitePublicationCityProjectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SitePublicationCityProjection that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationCityProjectionFindFirstArgs} args - Arguments to find a SitePublicationCityProjection
+     * @example
+     * // Get one SitePublicationCityProjection
+     * const sitePublicationCityProjection = await prisma.sitePublicationCityProjection.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SitePublicationCityProjectionFindFirstArgs>(args?: SelectSubset<T, SitePublicationCityProjectionFindFirstArgs<ExtArgs>>): Prisma__SitePublicationCityProjectionClient<$Result.GetResult<Prisma.$SitePublicationCityProjectionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SitePublicationCityProjection that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationCityProjectionFindFirstOrThrowArgs} args - Arguments to find a SitePublicationCityProjection
+     * @example
+     * // Get one SitePublicationCityProjection
+     * const sitePublicationCityProjection = await prisma.sitePublicationCityProjection.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SitePublicationCityProjectionFindFirstOrThrowArgs>(args?: SelectSubset<T, SitePublicationCityProjectionFindFirstOrThrowArgs<ExtArgs>>): Prisma__SitePublicationCityProjectionClient<$Result.GetResult<Prisma.$SitePublicationCityProjectionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SitePublicationCityProjections that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationCityProjectionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SitePublicationCityProjections
+     * const sitePublicationCityProjections = await prisma.sitePublicationCityProjection.findMany()
+     * 
+     * // Get first 10 SitePublicationCityProjections
+     * const sitePublicationCityProjections = await prisma.sitePublicationCityProjection.findMany({ take: 10 })
+     * 
+     * // Only select the `publicationId`
+     * const sitePublicationCityProjectionWithPublicationIdOnly = await prisma.sitePublicationCityProjection.findMany({ select: { publicationId: true } })
+     * 
+     */
+    findMany<T extends SitePublicationCityProjectionFindManyArgs>(args?: SelectSubset<T, SitePublicationCityProjectionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationCityProjectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SitePublicationCityProjection.
+     * @param {SitePublicationCityProjectionCreateArgs} args - Arguments to create a SitePublicationCityProjection.
+     * @example
+     * // Create one SitePublicationCityProjection
+     * const SitePublicationCityProjection = await prisma.sitePublicationCityProjection.create({
+     *   data: {
+     *     // ... data to create a SitePublicationCityProjection
+     *   }
+     * })
+     * 
+     */
+    create<T extends SitePublicationCityProjectionCreateArgs>(args: SelectSubset<T, SitePublicationCityProjectionCreateArgs<ExtArgs>>): Prisma__SitePublicationCityProjectionClient<$Result.GetResult<Prisma.$SitePublicationCityProjectionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SitePublicationCityProjections.
+     * @param {SitePublicationCityProjectionCreateManyArgs} args - Arguments to create many SitePublicationCityProjections.
+     * @example
+     * // Create many SitePublicationCityProjections
+     * const sitePublicationCityProjection = await prisma.sitePublicationCityProjection.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SitePublicationCityProjectionCreateManyArgs>(args?: SelectSubset<T, SitePublicationCityProjectionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SitePublicationCityProjections and returns the data saved in the database.
+     * @param {SitePublicationCityProjectionCreateManyAndReturnArgs} args - Arguments to create many SitePublicationCityProjections.
+     * @example
+     * // Create many SitePublicationCityProjections
+     * const sitePublicationCityProjection = await prisma.sitePublicationCityProjection.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SitePublicationCityProjections and only return the `publicationId`
+     * const sitePublicationCityProjectionWithPublicationIdOnly = await prisma.sitePublicationCityProjection.createManyAndReturn({
+     *   select: { publicationId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SitePublicationCityProjectionCreateManyAndReturnArgs>(args?: SelectSubset<T, SitePublicationCityProjectionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationCityProjectionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SitePublicationCityProjection.
+     * @param {SitePublicationCityProjectionDeleteArgs} args - Arguments to delete one SitePublicationCityProjection.
+     * @example
+     * // Delete one SitePublicationCityProjection
+     * const SitePublicationCityProjection = await prisma.sitePublicationCityProjection.delete({
+     *   where: {
+     *     // ... filter to delete one SitePublicationCityProjection
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SitePublicationCityProjectionDeleteArgs>(args: SelectSubset<T, SitePublicationCityProjectionDeleteArgs<ExtArgs>>): Prisma__SitePublicationCityProjectionClient<$Result.GetResult<Prisma.$SitePublicationCityProjectionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SitePublicationCityProjection.
+     * @param {SitePublicationCityProjectionUpdateArgs} args - Arguments to update one SitePublicationCityProjection.
+     * @example
+     * // Update one SitePublicationCityProjection
+     * const sitePublicationCityProjection = await prisma.sitePublicationCityProjection.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SitePublicationCityProjectionUpdateArgs>(args: SelectSubset<T, SitePublicationCityProjectionUpdateArgs<ExtArgs>>): Prisma__SitePublicationCityProjectionClient<$Result.GetResult<Prisma.$SitePublicationCityProjectionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SitePublicationCityProjections.
+     * @param {SitePublicationCityProjectionDeleteManyArgs} args - Arguments to filter SitePublicationCityProjections to delete.
+     * @example
+     * // Delete a few SitePublicationCityProjections
+     * const { count } = await prisma.sitePublicationCityProjection.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SitePublicationCityProjectionDeleteManyArgs>(args?: SelectSubset<T, SitePublicationCityProjectionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SitePublicationCityProjections.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationCityProjectionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SitePublicationCityProjections
+     * const sitePublicationCityProjection = await prisma.sitePublicationCityProjection.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SitePublicationCityProjectionUpdateManyArgs>(args: SelectSubset<T, SitePublicationCityProjectionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SitePublicationCityProjections and returns the data updated in the database.
+     * @param {SitePublicationCityProjectionUpdateManyAndReturnArgs} args - Arguments to update many SitePublicationCityProjections.
+     * @example
+     * // Update many SitePublicationCityProjections
+     * const sitePublicationCityProjection = await prisma.sitePublicationCityProjection.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SitePublicationCityProjections and only return the `publicationId`
+     * const sitePublicationCityProjectionWithPublicationIdOnly = await prisma.sitePublicationCityProjection.updateManyAndReturn({
+     *   select: { publicationId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SitePublicationCityProjectionUpdateManyAndReturnArgs>(args: SelectSubset<T, SitePublicationCityProjectionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationCityProjectionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SitePublicationCityProjection.
+     * @param {SitePublicationCityProjectionUpsertArgs} args - Arguments to update or create a SitePublicationCityProjection.
+     * @example
+     * // Update or create a SitePublicationCityProjection
+     * const sitePublicationCityProjection = await prisma.sitePublicationCityProjection.upsert({
+     *   create: {
+     *     // ... data to create a SitePublicationCityProjection
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SitePublicationCityProjection we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SitePublicationCityProjectionUpsertArgs>(args: SelectSubset<T, SitePublicationCityProjectionUpsertArgs<ExtArgs>>): Prisma__SitePublicationCityProjectionClient<$Result.GetResult<Prisma.$SitePublicationCityProjectionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SitePublicationCityProjections.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationCityProjectionCountArgs} args - Arguments to filter SitePublicationCityProjections to count.
+     * @example
+     * // Count the number of SitePublicationCityProjections
+     * const count = await prisma.sitePublicationCityProjection.count({
+     *   where: {
+     *     // ... the filter for the SitePublicationCityProjections we want to count
+     *   }
+     * })
+    **/
+    count<T extends SitePublicationCityProjectionCountArgs>(
+      args?: Subset<T, SitePublicationCityProjectionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SitePublicationCityProjectionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SitePublicationCityProjection.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationCityProjectionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SitePublicationCityProjectionAggregateArgs>(args: Subset<T, SitePublicationCityProjectionAggregateArgs>): Prisma.PrismaPromise<GetSitePublicationCityProjectionAggregateType<T>>
+
+    /**
+     * Group by SitePublicationCityProjection.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationCityProjectionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SitePublicationCityProjectionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SitePublicationCityProjectionGroupByArgs['orderBy'] }
+        : { orderBy?: SitePublicationCityProjectionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SitePublicationCityProjectionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSitePublicationCityProjectionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SitePublicationCityProjection model
+   */
+  readonly fields: SitePublicationCityProjectionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SitePublicationCityProjection.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SitePublicationCityProjectionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    projection<T extends SitePublicationProjectionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SitePublicationProjectionDefaultArgs<ExtArgs>>): Prisma__SitePublicationProjectionClient<$Result.GetResult<Prisma.$SitePublicationProjectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SitePublicationCityProjection model
+   */
+  interface SitePublicationCityProjectionFieldRefs {
+    readonly publicationId: FieldRef<"SitePublicationCityProjection", 'String'>
+    readonly citySlug: FieldRef<"SitePublicationCityProjection", 'String'>
+    readonly catalog: FieldRef<"SitePublicationCityProjection", 'Json'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SitePublicationCityProjection findUnique
+   */
+  export type SitePublicationCityProjectionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationCityProjection
+     */
+    select?: SitePublicationCityProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationCityProjection
+     */
+    omit?: SitePublicationCityProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationCityProjectionInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublicationCityProjection to fetch.
+     */
+    where: SitePublicationCityProjectionWhereUniqueInput
+  }
+
+  /**
+   * SitePublicationCityProjection findUniqueOrThrow
+   */
+  export type SitePublicationCityProjectionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationCityProjection
+     */
+    select?: SitePublicationCityProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationCityProjection
+     */
+    omit?: SitePublicationCityProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationCityProjectionInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublicationCityProjection to fetch.
+     */
+    where: SitePublicationCityProjectionWhereUniqueInput
+  }
+
+  /**
+   * SitePublicationCityProjection findFirst
+   */
+  export type SitePublicationCityProjectionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationCityProjection
+     */
+    select?: SitePublicationCityProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationCityProjection
+     */
+    omit?: SitePublicationCityProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationCityProjectionInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublicationCityProjection to fetch.
+     */
+    where?: SitePublicationCityProjectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitePublicationCityProjections to fetch.
+     */
+    orderBy?: SitePublicationCityProjectionOrderByWithRelationInput | SitePublicationCityProjectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SitePublicationCityProjections.
+     */
+    cursor?: SitePublicationCityProjectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitePublicationCityProjections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitePublicationCityProjections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SitePublicationCityProjections.
+     */
+    distinct?: SitePublicationCityProjectionScalarFieldEnum | SitePublicationCityProjectionScalarFieldEnum[]
+  }
+
+  /**
+   * SitePublicationCityProjection findFirstOrThrow
+   */
+  export type SitePublicationCityProjectionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationCityProjection
+     */
+    select?: SitePublicationCityProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationCityProjection
+     */
+    omit?: SitePublicationCityProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationCityProjectionInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublicationCityProjection to fetch.
+     */
+    where?: SitePublicationCityProjectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitePublicationCityProjections to fetch.
+     */
+    orderBy?: SitePublicationCityProjectionOrderByWithRelationInput | SitePublicationCityProjectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SitePublicationCityProjections.
+     */
+    cursor?: SitePublicationCityProjectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitePublicationCityProjections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitePublicationCityProjections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SitePublicationCityProjections.
+     */
+    distinct?: SitePublicationCityProjectionScalarFieldEnum | SitePublicationCityProjectionScalarFieldEnum[]
+  }
+
+  /**
+   * SitePublicationCityProjection findMany
+   */
+  export type SitePublicationCityProjectionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationCityProjection
+     */
+    select?: SitePublicationCityProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationCityProjection
+     */
+    omit?: SitePublicationCityProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationCityProjectionInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublicationCityProjections to fetch.
+     */
+    where?: SitePublicationCityProjectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitePublicationCityProjections to fetch.
+     */
+    orderBy?: SitePublicationCityProjectionOrderByWithRelationInput | SitePublicationCityProjectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SitePublicationCityProjections.
+     */
+    cursor?: SitePublicationCityProjectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitePublicationCityProjections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitePublicationCityProjections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SitePublicationCityProjections.
+     */
+    distinct?: SitePublicationCityProjectionScalarFieldEnum | SitePublicationCityProjectionScalarFieldEnum[]
+  }
+
+  /**
+   * SitePublicationCityProjection create
+   */
+  export type SitePublicationCityProjectionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationCityProjection
+     */
+    select?: SitePublicationCityProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationCityProjection
+     */
+    omit?: SitePublicationCityProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationCityProjectionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SitePublicationCityProjection.
+     */
+    data: XOR<SitePublicationCityProjectionCreateInput, SitePublicationCityProjectionUncheckedCreateInput>
+  }
+
+  /**
+   * SitePublicationCityProjection createMany
+   */
+  export type SitePublicationCityProjectionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SitePublicationCityProjections.
+     */
+    data: SitePublicationCityProjectionCreateManyInput | SitePublicationCityProjectionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SitePublicationCityProjection createManyAndReturn
+   */
+  export type SitePublicationCityProjectionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationCityProjection
+     */
+    select?: SitePublicationCityProjectionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationCityProjection
+     */
+    omit?: SitePublicationCityProjectionOmit<ExtArgs> | null
+    /**
+     * The data used to create many SitePublicationCityProjections.
+     */
+    data: SitePublicationCityProjectionCreateManyInput | SitePublicationCityProjectionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationCityProjectionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SitePublicationCityProjection update
+   */
+  export type SitePublicationCityProjectionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationCityProjection
+     */
+    select?: SitePublicationCityProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationCityProjection
+     */
+    omit?: SitePublicationCityProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationCityProjectionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SitePublicationCityProjection.
+     */
+    data: XOR<SitePublicationCityProjectionUpdateInput, SitePublicationCityProjectionUncheckedUpdateInput>
+    /**
+     * Choose, which SitePublicationCityProjection to update.
+     */
+    where: SitePublicationCityProjectionWhereUniqueInput
+  }
+
+  /**
+   * SitePublicationCityProjection updateMany
+   */
+  export type SitePublicationCityProjectionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SitePublicationCityProjections.
+     */
+    data: XOR<SitePublicationCityProjectionUpdateManyMutationInput, SitePublicationCityProjectionUncheckedUpdateManyInput>
+    /**
+     * Filter which SitePublicationCityProjections to update
+     */
+    where?: SitePublicationCityProjectionWhereInput
+    /**
+     * Limit how many SitePublicationCityProjections to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SitePublicationCityProjection updateManyAndReturn
+   */
+  export type SitePublicationCityProjectionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationCityProjection
+     */
+    select?: SitePublicationCityProjectionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationCityProjection
+     */
+    omit?: SitePublicationCityProjectionOmit<ExtArgs> | null
+    /**
+     * The data used to update SitePublicationCityProjections.
+     */
+    data: XOR<SitePublicationCityProjectionUpdateManyMutationInput, SitePublicationCityProjectionUncheckedUpdateManyInput>
+    /**
+     * Filter which SitePublicationCityProjections to update
+     */
+    where?: SitePublicationCityProjectionWhereInput
+    /**
+     * Limit how many SitePublicationCityProjections to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationCityProjectionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SitePublicationCityProjection upsert
+   */
+  export type SitePublicationCityProjectionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationCityProjection
+     */
+    select?: SitePublicationCityProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationCityProjection
+     */
+    omit?: SitePublicationCityProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationCityProjectionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SitePublicationCityProjection to update in case it exists.
+     */
+    where: SitePublicationCityProjectionWhereUniqueInput
+    /**
+     * In case the SitePublicationCityProjection found by the `where` argument doesn't exist, create a new SitePublicationCityProjection with this data.
+     */
+    create: XOR<SitePublicationCityProjectionCreateInput, SitePublicationCityProjectionUncheckedCreateInput>
+    /**
+     * In case the SitePublicationCityProjection was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SitePublicationCityProjectionUpdateInput, SitePublicationCityProjectionUncheckedUpdateInput>
+  }
+
+  /**
+   * SitePublicationCityProjection delete
+   */
+  export type SitePublicationCityProjectionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationCityProjection
+     */
+    select?: SitePublicationCityProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationCityProjection
+     */
+    omit?: SitePublicationCityProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationCityProjectionInclude<ExtArgs> | null
+    /**
+     * Filter which SitePublicationCityProjection to delete.
+     */
+    where: SitePublicationCityProjectionWhereUniqueInput
+  }
+
+  /**
+   * SitePublicationCityProjection deleteMany
+   */
+  export type SitePublicationCityProjectionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SitePublicationCityProjections to delete
+     */
+    where?: SitePublicationCityProjectionWhereInput
+    /**
+     * Limit how many SitePublicationCityProjections to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SitePublicationCityProjection without action
+   */
+  export type SitePublicationCityProjectionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationCityProjection
+     */
+    select?: SitePublicationCityProjectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationCityProjection
+     */
+    omit?: SitePublicationCityProjectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationCityProjectionInclude<ExtArgs> | null
   }
 
 
@@ -48926,6 +51383,7 @@ export namespace Prisma {
     changeSetDigest: 'changeSetDigest',
     status: 'status',
     catalog: 'catalog',
+    catalogGeneration: 'catalogGeneration',
     triggerEntity: 'triggerEntity',
     triggerEntityId: 'triggerEntityId',
     requestedById: 'requestedById',
@@ -48939,6 +51397,30 @@ export namespace Prisma {
   };
 
   export type SitePublicationScalarFieldEnum = (typeof SitePublicationScalarFieldEnum)[keyof typeof SitePublicationScalarFieldEnum]
+
+
+  export const SitePublicationProjectionScalarFieldEnum: {
+    publicationId: 'publicationId',
+    catalogGeneration: 'catalogGeneration',
+    formatVersion: 'formatVersion',
+    catalogDigest: 'catalogDigest',
+    site: 'site',
+    globalPages: 'globalPages',
+    addressCities: 'addressCities',
+    redirects: 'redirects',
+    cityCount: 'cityCount'
+  };
+
+  export type SitePublicationProjectionScalarFieldEnum = (typeof SitePublicationProjectionScalarFieldEnum)[keyof typeof SitePublicationProjectionScalarFieldEnum]
+
+
+  export const SitePublicationCityProjectionScalarFieldEnum: {
+    publicationId: 'publicationId',
+    citySlug: 'citySlug',
+    catalog: 'catalog'
+  };
+
+  export type SitePublicationCityProjectionScalarFieldEnum = (typeof SitePublicationCityProjectionScalarFieldEnum)[keyof typeof SitePublicationCityProjectionScalarFieldEnum]
 
 
   export const NewsArticleScalarFieldEnum: {
@@ -50589,6 +53071,7 @@ export namespace Prisma {
     changeSetDigest?: StringNullableFilter<"SitePublication"> | string | null
     status?: EnumSitePublicationStatusFilter<"SitePublication"> | $Enums.SitePublicationStatus
     catalog?: JsonFilter<"SitePublication">
+    catalogGeneration?: IntFilter<"SitePublication"> | number
     triggerEntity?: StringFilter<"SitePublication"> | string
     triggerEntityId?: StringFilter<"SitePublication"> | string
     requestedById?: StringNullableFilter<"SitePublication"> | string | null
@@ -50606,6 +53089,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildListRelationFilter
     publishedRebuilds?: SiteRebuildListRelationFilter
     editorialItems?: EditorialPublicationItemListRelationFilter
+    servingProjection?: XOR<SitePublicationProjectionNullableScalarRelationFilter, SitePublicationProjectionWhereInput> | null
   }
 
   export type SitePublicationOrderByWithRelationInput = {
@@ -50618,6 +53102,7 @@ export namespace Prisma {
     changeSetDigest?: SortOrderInput | SortOrder
     status?: SortOrder
     catalog?: SortOrder
+    catalogGeneration?: SortOrder
     triggerEntity?: SortOrder
     triggerEntityId?: SortOrder
     requestedById?: SortOrderInput | SortOrder
@@ -50635,6 +53120,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildOrderByRelationAggregateInput
     publishedRebuilds?: SiteRebuildOrderByRelationAggregateInput
     editorialItems?: EditorialPublicationItemOrderByRelationAggregateInput
+    servingProjection?: SitePublicationProjectionOrderByWithRelationInput
   }
 
   export type SitePublicationWhereUniqueInput = Prisma.AtLeast<{
@@ -50652,6 +53138,7 @@ export namespace Prisma {
     changeSetDigest?: StringNullableFilter<"SitePublication"> | string | null
     status?: EnumSitePublicationStatusFilter<"SitePublication"> | $Enums.SitePublicationStatus
     catalog?: JsonFilter<"SitePublication">
+    catalogGeneration?: IntFilter<"SitePublication"> | number
     triggerEntity?: StringFilter<"SitePublication"> | string
     triggerEntityId?: StringFilter<"SitePublication"> | string
     requestedById?: StringNullableFilter<"SitePublication"> | string | null
@@ -50668,6 +53155,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildListRelationFilter
     publishedRebuilds?: SiteRebuildListRelationFilter
     editorialItems?: EditorialPublicationItemListRelationFilter
+    servingProjection?: XOR<SitePublicationProjectionNullableScalarRelationFilter, SitePublicationProjectionWhereInput> | null
   }, "id" | "releaseSequence" | "validationId" | "siteId_siteRevision">
 
   export type SitePublicationOrderByWithAggregationInput = {
@@ -50680,6 +53168,7 @@ export namespace Prisma {
     changeSetDigest?: SortOrderInput | SortOrder
     status?: SortOrder
     catalog?: SortOrder
+    catalogGeneration?: SortOrder
     triggerEntity?: SortOrder
     triggerEntityId?: SortOrder
     requestedById?: SortOrderInput | SortOrder
@@ -50710,6 +53199,7 @@ export namespace Prisma {
     changeSetDigest?: StringNullableWithAggregatesFilter<"SitePublication"> | string | null
     status?: EnumSitePublicationStatusWithAggregatesFilter<"SitePublication"> | $Enums.SitePublicationStatus
     catalog?: JsonWithAggregatesFilter<"SitePublication">
+    catalogGeneration?: IntWithAggregatesFilter<"SitePublication"> | number
     triggerEntity?: StringWithAggregatesFilter<"SitePublication"> | string
     triggerEntityId?: StringWithAggregatesFilter<"SitePublication"> | string
     requestedById?: StringNullableWithAggregatesFilter<"SitePublication"> | string | null
@@ -50720,6 +53210,132 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"SitePublication"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"SitePublication"> | Date | string
     publishedAt?: DateTimeNullableWithAggregatesFilter<"SitePublication"> | Date | string | null
+  }
+
+  export type SitePublicationProjectionWhereInput = {
+    AND?: SitePublicationProjectionWhereInput | SitePublicationProjectionWhereInput[]
+    OR?: SitePublicationProjectionWhereInput[]
+    NOT?: SitePublicationProjectionWhereInput | SitePublicationProjectionWhereInput[]
+    publicationId?: StringFilter<"SitePublicationProjection"> | string
+    catalogGeneration?: IntFilter<"SitePublicationProjection"> | number
+    formatVersion?: IntFilter<"SitePublicationProjection"> | number
+    catalogDigest?: StringFilter<"SitePublicationProjection"> | string
+    site?: JsonFilter<"SitePublicationProjection">
+    globalPages?: JsonFilter<"SitePublicationProjection">
+    addressCities?: JsonFilter<"SitePublicationProjection">
+    redirects?: JsonFilter<"SitePublicationProjection">
+    cityCount?: IntFilter<"SitePublicationProjection"> | number
+    publication?: XOR<SitePublicationScalarRelationFilter, SitePublicationWhereInput>
+    cities?: SitePublicationCityProjectionListRelationFilter
+  }
+
+  export type SitePublicationProjectionOrderByWithRelationInput = {
+    publicationId?: SortOrder
+    catalogGeneration?: SortOrder
+    formatVersion?: SortOrder
+    catalogDigest?: SortOrder
+    site?: SortOrder
+    globalPages?: SortOrder
+    addressCities?: SortOrder
+    redirects?: SortOrder
+    cityCount?: SortOrder
+    publication?: SitePublicationOrderByWithRelationInput
+    cities?: SitePublicationCityProjectionOrderByRelationAggregateInput
+  }
+
+  export type SitePublicationProjectionWhereUniqueInput = Prisma.AtLeast<{
+    publicationId?: string
+    AND?: SitePublicationProjectionWhereInput | SitePublicationProjectionWhereInput[]
+    OR?: SitePublicationProjectionWhereInput[]
+    NOT?: SitePublicationProjectionWhereInput | SitePublicationProjectionWhereInput[]
+    catalogGeneration?: IntFilter<"SitePublicationProjection"> | number
+    formatVersion?: IntFilter<"SitePublicationProjection"> | number
+    catalogDigest?: StringFilter<"SitePublicationProjection"> | string
+    site?: JsonFilter<"SitePublicationProjection">
+    globalPages?: JsonFilter<"SitePublicationProjection">
+    addressCities?: JsonFilter<"SitePublicationProjection">
+    redirects?: JsonFilter<"SitePublicationProjection">
+    cityCount?: IntFilter<"SitePublicationProjection"> | number
+    publication?: XOR<SitePublicationScalarRelationFilter, SitePublicationWhereInput>
+    cities?: SitePublicationCityProjectionListRelationFilter
+  }, "publicationId">
+
+  export type SitePublicationProjectionOrderByWithAggregationInput = {
+    publicationId?: SortOrder
+    catalogGeneration?: SortOrder
+    formatVersion?: SortOrder
+    catalogDigest?: SortOrder
+    site?: SortOrder
+    globalPages?: SortOrder
+    addressCities?: SortOrder
+    redirects?: SortOrder
+    cityCount?: SortOrder
+    _count?: SitePublicationProjectionCountOrderByAggregateInput
+    _avg?: SitePublicationProjectionAvgOrderByAggregateInput
+    _max?: SitePublicationProjectionMaxOrderByAggregateInput
+    _min?: SitePublicationProjectionMinOrderByAggregateInput
+    _sum?: SitePublicationProjectionSumOrderByAggregateInput
+  }
+
+  export type SitePublicationProjectionScalarWhereWithAggregatesInput = {
+    AND?: SitePublicationProjectionScalarWhereWithAggregatesInput | SitePublicationProjectionScalarWhereWithAggregatesInput[]
+    OR?: SitePublicationProjectionScalarWhereWithAggregatesInput[]
+    NOT?: SitePublicationProjectionScalarWhereWithAggregatesInput | SitePublicationProjectionScalarWhereWithAggregatesInput[]
+    publicationId?: StringWithAggregatesFilter<"SitePublicationProjection"> | string
+    catalogGeneration?: IntWithAggregatesFilter<"SitePublicationProjection"> | number
+    formatVersion?: IntWithAggregatesFilter<"SitePublicationProjection"> | number
+    catalogDigest?: StringWithAggregatesFilter<"SitePublicationProjection"> | string
+    site?: JsonWithAggregatesFilter<"SitePublicationProjection">
+    globalPages?: JsonWithAggregatesFilter<"SitePublicationProjection">
+    addressCities?: JsonWithAggregatesFilter<"SitePublicationProjection">
+    redirects?: JsonWithAggregatesFilter<"SitePublicationProjection">
+    cityCount?: IntWithAggregatesFilter<"SitePublicationProjection"> | number
+  }
+
+  export type SitePublicationCityProjectionWhereInput = {
+    AND?: SitePublicationCityProjectionWhereInput | SitePublicationCityProjectionWhereInput[]
+    OR?: SitePublicationCityProjectionWhereInput[]
+    NOT?: SitePublicationCityProjectionWhereInput | SitePublicationCityProjectionWhereInput[]
+    publicationId?: StringFilter<"SitePublicationCityProjection"> | string
+    citySlug?: StringFilter<"SitePublicationCityProjection"> | string
+    catalog?: JsonFilter<"SitePublicationCityProjection">
+    projection?: XOR<SitePublicationProjectionScalarRelationFilter, SitePublicationProjectionWhereInput>
+  }
+
+  export type SitePublicationCityProjectionOrderByWithRelationInput = {
+    publicationId?: SortOrder
+    citySlug?: SortOrder
+    catalog?: SortOrder
+    projection?: SitePublicationProjectionOrderByWithRelationInput
+  }
+
+  export type SitePublicationCityProjectionWhereUniqueInput = Prisma.AtLeast<{
+    publicationId_citySlug?: SitePublicationCityProjectionPublicationIdCitySlugCompoundUniqueInput
+    AND?: SitePublicationCityProjectionWhereInput | SitePublicationCityProjectionWhereInput[]
+    OR?: SitePublicationCityProjectionWhereInput[]
+    NOT?: SitePublicationCityProjectionWhereInput | SitePublicationCityProjectionWhereInput[]
+    publicationId?: StringFilter<"SitePublicationCityProjection"> | string
+    citySlug?: StringFilter<"SitePublicationCityProjection"> | string
+    catalog?: JsonFilter<"SitePublicationCityProjection">
+    projection?: XOR<SitePublicationProjectionScalarRelationFilter, SitePublicationProjectionWhereInput>
+  }, "publicationId_citySlug">
+
+  export type SitePublicationCityProjectionOrderByWithAggregationInput = {
+    publicationId?: SortOrder
+    citySlug?: SortOrder
+    catalog?: SortOrder
+    _count?: SitePublicationCityProjectionCountOrderByAggregateInput
+    _max?: SitePublicationCityProjectionMaxOrderByAggregateInput
+    _min?: SitePublicationCityProjectionMinOrderByAggregateInput
+  }
+
+  export type SitePublicationCityProjectionScalarWhereWithAggregatesInput = {
+    AND?: SitePublicationCityProjectionScalarWhereWithAggregatesInput | SitePublicationCityProjectionScalarWhereWithAggregatesInput[]
+    OR?: SitePublicationCityProjectionScalarWhereWithAggregatesInput[]
+    NOT?: SitePublicationCityProjectionScalarWhereWithAggregatesInput | SitePublicationCityProjectionScalarWhereWithAggregatesInput[]
+    publicationId?: StringWithAggregatesFilter<"SitePublicationCityProjection"> | string
+    citySlug?: StringWithAggregatesFilter<"SitePublicationCityProjection"> | string
+    catalog?: JsonWithAggregatesFilter<"SitePublicationCityProjection">
   }
 
   export type NewsArticleWhereInput = {
@@ -54203,6 +56819,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     lastError?: string | null
@@ -54218,6 +56835,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
     publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
     editorialItems?: EditorialPublicationItemCreateNestedManyWithoutPublicationInput
+    servingProjection?: SitePublicationProjectionCreateNestedOneWithoutPublicationInput
   }
 
   export type SitePublicationUncheckedCreateInput = {
@@ -54230,6 +56848,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     requestedById?: string | null
@@ -54244,6 +56863,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutProcessingPublicationInput
     publishedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutPublishedPublicationInput
     editorialItems?: EditorialPublicationItemUncheckedCreateNestedManyWithoutPublicationInput
+    servingProjection?: SitePublicationProjectionUncheckedCreateNestedOneWithoutPublicationInput
   }
 
   export type SitePublicationUpdateInput = {
@@ -54254,6 +56874,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54269,6 +56890,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
     publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
     editorialItems?: EditorialPublicationItemUpdateManyWithoutPublicationNestedInput
+    servingProjection?: SitePublicationProjectionUpdateOneWithoutPublicationNestedInput
   }
 
   export type SitePublicationUncheckedUpdateInput = {
@@ -54281,6 +56903,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     requestedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54295,6 +56918,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildUncheckedUpdateManyWithoutProcessingPublicationNestedInput
     publishedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutPublishedPublicationNestedInput
     editorialItems?: EditorialPublicationItemUncheckedUpdateManyWithoutPublicationNestedInput
+    servingProjection?: SitePublicationProjectionUncheckedUpdateOneWithoutPublicationNestedInput
   }
 
   export type SitePublicationCreateManyInput = {
@@ -54307,6 +56931,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     requestedById?: string | null
@@ -54327,6 +56952,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54347,6 +56973,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     requestedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54357,6 +56984,134 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SitePublicationProjectionCreateInput = {
+    catalogGeneration: number
+    formatVersion: number
+    catalogDigest: string
+    site: JsonNullValueInput | InputJsonValue
+    globalPages: JsonNullValueInput | InputJsonValue
+    addressCities: JsonNullValueInput | InputJsonValue
+    redirects: JsonNullValueInput | InputJsonValue
+    cityCount: number
+    publication: SitePublicationCreateNestedOneWithoutServingProjectionInput
+    cities?: SitePublicationCityProjectionCreateNestedManyWithoutProjectionInput
+  }
+
+  export type SitePublicationProjectionUncheckedCreateInput = {
+    publicationId: string
+    catalogGeneration: number
+    formatVersion: number
+    catalogDigest: string
+    site: JsonNullValueInput | InputJsonValue
+    globalPages: JsonNullValueInput | InputJsonValue
+    addressCities: JsonNullValueInput | InputJsonValue
+    redirects: JsonNullValueInput | InputJsonValue
+    cityCount: number
+    cities?: SitePublicationCityProjectionUncheckedCreateNestedManyWithoutProjectionInput
+  }
+
+  export type SitePublicationProjectionUpdateInput = {
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
+    formatVersion?: IntFieldUpdateOperationsInput | number
+    catalogDigest?: StringFieldUpdateOperationsInput | string
+    site?: JsonNullValueInput | InputJsonValue
+    globalPages?: JsonNullValueInput | InputJsonValue
+    addressCities?: JsonNullValueInput | InputJsonValue
+    redirects?: JsonNullValueInput | InputJsonValue
+    cityCount?: IntFieldUpdateOperationsInput | number
+    publication?: SitePublicationUpdateOneRequiredWithoutServingProjectionNestedInput
+    cities?: SitePublicationCityProjectionUpdateManyWithoutProjectionNestedInput
+  }
+
+  export type SitePublicationProjectionUncheckedUpdateInput = {
+    publicationId?: StringFieldUpdateOperationsInput | string
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
+    formatVersion?: IntFieldUpdateOperationsInput | number
+    catalogDigest?: StringFieldUpdateOperationsInput | string
+    site?: JsonNullValueInput | InputJsonValue
+    globalPages?: JsonNullValueInput | InputJsonValue
+    addressCities?: JsonNullValueInput | InputJsonValue
+    redirects?: JsonNullValueInput | InputJsonValue
+    cityCount?: IntFieldUpdateOperationsInput | number
+    cities?: SitePublicationCityProjectionUncheckedUpdateManyWithoutProjectionNestedInput
+  }
+
+  export type SitePublicationProjectionCreateManyInput = {
+    publicationId: string
+    catalogGeneration: number
+    formatVersion: number
+    catalogDigest: string
+    site: JsonNullValueInput | InputJsonValue
+    globalPages: JsonNullValueInput | InputJsonValue
+    addressCities: JsonNullValueInput | InputJsonValue
+    redirects: JsonNullValueInput | InputJsonValue
+    cityCount: number
+  }
+
+  export type SitePublicationProjectionUpdateManyMutationInput = {
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
+    formatVersion?: IntFieldUpdateOperationsInput | number
+    catalogDigest?: StringFieldUpdateOperationsInput | string
+    site?: JsonNullValueInput | InputJsonValue
+    globalPages?: JsonNullValueInput | InputJsonValue
+    addressCities?: JsonNullValueInput | InputJsonValue
+    redirects?: JsonNullValueInput | InputJsonValue
+    cityCount?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type SitePublicationProjectionUncheckedUpdateManyInput = {
+    publicationId?: StringFieldUpdateOperationsInput | string
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
+    formatVersion?: IntFieldUpdateOperationsInput | number
+    catalogDigest?: StringFieldUpdateOperationsInput | string
+    site?: JsonNullValueInput | InputJsonValue
+    globalPages?: JsonNullValueInput | InputJsonValue
+    addressCities?: JsonNullValueInput | InputJsonValue
+    redirects?: JsonNullValueInput | InputJsonValue
+    cityCount?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type SitePublicationCityProjectionCreateInput = {
+    citySlug: string
+    catalog: JsonNullValueInput | InputJsonValue
+    projection: SitePublicationProjectionCreateNestedOneWithoutCitiesInput
+  }
+
+  export type SitePublicationCityProjectionUncheckedCreateInput = {
+    publicationId: string
+    citySlug: string
+    catalog: JsonNullValueInput | InputJsonValue
+  }
+
+  export type SitePublicationCityProjectionUpdateInput = {
+    citySlug?: StringFieldUpdateOperationsInput | string
+    catalog?: JsonNullValueInput | InputJsonValue
+    projection?: SitePublicationProjectionUpdateOneRequiredWithoutCitiesNestedInput
+  }
+
+  export type SitePublicationCityProjectionUncheckedUpdateInput = {
+    publicationId?: StringFieldUpdateOperationsInput | string
+    citySlug?: StringFieldUpdateOperationsInput | string
+    catalog?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type SitePublicationCityProjectionCreateManyInput = {
+    publicationId: string
+    citySlug: string
+    catalog: JsonNullValueInput | InputJsonValue
+  }
+
+  export type SitePublicationCityProjectionUpdateManyMutationInput = {
+    citySlug?: StringFieldUpdateOperationsInput | string
+    catalog?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type SitePublicationCityProjectionUncheckedUpdateManyInput = {
+    publicationId?: StringFieldUpdateOperationsInput | string
+    citySlug?: StringFieldUpdateOperationsInput | string
+    catalog?: JsonNullValueInput | InputJsonValue
   }
 
   export type NewsArticleCreateInput = {
@@ -58341,6 +61096,11 @@ export namespace Prisma {
     none?: EditorialPublicationItemWhereInput
   }
 
+  export type SitePublicationProjectionNullableScalarRelationFilter = {
+    is?: SitePublicationProjectionWhereInput | null
+    isNot?: SitePublicationProjectionWhereInput | null
+  }
+
   export type EditorialPublicationItemOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -58361,6 +61121,7 @@ export namespace Prisma {
     changeSetDigest?: SortOrder
     status?: SortOrder
     catalog?: SortOrder
+    catalogGeneration?: SortOrder
     triggerEntity?: SortOrder
     triggerEntityId?: SortOrder
     requestedById?: SortOrder
@@ -58376,6 +61137,7 @@ export namespace Prisma {
   export type SitePublicationAvgOrderByAggregateInput = {
     siteRevision?: SortOrder
     releaseSequence?: SortOrder
+    catalogGeneration?: SortOrder
   }
 
   export type SitePublicationMaxOrderByAggregateInput = {
@@ -58387,6 +61149,7 @@ export namespace Prisma {
     basePublicationId?: SortOrder
     changeSetDigest?: SortOrder
     status?: SortOrder
+    catalogGeneration?: SortOrder
     triggerEntity?: SortOrder
     triggerEntityId?: SortOrder
     requestedById?: SortOrder
@@ -58407,6 +61170,7 @@ export namespace Prisma {
     basePublicationId?: SortOrder
     changeSetDigest?: SortOrder
     status?: SortOrder
+    catalogGeneration?: SortOrder
     triggerEntity?: SortOrder
     triggerEntityId?: SortOrder
     requestedById?: SortOrder
@@ -58421,6 +61185,7 @@ export namespace Prisma {
   export type SitePublicationSumOrderByAggregateInput = {
     siteRevision?: SortOrder
     releaseSequence?: SortOrder
+    catalogGeneration?: SortOrder
   }
 
   export type EnumSitePublicationStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -58431,6 +61196,87 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumSitePublicationStatusFilter<$PrismaModel>
     _max?: NestedEnumSitePublicationStatusFilter<$PrismaModel>
+  }
+
+  export type SitePublicationScalarRelationFilter = {
+    is?: SitePublicationWhereInput
+    isNot?: SitePublicationWhereInput
+  }
+
+  export type SitePublicationCityProjectionListRelationFilter = {
+    every?: SitePublicationCityProjectionWhereInput
+    some?: SitePublicationCityProjectionWhereInput
+    none?: SitePublicationCityProjectionWhereInput
+  }
+
+  export type SitePublicationCityProjectionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SitePublicationProjectionCountOrderByAggregateInput = {
+    publicationId?: SortOrder
+    catalogGeneration?: SortOrder
+    formatVersion?: SortOrder
+    catalogDigest?: SortOrder
+    site?: SortOrder
+    globalPages?: SortOrder
+    addressCities?: SortOrder
+    redirects?: SortOrder
+    cityCount?: SortOrder
+  }
+
+  export type SitePublicationProjectionAvgOrderByAggregateInput = {
+    catalogGeneration?: SortOrder
+    formatVersion?: SortOrder
+    cityCount?: SortOrder
+  }
+
+  export type SitePublicationProjectionMaxOrderByAggregateInput = {
+    publicationId?: SortOrder
+    catalogGeneration?: SortOrder
+    formatVersion?: SortOrder
+    catalogDigest?: SortOrder
+    cityCount?: SortOrder
+  }
+
+  export type SitePublicationProjectionMinOrderByAggregateInput = {
+    publicationId?: SortOrder
+    catalogGeneration?: SortOrder
+    formatVersion?: SortOrder
+    catalogDigest?: SortOrder
+    cityCount?: SortOrder
+  }
+
+  export type SitePublicationProjectionSumOrderByAggregateInput = {
+    catalogGeneration?: SortOrder
+    formatVersion?: SortOrder
+    cityCount?: SortOrder
+  }
+
+  export type SitePublicationProjectionScalarRelationFilter = {
+    is?: SitePublicationProjectionWhereInput
+    isNot?: SitePublicationProjectionWhereInput
+  }
+
+  export type SitePublicationCityProjectionPublicationIdCitySlugCompoundUniqueInput = {
+    publicationId: string
+    citySlug: string
+  }
+
+  export type SitePublicationCityProjectionCountOrderByAggregateInput = {
+    publicationId?: SortOrder
+    citySlug?: SortOrder
+    catalog?: SortOrder
+  }
+
+  export type SitePublicationCityProjectionMaxOrderByAggregateInput = {
+    publicationId?: SortOrder
+    citySlug?: SortOrder
+  }
+
+  export type SitePublicationCityProjectionMinOrderByAggregateInput = {
+    publicationId?: SortOrder
+    citySlug?: SortOrder
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -58796,11 +61642,6 @@ export namespace Prisma {
     bytes?: SortOrder
     width?: SortOrder
     height?: SortOrder
-  }
-
-  export type SitePublicationScalarRelationFilter = {
-    is?: SitePublicationWhereInput
-    isNot?: SitePublicationWhereInput
   }
 
   export type EditorialPublicationItemPublicationIdKindEntityIdCompoundUniqueInput = {
@@ -61680,6 +64521,12 @@ export namespace Prisma {
     connect?: EditorialPublicationItemWhereUniqueInput | EditorialPublicationItemWhereUniqueInput[]
   }
 
+  export type SitePublicationProjectionCreateNestedOneWithoutPublicationInput = {
+    create?: XOR<SitePublicationProjectionCreateWithoutPublicationInput, SitePublicationProjectionUncheckedCreateWithoutPublicationInput>
+    connectOrCreate?: SitePublicationProjectionCreateOrConnectWithoutPublicationInput
+    connect?: SitePublicationProjectionWhereUniqueInput
+  }
+
   export type SiteRebuildUncheckedCreateNestedManyWithoutRequestedPublicationInput = {
     create?: XOR<SiteRebuildCreateWithoutRequestedPublicationInput, SiteRebuildUncheckedCreateWithoutRequestedPublicationInput> | SiteRebuildCreateWithoutRequestedPublicationInput[] | SiteRebuildUncheckedCreateWithoutRequestedPublicationInput[]
     connectOrCreate?: SiteRebuildCreateOrConnectWithoutRequestedPublicationInput | SiteRebuildCreateOrConnectWithoutRequestedPublicationInput[]
@@ -61706,6 +64553,12 @@ export namespace Prisma {
     connectOrCreate?: EditorialPublicationItemCreateOrConnectWithoutPublicationInput | EditorialPublicationItemCreateOrConnectWithoutPublicationInput[]
     createMany?: EditorialPublicationItemCreateManyPublicationInputEnvelope
     connect?: EditorialPublicationItemWhereUniqueInput | EditorialPublicationItemWhereUniqueInput[]
+  }
+
+  export type SitePublicationProjectionUncheckedCreateNestedOneWithoutPublicationInput = {
+    create?: XOR<SitePublicationProjectionCreateWithoutPublicationInput, SitePublicationProjectionUncheckedCreateWithoutPublicationInput>
+    connectOrCreate?: SitePublicationProjectionCreateOrConnectWithoutPublicationInput
+    connect?: SitePublicationProjectionWhereUniqueInput
   }
 
   export type EnumSitePublicationStatusFieldUpdateOperationsInput = {
@@ -61796,6 +64649,16 @@ export namespace Prisma {
     deleteMany?: EditorialPublicationItemScalarWhereInput | EditorialPublicationItemScalarWhereInput[]
   }
 
+  export type SitePublicationProjectionUpdateOneWithoutPublicationNestedInput = {
+    create?: XOR<SitePublicationProjectionCreateWithoutPublicationInput, SitePublicationProjectionUncheckedCreateWithoutPublicationInput>
+    connectOrCreate?: SitePublicationProjectionCreateOrConnectWithoutPublicationInput
+    upsert?: SitePublicationProjectionUpsertWithoutPublicationInput
+    disconnect?: SitePublicationProjectionWhereInput | boolean
+    delete?: SitePublicationProjectionWhereInput | boolean
+    connect?: SitePublicationProjectionWhereUniqueInput
+    update?: XOR<XOR<SitePublicationProjectionUpdateToOneWithWhereWithoutPublicationInput, SitePublicationProjectionUpdateWithoutPublicationInput>, SitePublicationProjectionUncheckedUpdateWithoutPublicationInput>
+  }
+
   export type SiteRebuildUncheckedUpdateManyWithoutRequestedPublicationNestedInput = {
     create?: XOR<SiteRebuildCreateWithoutRequestedPublicationInput, SiteRebuildUncheckedCreateWithoutRequestedPublicationInput> | SiteRebuildCreateWithoutRequestedPublicationInput[] | SiteRebuildUncheckedCreateWithoutRequestedPublicationInput[]
     connectOrCreate?: SiteRebuildCreateOrConnectWithoutRequestedPublicationInput | SiteRebuildCreateOrConnectWithoutRequestedPublicationInput[]
@@ -61850,6 +64713,86 @@ export namespace Prisma {
     update?: EditorialPublicationItemUpdateWithWhereUniqueWithoutPublicationInput | EditorialPublicationItemUpdateWithWhereUniqueWithoutPublicationInput[]
     updateMany?: EditorialPublicationItemUpdateManyWithWhereWithoutPublicationInput | EditorialPublicationItemUpdateManyWithWhereWithoutPublicationInput[]
     deleteMany?: EditorialPublicationItemScalarWhereInput | EditorialPublicationItemScalarWhereInput[]
+  }
+
+  export type SitePublicationProjectionUncheckedUpdateOneWithoutPublicationNestedInput = {
+    create?: XOR<SitePublicationProjectionCreateWithoutPublicationInput, SitePublicationProjectionUncheckedCreateWithoutPublicationInput>
+    connectOrCreate?: SitePublicationProjectionCreateOrConnectWithoutPublicationInput
+    upsert?: SitePublicationProjectionUpsertWithoutPublicationInput
+    disconnect?: SitePublicationProjectionWhereInput | boolean
+    delete?: SitePublicationProjectionWhereInput | boolean
+    connect?: SitePublicationProjectionWhereUniqueInput
+    update?: XOR<XOR<SitePublicationProjectionUpdateToOneWithWhereWithoutPublicationInput, SitePublicationProjectionUpdateWithoutPublicationInput>, SitePublicationProjectionUncheckedUpdateWithoutPublicationInput>
+  }
+
+  export type SitePublicationCreateNestedOneWithoutServingProjectionInput = {
+    create?: XOR<SitePublicationCreateWithoutServingProjectionInput, SitePublicationUncheckedCreateWithoutServingProjectionInput>
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutServingProjectionInput
+    connect?: SitePublicationWhereUniqueInput
+  }
+
+  export type SitePublicationCityProjectionCreateNestedManyWithoutProjectionInput = {
+    create?: XOR<SitePublicationCityProjectionCreateWithoutProjectionInput, SitePublicationCityProjectionUncheckedCreateWithoutProjectionInput> | SitePublicationCityProjectionCreateWithoutProjectionInput[] | SitePublicationCityProjectionUncheckedCreateWithoutProjectionInput[]
+    connectOrCreate?: SitePublicationCityProjectionCreateOrConnectWithoutProjectionInput | SitePublicationCityProjectionCreateOrConnectWithoutProjectionInput[]
+    createMany?: SitePublicationCityProjectionCreateManyProjectionInputEnvelope
+    connect?: SitePublicationCityProjectionWhereUniqueInput | SitePublicationCityProjectionWhereUniqueInput[]
+  }
+
+  export type SitePublicationCityProjectionUncheckedCreateNestedManyWithoutProjectionInput = {
+    create?: XOR<SitePublicationCityProjectionCreateWithoutProjectionInput, SitePublicationCityProjectionUncheckedCreateWithoutProjectionInput> | SitePublicationCityProjectionCreateWithoutProjectionInput[] | SitePublicationCityProjectionUncheckedCreateWithoutProjectionInput[]
+    connectOrCreate?: SitePublicationCityProjectionCreateOrConnectWithoutProjectionInput | SitePublicationCityProjectionCreateOrConnectWithoutProjectionInput[]
+    createMany?: SitePublicationCityProjectionCreateManyProjectionInputEnvelope
+    connect?: SitePublicationCityProjectionWhereUniqueInput | SitePublicationCityProjectionWhereUniqueInput[]
+  }
+
+  export type SitePublicationUpdateOneRequiredWithoutServingProjectionNestedInput = {
+    create?: XOR<SitePublicationCreateWithoutServingProjectionInput, SitePublicationUncheckedCreateWithoutServingProjectionInput>
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutServingProjectionInput
+    upsert?: SitePublicationUpsertWithoutServingProjectionInput
+    connect?: SitePublicationWhereUniqueInput
+    update?: XOR<XOR<SitePublicationUpdateToOneWithWhereWithoutServingProjectionInput, SitePublicationUpdateWithoutServingProjectionInput>, SitePublicationUncheckedUpdateWithoutServingProjectionInput>
+  }
+
+  export type SitePublicationCityProjectionUpdateManyWithoutProjectionNestedInput = {
+    create?: XOR<SitePublicationCityProjectionCreateWithoutProjectionInput, SitePublicationCityProjectionUncheckedCreateWithoutProjectionInput> | SitePublicationCityProjectionCreateWithoutProjectionInput[] | SitePublicationCityProjectionUncheckedCreateWithoutProjectionInput[]
+    connectOrCreate?: SitePublicationCityProjectionCreateOrConnectWithoutProjectionInput | SitePublicationCityProjectionCreateOrConnectWithoutProjectionInput[]
+    upsert?: SitePublicationCityProjectionUpsertWithWhereUniqueWithoutProjectionInput | SitePublicationCityProjectionUpsertWithWhereUniqueWithoutProjectionInput[]
+    createMany?: SitePublicationCityProjectionCreateManyProjectionInputEnvelope
+    set?: SitePublicationCityProjectionWhereUniqueInput | SitePublicationCityProjectionWhereUniqueInput[]
+    disconnect?: SitePublicationCityProjectionWhereUniqueInput | SitePublicationCityProjectionWhereUniqueInput[]
+    delete?: SitePublicationCityProjectionWhereUniqueInput | SitePublicationCityProjectionWhereUniqueInput[]
+    connect?: SitePublicationCityProjectionWhereUniqueInput | SitePublicationCityProjectionWhereUniqueInput[]
+    update?: SitePublicationCityProjectionUpdateWithWhereUniqueWithoutProjectionInput | SitePublicationCityProjectionUpdateWithWhereUniqueWithoutProjectionInput[]
+    updateMany?: SitePublicationCityProjectionUpdateManyWithWhereWithoutProjectionInput | SitePublicationCityProjectionUpdateManyWithWhereWithoutProjectionInput[]
+    deleteMany?: SitePublicationCityProjectionScalarWhereInput | SitePublicationCityProjectionScalarWhereInput[]
+  }
+
+  export type SitePublicationCityProjectionUncheckedUpdateManyWithoutProjectionNestedInput = {
+    create?: XOR<SitePublicationCityProjectionCreateWithoutProjectionInput, SitePublicationCityProjectionUncheckedCreateWithoutProjectionInput> | SitePublicationCityProjectionCreateWithoutProjectionInput[] | SitePublicationCityProjectionUncheckedCreateWithoutProjectionInput[]
+    connectOrCreate?: SitePublicationCityProjectionCreateOrConnectWithoutProjectionInput | SitePublicationCityProjectionCreateOrConnectWithoutProjectionInput[]
+    upsert?: SitePublicationCityProjectionUpsertWithWhereUniqueWithoutProjectionInput | SitePublicationCityProjectionUpsertWithWhereUniqueWithoutProjectionInput[]
+    createMany?: SitePublicationCityProjectionCreateManyProjectionInputEnvelope
+    set?: SitePublicationCityProjectionWhereUniqueInput | SitePublicationCityProjectionWhereUniqueInput[]
+    disconnect?: SitePublicationCityProjectionWhereUniqueInput | SitePublicationCityProjectionWhereUniqueInput[]
+    delete?: SitePublicationCityProjectionWhereUniqueInput | SitePublicationCityProjectionWhereUniqueInput[]
+    connect?: SitePublicationCityProjectionWhereUniqueInput | SitePublicationCityProjectionWhereUniqueInput[]
+    update?: SitePublicationCityProjectionUpdateWithWhereUniqueWithoutProjectionInput | SitePublicationCityProjectionUpdateWithWhereUniqueWithoutProjectionInput[]
+    updateMany?: SitePublicationCityProjectionUpdateManyWithWhereWithoutProjectionInput | SitePublicationCityProjectionUpdateManyWithWhereWithoutProjectionInput[]
+    deleteMany?: SitePublicationCityProjectionScalarWhereInput | SitePublicationCityProjectionScalarWhereInput[]
+  }
+
+  export type SitePublicationProjectionCreateNestedOneWithoutCitiesInput = {
+    create?: XOR<SitePublicationProjectionCreateWithoutCitiesInput, SitePublicationProjectionUncheckedCreateWithoutCitiesInput>
+    connectOrCreate?: SitePublicationProjectionCreateOrConnectWithoutCitiesInput
+    connect?: SitePublicationProjectionWhereUniqueInput
+  }
+
+  export type SitePublicationProjectionUpdateOneRequiredWithoutCitiesNestedInput = {
+    create?: XOR<SitePublicationProjectionCreateWithoutCitiesInput, SitePublicationProjectionUncheckedCreateWithoutCitiesInput>
+    connectOrCreate?: SitePublicationProjectionCreateOrConnectWithoutCitiesInput
+    upsert?: SitePublicationProjectionUpsertWithoutCitiesInput
+    connect?: SitePublicationProjectionWhereUniqueInput
+    update?: XOR<XOR<SitePublicationProjectionUpdateToOneWithWhereWithoutCitiesInput, SitePublicationProjectionUpdateWithoutCitiesInput>, SitePublicationProjectionUncheckedUpdateWithoutCitiesInput>
   }
 
   export type SiteCreateNestedOneWithoutNewsArticlesInput = {
@@ -65583,6 +68526,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     lastError?: string | null
@@ -65597,6 +68541,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
     publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
     editorialItems?: EditorialPublicationItemCreateNestedManyWithoutPublicationInput
+    servingProjection?: SitePublicationProjectionCreateNestedOneWithoutPublicationInput
   }
 
   export type SitePublicationUncheckedCreateWithoutSiteInput = {
@@ -65608,6 +68553,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     requestedById?: string | null
@@ -65622,6 +68568,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutProcessingPublicationInput
     publishedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutPublishedPublicationInput
     editorialItems?: EditorialPublicationItemUncheckedCreateNestedManyWithoutPublicationInput
+    servingProjection?: SitePublicationProjectionUncheckedCreateNestedOneWithoutPublicationInput
   }
 
   export type SitePublicationCreateOrConnectWithoutSiteInput = {
@@ -66414,6 +69361,7 @@ export namespace Prisma {
     changeSetDigest?: StringNullableFilter<"SitePublication"> | string | null
     status?: EnumSitePublicationStatusFilter<"SitePublication"> | $Enums.SitePublicationStatus
     catalog?: JsonFilter<"SitePublication">
+    catalogGeneration?: IntFilter<"SitePublication"> | number
     triggerEntity?: StringFilter<"SitePublication"> | string
     triggerEntityId?: StringFilter<"SitePublication"> | string
     requestedById?: StringNullableFilter<"SitePublication"> | string | null
@@ -67210,6 +70158,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     lastError?: string | null
@@ -67224,6 +70173,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
     publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
     editorialItems?: EditorialPublicationItemCreateNestedManyWithoutPublicationInput
+    servingProjection?: SitePublicationProjectionCreateNestedOneWithoutPublicationInput
   }
 
   export type SitePublicationUncheckedCreateWithoutRequestedRebuildsInput = {
@@ -67236,6 +70186,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     requestedById?: string | null
@@ -67249,6 +70200,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutProcessingPublicationInput
     publishedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutPublishedPublicationInput
     editorialItems?: EditorialPublicationItemUncheckedCreateNestedManyWithoutPublicationInput
+    servingProjection?: SitePublicationProjectionUncheckedCreateNestedOneWithoutPublicationInput
   }
 
   export type SitePublicationCreateOrConnectWithoutRequestedRebuildsInput = {
@@ -67265,6 +70217,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     lastError?: string | null
@@ -67279,6 +70232,7 @@ export namespace Prisma {
     requestedRebuilds?: SiteRebuildCreateNestedManyWithoutRequestedPublicationInput
     publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
     editorialItems?: EditorialPublicationItemCreateNestedManyWithoutPublicationInput
+    servingProjection?: SitePublicationProjectionCreateNestedOneWithoutPublicationInput
   }
 
   export type SitePublicationUncheckedCreateWithoutProcessingRebuildsInput = {
@@ -67291,6 +70245,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     requestedById?: string | null
@@ -67304,6 +70259,7 @@ export namespace Prisma {
     requestedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutRequestedPublicationInput
     publishedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutPublishedPublicationInput
     editorialItems?: EditorialPublicationItemUncheckedCreateNestedManyWithoutPublicationInput
+    servingProjection?: SitePublicationProjectionUncheckedCreateNestedOneWithoutPublicationInput
   }
 
   export type SitePublicationCreateOrConnectWithoutProcessingRebuildsInput = {
@@ -67320,6 +70276,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     lastError?: string | null
@@ -67334,6 +70291,7 @@ export namespace Prisma {
     requestedRebuilds?: SiteRebuildCreateNestedManyWithoutRequestedPublicationInput
     processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
     editorialItems?: EditorialPublicationItemCreateNestedManyWithoutPublicationInput
+    servingProjection?: SitePublicationProjectionCreateNestedOneWithoutPublicationInput
   }
 
   export type SitePublicationUncheckedCreateWithoutPublishedRebuildsInput = {
@@ -67346,6 +70304,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     requestedById?: string | null
@@ -67359,6 +70318,7 @@ export namespace Prisma {
     requestedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutRequestedPublicationInput
     processingRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutProcessingPublicationInput
     editorialItems?: EditorialPublicationItemUncheckedCreateNestedManyWithoutPublicationInput
+    servingProjection?: SitePublicationProjectionUncheckedCreateNestedOneWithoutPublicationInput
   }
 
   export type SitePublicationCreateOrConnectWithoutPublishedRebuildsInput = {
@@ -67466,6 +70426,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67480,6 +70441,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
     publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
     editorialItems?: EditorialPublicationItemUpdateManyWithoutPublicationNestedInput
+    servingProjection?: SitePublicationProjectionUpdateOneWithoutPublicationNestedInput
   }
 
   export type SitePublicationUncheckedUpdateWithoutRequestedRebuildsInput = {
@@ -67492,6 +70454,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     requestedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67505,6 +70468,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildUncheckedUpdateManyWithoutProcessingPublicationNestedInput
     publishedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutPublishedPublicationNestedInput
     editorialItems?: EditorialPublicationItemUncheckedUpdateManyWithoutPublicationNestedInput
+    servingProjection?: SitePublicationProjectionUncheckedUpdateOneWithoutPublicationNestedInput
   }
 
   export type SitePublicationUpsertWithoutProcessingRebuildsInput = {
@@ -67526,6 +70490,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67540,6 +70505,7 @@ export namespace Prisma {
     requestedRebuilds?: SiteRebuildUpdateManyWithoutRequestedPublicationNestedInput
     publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
     editorialItems?: EditorialPublicationItemUpdateManyWithoutPublicationNestedInput
+    servingProjection?: SitePublicationProjectionUpdateOneWithoutPublicationNestedInput
   }
 
   export type SitePublicationUncheckedUpdateWithoutProcessingRebuildsInput = {
@@ -67552,6 +70518,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     requestedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67565,6 +70532,7 @@ export namespace Prisma {
     requestedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutRequestedPublicationNestedInput
     publishedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutPublishedPublicationNestedInput
     editorialItems?: EditorialPublicationItemUncheckedUpdateManyWithoutPublicationNestedInput
+    servingProjection?: SitePublicationProjectionUncheckedUpdateOneWithoutPublicationNestedInput
   }
 
   export type SitePublicationUpsertWithoutPublishedRebuildsInput = {
@@ -67586,6 +70554,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67600,6 +70569,7 @@ export namespace Prisma {
     requestedRebuilds?: SiteRebuildUpdateManyWithoutRequestedPublicationNestedInput
     processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
     editorialItems?: EditorialPublicationItemUpdateManyWithoutPublicationNestedInput
+    servingProjection?: SitePublicationProjectionUpdateOneWithoutPublicationNestedInput
   }
 
   export type SitePublicationUncheckedUpdateWithoutPublishedRebuildsInput = {
@@ -67612,6 +70582,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     requestedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67625,6 +70596,7 @@ export namespace Prisma {
     requestedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutRequestedPublicationNestedInput
     processingRebuilds?: SiteRebuildUncheckedUpdateManyWithoutProcessingPublicationNestedInput
     editorialItems?: EditorialPublicationItemUncheckedUpdateManyWithoutPublicationNestedInput
+    servingProjection?: SitePublicationProjectionUncheckedUpdateOneWithoutPublicationNestedInput
   }
 
   export type SiteCreateWithoutContentRevisionsInput = {
@@ -68238,6 +71210,35 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SitePublicationProjectionCreateWithoutPublicationInput = {
+    catalogGeneration: number
+    formatVersion: number
+    catalogDigest: string
+    site: JsonNullValueInput | InputJsonValue
+    globalPages: JsonNullValueInput | InputJsonValue
+    addressCities: JsonNullValueInput | InputJsonValue
+    redirects: JsonNullValueInput | InputJsonValue
+    cityCount: number
+    cities?: SitePublicationCityProjectionCreateNestedManyWithoutProjectionInput
+  }
+
+  export type SitePublicationProjectionUncheckedCreateWithoutPublicationInput = {
+    catalogGeneration: number
+    formatVersion: number
+    catalogDigest: string
+    site: JsonNullValueInput | InputJsonValue
+    globalPages: JsonNullValueInput | InputJsonValue
+    addressCities: JsonNullValueInput | InputJsonValue
+    redirects: JsonNullValueInput | InputJsonValue
+    cityCount: number
+    cities?: SitePublicationCityProjectionUncheckedCreateNestedManyWithoutProjectionInput
+  }
+
+  export type SitePublicationProjectionCreateOrConnectWithoutPublicationInput = {
+    where: SitePublicationProjectionWhereUniqueInput
+    create: XOR<SitePublicationProjectionCreateWithoutPublicationInput, SitePublicationProjectionUncheckedCreateWithoutPublicationInput>
+  }
+
   export type SiteUpsertWithoutPublicationsInput = {
     update: XOR<SiteUpdateWithoutPublicationsInput, SiteUncheckedUpdateWithoutPublicationsInput>
     create: XOR<SiteCreateWithoutPublicationsInput, SiteUncheckedCreateWithoutPublicationsInput>
@@ -68480,6 +71481,273 @@ export namespace Prisma {
     revision?: IntFilter<"EditorialPublicationItem"> | number
     action?: StringFilter<"EditorialPublicationItem"> | string
     snapshot?: JsonNullableFilter<"EditorialPublicationItem">
+  }
+
+  export type SitePublicationProjectionUpsertWithoutPublicationInput = {
+    update: XOR<SitePublicationProjectionUpdateWithoutPublicationInput, SitePublicationProjectionUncheckedUpdateWithoutPublicationInput>
+    create: XOR<SitePublicationProjectionCreateWithoutPublicationInput, SitePublicationProjectionUncheckedCreateWithoutPublicationInput>
+    where?: SitePublicationProjectionWhereInput
+  }
+
+  export type SitePublicationProjectionUpdateToOneWithWhereWithoutPublicationInput = {
+    where?: SitePublicationProjectionWhereInput
+    data: XOR<SitePublicationProjectionUpdateWithoutPublicationInput, SitePublicationProjectionUncheckedUpdateWithoutPublicationInput>
+  }
+
+  export type SitePublicationProjectionUpdateWithoutPublicationInput = {
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
+    formatVersion?: IntFieldUpdateOperationsInput | number
+    catalogDigest?: StringFieldUpdateOperationsInput | string
+    site?: JsonNullValueInput | InputJsonValue
+    globalPages?: JsonNullValueInput | InputJsonValue
+    addressCities?: JsonNullValueInput | InputJsonValue
+    redirects?: JsonNullValueInput | InputJsonValue
+    cityCount?: IntFieldUpdateOperationsInput | number
+    cities?: SitePublicationCityProjectionUpdateManyWithoutProjectionNestedInput
+  }
+
+  export type SitePublicationProjectionUncheckedUpdateWithoutPublicationInput = {
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
+    formatVersion?: IntFieldUpdateOperationsInput | number
+    catalogDigest?: StringFieldUpdateOperationsInput | string
+    site?: JsonNullValueInput | InputJsonValue
+    globalPages?: JsonNullValueInput | InputJsonValue
+    addressCities?: JsonNullValueInput | InputJsonValue
+    redirects?: JsonNullValueInput | InputJsonValue
+    cityCount?: IntFieldUpdateOperationsInput | number
+    cities?: SitePublicationCityProjectionUncheckedUpdateManyWithoutProjectionNestedInput
+  }
+
+  export type SitePublicationCreateWithoutServingProjectionInput = {
+    id?: string
+    siteRevision: number
+    releaseSequence?: number
+    scopeKey?: string
+    basePublicationId?: string | null
+    changeSetDigest?: string | null
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
+    triggerEntity: string
+    triggerEntityId: string
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    site: SiteCreateNestedOneWithoutPublicationsInput
+    requestedBy?: UserCreateNestedOneWithoutPublicationsInput
+    validation?: SitePublicationValidationCreateNestedOneWithoutPublicationInput
+    requestedRebuilds?: SiteRebuildCreateNestedManyWithoutRequestedPublicationInput
+    processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
+    publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
+    editorialItems?: EditorialPublicationItemCreateNestedManyWithoutPublicationInput
+  }
+
+  export type SitePublicationUncheckedCreateWithoutServingProjectionInput = {
+    id?: string
+    siteId: string
+    siteRevision: number
+    releaseSequence?: number
+    scopeKey?: string
+    basePublicationId?: string | null
+    changeSetDigest?: string | null
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
+    triggerEntity: string
+    triggerEntityId: string
+    requestedById?: string | null
+    validationId?: string | null
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    requestedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutRequestedPublicationInput
+    processingRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutProcessingPublicationInput
+    publishedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutPublishedPublicationInput
+    editorialItems?: EditorialPublicationItemUncheckedCreateNestedManyWithoutPublicationInput
+  }
+
+  export type SitePublicationCreateOrConnectWithoutServingProjectionInput = {
+    where: SitePublicationWhereUniqueInput
+    create: XOR<SitePublicationCreateWithoutServingProjectionInput, SitePublicationUncheckedCreateWithoutServingProjectionInput>
+  }
+
+  export type SitePublicationCityProjectionCreateWithoutProjectionInput = {
+    citySlug: string
+    catalog: JsonNullValueInput | InputJsonValue
+  }
+
+  export type SitePublicationCityProjectionUncheckedCreateWithoutProjectionInput = {
+    citySlug: string
+    catalog: JsonNullValueInput | InputJsonValue
+  }
+
+  export type SitePublicationCityProjectionCreateOrConnectWithoutProjectionInput = {
+    where: SitePublicationCityProjectionWhereUniqueInput
+    create: XOR<SitePublicationCityProjectionCreateWithoutProjectionInput, SitePublicationCityProjectionUncheckedCreateWithoutProjectionInput>
+  }
+
+  export type SitePublicationCityProjectionCreateManyProjectionInputEnvelope = {
+    data: SitePublicationCityProjectionCreateManyProjectionInput | SitePublicationCityProjectionCreateManyProjectionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SitePublicationUpsertWithoutServingProjectionInput = {
+    update: XOR<SitePublicationUpdateWithoutServingProjectionInput, SitePublicationUncheckedUpdateWithoutServingProjectionInput>
+    create: XOR<SitePublicationCreateWithoutServingProjectionInput, SitePublicationUncheckedCreateWithoutServingProjectionInput>
+    where?: SitePublicationWhereInput
+  }
+
+  export type SitePublicationUpdateToOneWithWhereWithoutServingProjectionInput = {
+    where?: SitePublicationWhereInput
+    data: XOR<SitePublicationUpdateWithoutServingProjectionInput, SitePublicationUncheckedUpdateWithoutServingProjectionInput>
+  }
+
+  export type SitePublicationUpdateWithoutServingProjectionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    scopeKey?: StringFieldUpdateOperationsInput | string
+    basePublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    site?: SiteUpdateOneRequiredWithoutPublicationsNestedInput
+    requestedBy?: UserUpdateOneWithoutPublicationsNestedInput
+    validation?: SitePublicationValidationUpdateOneWithoutPublicationNestedInput
+    requestedRebuilds?: SiteRebuildUpdateManyWithoutRequestedPublicationNestedInput
+    processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
+    publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
+    editorialItems?: EditorialPublicationItemUpdateManyWithoutPublicationNestedInput
+  }
+
+  export type SitePublicationUncheckedUpdateWithoutServingProjectionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    releaseSequence?: IntFieldUpdateOperationsInput | number
+    scopeKey?: StringFieldUpdateOperationsInput | string
+    basePublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    validationId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutRequestedPublicationNestedInput
+    processingRebuilds?: SiteRebuildUncheckedUpdateManyWithoutProcessingPublicationNestedInput
+    publishedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutPublishedPublicationNestedInput
+    editorialItems?: EditorialPublicationItemUncheckedUpdateManyWithoutPublicationNestedInput
+  }
+
+  export type SitePublicationCityProjectionUpsertWithWhereUniqueWithoutProjectionInput = {
+    where: SitePublicationCityProjectionWhereUniqueInput
+    update: XOR<SitePublicationCityProjectionUpdateWithoutProjectionInput, SitePublicationCityProjectionUncheckedUpdateWithoutProjectionInput>
+    create: XOR<SitePublicationCityProjectionCreateWithoutProjectionInput, SitePublicationCityProjectionUncheckedCreateWithoutProjectionInput>
+  }
+
+  export type SitePublicationCityProjectionUpdateWithWhereUniqueWithoutProjectionInput = {
+    where: SitePublicationCityProjectionWhereUniqueInput
+    data: XOR<SitePublicationCityProjectionUpdateWithoutProjectionInput, SitePublicationCityProjectionUncheckedUpdateWithoutProjectionInput>
+  }
+
+  export type SitePublicationCityProjectionUpdateManyWithWhereWithoutProjectionInput = {
+    where: SitePublicationCityProjectionScalarWhereInput
+    data: XOR<SitePublicationCityProjectionUpdateManyMutationInput, SitePublicationCityProjectionUncheckedUpdateManyWithoutProjectionInput>
+  }
+
+  export type SitePublicationCityProjectionScalarWhereInput = {
+    AND?: SitePublicationCityProjectionScalarWhereInput | SitePublicationCityProjectionScalarWhereInput[]
+    OR?: SitePublicationCityProjectionScalarWhereInput[]
+    NOT?: SitePublicationCityProjectionScalarWhereInput | SitePublicationCityProjectionScalarWhereInput[]
+    publicationId?: StringFilter<"SitePublicationCityProjection"> | string
+    citySlug?: StringFilter<"SitePublicationCityProjection"> | string
+    catalog?: JsonFilter<"SitePublicationCityProjection">
+  }
+
+  export type SitePublicationProjectionCreateWithoutCitiesInput = {
+    catalogGeneration: number
+    formatVersion: number
+    catalogDigest: string
+    site: JsonNullValueInput | InputJsonValue
+    globalPages: JsonNullValueInput | InputJsonValue
+    addressCities: JsonNullValueInput | InputJsonValue
+    redirects: JsonNullValueInput | InputJsonValue
+    cityCount: number
+    publication: SitePublicationCreateNestedOneWithoutServingProjectionInput
+  }
+
+  export type SitePublicationProjectionUncheckedCreateWithoutCitiesInput = {
+    publicationId: string
+    catalogGeneration: number
+    formatVersion: number
+    catalogDigest: string
+    site: JsonNullValueInput | InputJsonValue
+    globalPages: JsonNullValueInput | InputJsonValue
+    addressCities: JsonNullValueInput | InputJsonValue
+    redirects: JsonNullValueInput | InputJsonValue
+    cityCount: number
+  }
+
+  export type SitePublicationProjectionCreateOrConnectWithoutCitiesInput = {
+    where: SitePublicationProjectionWhereUniqueInput
+    create: XOR<SitePublicationProjectionCreateWithoutCitiesInput, SitePublicationProjectionUncheckedCreateWithoutCitiesInput>
+  }
+
+  export type SitePublicationProjectionUpsertWithoutCitiesInput = {
+    update: XOR<SitePublicationProjectionUpdateWithoutCitiesInput, SitePublicationProjectionUncheckedUpdateWithoutCitiesInput>
+    create: XOR<SitePublicationProjectionCreateWithoutCitiesInput, SitePublicationProjectionUncheckedCreateWithoutCitiesInput>
+    where?: SitePublicationProjectionWhereInput
+  }
+
+  export type SitePublicationProjectionUpdateToOneWithWhereWithoutCitiesInput = {
+    where?: SitePublicationProjectionWhereInput
+    data: XOR<SitePublicationProjectionUpdateWithoutCitiesInput, SitePublicationProjectionUncheckedUpdateWithoutCitiesInput>
+  }
+
+  export type SitePublicationProjectionUpdateWithoutCitiesInput = {
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
+    formatVersion?: IntFieldUpdateOperationsInput | number
+    catalogDigest?: StringFieldUpdateOperationsInput | string
+    site?: JsonNullValueInput | InputJsonValue
+    globalPages?: JsonNullValueInput | InputJsonValue
+    addressCities?: JsonNullValueInput | InputJsonValue
+    redirects?: JsonNullValueInput | InputJsonValue
+    cityCount?: IntFieldUpdateOperationsInput | number
+    publication?: SitePublicationUpdateOneRequiredWithoutServingProjectionNestedInput
+  }
+
+  export type SitePublicationProjectionUncheckedUpdateWithoutCitiesInput = {
+    publicationId?: StringFieldUpdateOperationsInput | string
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
+    formatVersion?: IntFieldUpdateOperationsInput | number
+    catalogDigest?: StringFieldUpdateOperationsInput | string
+    site?: JsonNullValueInput | InputJsonValue
+    globalPages?: JsonNullValueInput | InputJsonValue
+    addressCities?: JsonNullValueInput | InputJsonValue
+    redirects?: JsonNullValueInput | InputJsonValue
+    cityCount?: IntFieldUpdateOperationsInput | number
   }
 
   export type SiteCreateWithoutNewsArticlesInput = {
@@ -69407,6 +72675,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     lastError?: string | null
@@ -69421,6 +72690,7 @@ export namespace Prisma {
     requestedRebuilds?: SiteRebuildCreateNestedManyWithoutRequestedPublicationInput
     processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
     publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
+    servingProjection?: SitePublicationProjectionCreateNestedOneWithoutPublicationInput
   }
 
   export type SitePublicationUncheckedCreateWithoutEditorialItemsInput = {
@@ -69433,6 +72703,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     requestedById?: string | null
@@ -69446,6 +72717,7 @@ export namespace Prisma {
     requestedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutRequestedPublicationInput
     processingRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutProcessingPublicationInput
     publishedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutPublishedPublicationInput
+    servingProjection?: SitePublicationProjectionUncheckedCreateNestedOneWithoutPublicationInput
   }
 
   export type SitePublicationCreateOrConnectWithoutEditorialItemsInput = {
@@ -69472,6 +72744,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -69486,6 +72759,7 @@ export namespace Prisma {
     requestedRebuilds?: SiteRebuildUpdateManyWithoutRequestedPublicationNestedInput
     processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
     publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
+    servingProjection?: SitePublicationProjectionUpdateOneWithoutPublicationNestedInput
   }
 
   export type SitePublicationUncheckedUpdateWithoutEditorialItemsInput = {
@@ -69498,6 +72772,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     requestedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -69511,6 +72786,7 @@ export namespace Prisma {
     requestedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutRequestedPublicationNestedInput
     processingRebuilds?: SiteRebuildUncheckedUpdateManyWithoutProcessingPublicationNestedInput
     publishedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutPublishedPublicationNestedInput
+    servingProjection?: SitePublicationProjectionUncheckedUpdateOneWithoutPublicationNestedInput
   }
 
   export type SiteCreateWithoutPublicationValidationsInput = {
@@ -69640,6 +72916,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     lastError?: string | null
@@ -69654,6 +72931,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
     publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
     editorialItems?: EditorialPublicationItemCreateNestedManyWithoutPublicationInput
+    servingProjection?: SitePublicationProjectionCreateNestedOneWithoutPublicationInput
   }
 
   export type SitePublicationUncheckedCreateWithoutValidationInput = {
@@ -69666,6 +72944,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     requestedById?: string | null
@@ -69679,6 +72958,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutProcessingPublicationInput
     publishedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutPublishedPublicationInput
     editorialItems?: EditorialPublicationItemUncheckedCreateNestedManyWithoutPublicationInput
+    servingProjection?: SitePublicationProjectionUncheckedCreateNestedOneWithoutPublicationInput
   }
 
   export type SitePublicationCreateOrConnectWithoutValidationInput = {
@@ -69835,6 +73115,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -69849,6 +73130,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
     publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
     editorialItems?: EditorialPublicationItemUpdateManyWithoutPublicationNestedInput
+    servingProjection?: SitePublicationProjectionUpdateOneWithoutPublicationNestedInput
   }
 
   export type SitePublicationUncheckedUpdateWithoutValidationInput = {
@@ -69861,6 +73143,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     requestedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -69874,6 +73157,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildUncheckedUpdateManyWithoutProcessingPublicationNestedInput
     publishedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutPublishedPublicationNestedInput
     editorialItems?: EditorialPublicationItemUncheckedUpdateManyWithoutPublicationNestedInput
+    servingProjection?: SitePublicationProjectionUncheckedUpdateOneWithoutPublicationNestedInput
   }
 
   export type SiteCreateWithoutAuditEventsInput = {
@@ -76854,6 +80138,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     lastError?: string | null
@@ -76868,6 +80153,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
     publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
     editorialItems?: EditorialPublicationItemCreateNestedManyWithoutPublicationInput
+    servingProjection?: SitePublicationProjectionCreateNestedOneWithoutPublicationInput
   }
 
   export type SitePublicationUncheckedCreateWithoutRequestedByInput = {
@@ -76880,6 +80166,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     validationId?: string | null
@@ -76893,6 +80180,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutProcessingPublicationInput
     publishedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutPublishedPublicationInput
     editorialItems?: EditorialPublicationItemUncheckedCreateNestedManyWithoutPublicationInput
+    servingProjection?: SitePublicationProjectionUncheckedCreateNestedOneWithoutPublicationInput
   }
 
   export type SitePublicationCreateOrConnectWithoutRequestedByInput = {
@@ -77927,6 +81215,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     requestedById?: string | null
@@ -78671,6 +81960,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -78685,6 +81975,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
     publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
     editorialItems?: EditorialPublicationItemUpdateManyWithoutPublicationNestedInput
+    servingProjection?: SitePublicationProjectionUpdateOneWithoutPublicationNestedInput
   }
 
   export type SitePublicationUncheckedUpdateWithoutSiteInput = {
@@ -78696,6 +81987,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     requestedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -78710,6 +82002,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildUncheckedUpdateManyWithoutProcessingPublicationNestedInput
     publishedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutPublishedPublicationNestedInput
     editorialItems?: EditorialPublicationItemUncheckedUpdateManyWithoutPublicationNestedInput
+    servingProjection?: SitePublicationProjectionUncheckedUpdateOneWithoutPublicationNestedInput
   }
 
   export type SitePublicationUncheckedUpdateManyWithoutSiteInput = {
@@ -78721,6 +82014,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     requestedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -79431,6 +82725,26 @@ export namespace Prisma {
     revision?: IntFieldUpdateOperationsInput | number
     action?: StringFieldUpdateOperationsInput | string
     snapshot?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type SitePublicationCityProjectionCreateManyProjectionInput = {
+    citySlug: string
+    catalog: JsonNullValueInput | InputJsonValue
+  }
+
+  export type SitePublicationCityProjectionUpdateWithoutProjectionInput = {
+    citySlug?: StringFieldUpdateOperationsInput | string
+    catalog?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type SitePublicationCityProjectionUncheckedUpdateWithoutProjectionInput = {
+    citySlug?: StringFieldUpdateOperationsInput | string
+    catalog?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type SitePublicationCityProjectionUncheckedUpdateManyWithoutProjectionInput = {
+    citySlug?: StringFieldUpdateOperationsInput | string
+    catalog?: JsonNullValueInput | InputJsonValue
   }
 
   export type NewsArticleCreateManyCategoryInput = {
@@ -81589,6 +84903,7 @@ export namespace Prisma {
     changeSetDigest?: string | null
     status?: $Enums.SitePublicationStatus
     catalog: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: number
     triggerEntity: string
     triggerEntityId: string
     validationId?: string | null
@@ -81780,6 +85095,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -81794,6 +85110,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
     publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
     editorialItems?: EditorialPublicationItemUpdateManyWithoutPublicationNestedInput
+    servingProjection?: SitePublicationProjectionUpdateOneWithoutPublicationNestedInput
   }
 
   export type SitePublicationUncheckedUpdateWithoutRequestedByInput = {
@@ -81806,6 +85123,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     validationId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -81819,6 +85137,7 @@ export namespace Prisma {
     processingRebuilds?: SiteRebuildUncheckedUpdateManyWithoutProcessingPublicationNestedInput
     publishedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutPublishedPublicationNestedInput
     editorialItems?: EditorialPublicationItemUncheckedUpdateManyWithoutPublicationNestedInput
+    servingProjection?: SitePublicationProjectionUncheckedUpdateOneWithoutPublicationNestedInput
   }
 
   export type SitePublicationUncheckedUpdateManyWithoutRequestedByInput = {
@@ -81831,6 +85150,7 @@ export namespace Prisma {
     changeSetDigest?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
     catalog?: JsonNullValueInput | InputJsonValue
+    catalogGeneration?: IntFieldUpdateOperationsInput | number
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     validationId?: NullableStringFieldUpdateOperationsInput | string | null

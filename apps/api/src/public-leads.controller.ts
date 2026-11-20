@@ -134,7 +134,7 @@ export class PublicLeadsController {
     const page = serving ? serving.page : body.pageSlug && city
       ? await this.prisma.page.findFirst({ where: { ...(body.pageScope === 'GLOBAL' ? { siteId: site.id, cityId: null, type: body.pageSlug === 'official-site-domru' ? 'OFFICIAL_SITE' as const : body.pageSlug === 'proverit-skorost-interneta' ? 'SPEED_TEST' as const : 'ACCOUNT' as const } : { cityId: city.id }), slug: body.pageSlug, status: 'PUBLISHED' } })
       : null;
-    const publication = serving ? serving.publication : body.configuration
+    const publication = !serving && body.configuration
       ? await this.prisma.sitePublication.findFirst({
         where: { siteId: site.id, status: 'SUCCEEDED' },
         orderBy: { releaseSequence: 'desc' },
@@ -142,7 +142,7 @@ export class PublicLeadsController {
       })
       : null;
     const catalog = publication?.catalog as { cities?: Array<{ slug?: string; tariffs?: Array<Record<string, unknown>> }> } | null;
-    const publishedCity = catalog?.cities?.find((item) => item.slug === city?.slug);
+    const publishedCity = serving?.city ?? catalog?.cities?.find((item) => item.slug === city?.slug);
     const publishedTariff = publishedCity?.tariffs?.find((item) => item.slug === body.tariffSlug);
     const tariffRow = body.tariffSlug && city && (!(body.configuration || serving) || typeof publishedTariff?.id === 'string')
       ? await this.prisma.tariff.findFirst({ where: body.configuration || serving

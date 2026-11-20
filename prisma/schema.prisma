@@ -369,6 +369,7 @@ model SitePublication {
   changeSetDigest      String?
   status               SitePublicationStatus @default(PENDING)
   catalog              Json
+  catalogGeneration    Int                   @default(1)
   triggerEntity        String
   triggerEntityId      String
   requestedById        String?
@@ -386,11 +387,35 @@ model SitePublication {
   processingRebuilds   SiteRebuild[]         @relation("ProcessingPublication")
   publishedRebuilds    SiteRebuild[]         @relation("PublishedPublication")
   editorialItems      EditorialPublicationItem[]
+  servingProjection   SitePublicationProjection?
 
   @@unique([siteId, siteRevision, scopeKey], name: "siteId_siteRevision")
   @@index([siteId, releaseSequence])
   @@index([siteId, status, createdAt])
   @@index([requestedById, createdAt])
+}
+
+model SitePublicationProjection {
+  publicationId     String                          @id
+  catalogGeneration Int
+  formatVersion     Int
+  catalogDigest     String
+  site              Json
+  globalPages       Json
+  addressCities     Json
+  redirects         Json
+  cityCount         Int
+  publication       SitePublication                 @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+  cities            SitePublicationCityProjection[]
+}
+
+model SitePublicationCityProjection {
+  publicationId String
+  citySlug      String
+  catalog       Json
+  projection    SitePublicationProjection @relation(fields: [publicationId], references: [publicationId], onDelete: Cascade)
+
+  @@id([publicationId, citySlug])
 }
 
 enum EditorialKind {

@@ -324,7 +324,7 @@ export class EditorialPublicationService {
       for(const variant of variants){const query=new URLSearchParams({kind:mediaKind,variant:variant.sha256,...(cropKey?{crop:cropKey}:{})});mediaRequests[variant.src]=`/admin/sites/${encodeURIComponent(siteId)}/news/media/${encodeURIComponent(assetId)}/file?${query}`;}
     }
     const catalog='source' in baseline ? this.catalog.renderSource(baseline.source)
-      : editorialPreviewShell(baseline.publication.catalog)??editorialPreviewShell(this.catalog.renderSource(await baseline.loadHistoricalSource()));
+      : baseline.previewShell??editorialPreviewShell(this.catalog.renderSource(await baseline.loadHistoricalSource()));
     if(!catalog)throw new ConflictException('Оболочка опубликованного предпросмотра недоступна.');
     return {available:true,mode,kind,entityId:row.id,revision:row.revision,selectedRevision:selected?.revision??null,publicationId:baseline.publication.id,editorial:editorial??null,mediaRequests,catalog,...(preview?{view:preview.view}:{})};
   }

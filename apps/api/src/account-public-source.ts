@@ -1,13 +1,19 @@
 import { BadRequestException } from '@nestjs/common';
 import { ACCOUNT_PAGE_SLUG } from './account-page-model';
 import { PrismaService } from './prisma.service';
-import { servingPublication } from './serving-publication-context';
+import { servingGlobalProjection, servingPublication } from './serving-publication-context';
 import { extractDomruLocation, normalizeDomruLocality, normalizeDomruRegion } from './domru-profile-catalog';
 
 /** A global source never borrows a city's page or the example city from a mockup. */
 export async function accountPublicSource(prisma: PrismaService, siteSlug: string, pageSlug?: string) {
   const type = pageSlug === ACCOUNT_PAGE_SLUG ? 'ACCOUNT' : pageSlug === 'official-site-domru' ? 'OFFICIAL_SITE' : pageSlug === 'proverit-skorost-interneta' ? 'SPEED_TEST' : null;
   if (!type) throw new BadRequestException('Неизвестная общая страница обращения');
+  const projected = await servingGlobalProjection(prisma, siteSlug, pageSlug, type);
+  if (projected) {
+    const { site, page, cities } = projected.data;
+    if (!page?.id) throw new BadRequestException('Общая страница недоступна в обслуживаемой публикации');
+    return { site: { ...site, id: projected.publication.siteId }, page, cities, publication: projected.publication };
+  }
   const publication = await servingPublication(prisma, siteSlug);
   if (publication) {
     const catalog = publication.catalog as any;

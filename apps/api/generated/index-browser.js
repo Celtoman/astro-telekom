@@ -223,6 +223,7 @@ exports.Prisma.SitePublicationScalarFieldEnum = {
   changeSetDigest: 'changeSetDigest',
   status: 'status',
   catalog: 'catalog',
+  catalogGeneration: 'catalogGeneration',
   triggerEntity: 'triggerEntity',
   triggerEntityId: 'triggerEntityId',
   requestedById: 'requestedById',
@@ -233,6 +234,24 @@ exports.Prisma.SitePublicationScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   publishedAt: 'publishedAt'
+};
+
+exports.Prisma.SitePublicationProjectionScalarFieldEnum = {
+  publicationId: 'publicationId',
+  catalogGeneration: 'catalogGeneration',
+  formatVersion: 'formatVersion',
+  catalogDigest: 'catalogDigest',
+  site: 'site',
+  globalPages: 'globalPages',
+  addressCities: 'addressCities',
+  redirects: 'redirects',
+  cityCount: 'cityCount'
+};
+
+exports.Prisma.SitePublicationCityProjectionScalarFieldEnum = {
+  publicationId: 'publicationId',
+  citySlug: 'citySlug',
+  catalog: 'catalog'
 };
 
 exports.Prisma.NewsArticleScalarFieldEnum = {
@@ -912,6 +931,8 @@ exports.Prisma.ModelName = {
   SiteRebuild: 'SiteRebuild',
   ContentRevision: 'ContentRevision',
   SitePublication: 'SitePublication',
+  SitePublicationProjection: 'SitePublicationProjection',
+  SitePublicationCityProjection: 'SitePublicationCityProjection',
   NewsArticle: 'NewsArticle',
   NewsCategory: 'NewsCategory',
   EditorialSettings: 'EditorialSettings',

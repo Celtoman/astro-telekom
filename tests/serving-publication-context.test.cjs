@@ -15,7 +15,7 @@ test('Nest HTTP catalog and quotes honor each serving context and reject a machi
   const previous = { provider: process.env.REBUILD_PROVIDER, token: process.env.ADMIN_API_TOKEN, url: process.env.STATIC_PUBLICATION_URL };
   process.env.REBUILD_PROVIDER = 'static'; process.env.ADMIN_API_TOKEN = 's'.repeat(32);
   const publications = new Map(['pub-a', 'pub-b'].map((id, index) => [id, { id, siteId: 'site-1', siteRevision: 7 + index, status: 'RUNNING',
-    catalog: { site: { slug: 'domru-site' }, marker: id, cities: [{ slug: 'kazan', tariffs: [{ id: 'tariff-1', slug: 'tariff', name: id,
+    catalog: { site: { slug: 'domru-site' }, marker: id, cities: [{ slug: 'kazan', name: id, tariffs: [{ id: 'tariff-1', slug: 'tariff', name: id,
       standardPrice: String(900 + 100 * index), connectionFee: '0', attributes: {} }] }] } }]));
   let activeReads = 0;
   const controller = createServer((request, response) => {
@@ -29,8 +29,30 @@ test('Nest HTTP catalog and quotes honor each serving context and reject a machi
   try {
     await new Promise(resolve => controller.listen(0, '127.0.0.1', resolve));
     process.env.STATIC_PUBLICATION_URL = `http://127.0.0.1:${controller.address().port}`;
-    const client = { sitePublication: { findUnique: async ({ where }) => { await new Promise(resolve => setTimeout(resolve, 5)); return publications.get(where.id); },
-      findFirst: async () => { throw new Error('No SQL latest fallback'); } } };
+    const catalogReads = [], projectionReads = [];
+    const client = {
+      sitePublication: {
+        findUnique: async ({ where }) => {
+          catalogReads.push(where.id);
+          await new Promise(resolve => setTimeout(resolve, 5));
+          return publications.get(where.id);
+        },
+        findFirst: async () => { throw new Error('No SQL latest fallback'); },
+      },
+      $queryRaw: async query => {
+        const [citySlug, publicationId] = query.values.slice(-2);
+        const tariffSlug = query.values.length === 3 ? query.values[0] : undefined;
+        projectionReads.push({ citySlug, publicationId, tariffSlug });
+        const publication = publications.get(publicationId);
+        if (!publication) return [];
+        const city = publication.catalog.cities.find(item => item.slug === citySlug);
+        const value = tariffSlug === undefined ? city : city?.tariffs.find(item => item.slug === tariffSlug);
+        return [{
+          status: publication.status, siteId: publication.siteId, siteRevision: publication.siteRevision,
+          catalogSiteSlug: publication.catalog.site.slug, cityFound: Boolean(city), value: value ?? null,
+        }];
+      },
+    };
     class ServingTestModule {}
     Module({ controllers: [CitiesController], providers: [
       { provide: SiteCatalogService, useValue: {} },
@@ -45,10 +67,34 @@ test('Nest HTTP catalog and quotes honor each serving context and reject a machi
       const response = await fetch(base, { headers: headers(id) }); assert.equal(response.status, 200); return (await response.json()).marker;
     }));
     assert.deepEqual(results, ['pub-a', 'pub-b']); assert.equal(activeReads, 0);
+    catalogReads.length = 0;
+    const cityResults = await Promise.all(['pub-a', 'pub-b'].map(async id => {
+      const response = await fetch(`${base}/kazan`, { headers: headers(id) });
+      assert.equal(response.status, 200);
+      return response.json();
+    }));
+    assert.deepEqual(cityResults, ['pub-a', 'pub-b'].map(id => publications.get(id).catalog.cities[0]));
     const quote = await fetch(`${base}/kazan/tariffs/tariff/quote`, { method: 'POST', headers: { ...headers('pub-b'), 'content-type': 'application/json' }, body: '{}' });
     assert.equal(quote.status, 200); assert.equal((await quote.json()).totals.monthly, 1000);
-    const spoof = await fetch(base, { headers: { 'x-site-publication-id': 'pub-b', 'x-site-publication-token': process.env.ADMIN_API_TOKEN } });
-    assert.equal(spoof.status, 200); assert.equal((await spoof.json()).marker, 'pub-a'); assert.equal(activeReads, 1);
+    assert.deepEqual(catalogReads, []);
+    assert.equal(projectionReads.length, 3);
+    assert.deepEqual(projectionReads.at(-1), { citySlug: 'kazan', publicationId: 'pub-b', tariffSlug: 'tariff' });
+    assert.equal(activeReads, 0);
+
+    publications.get('pub-a').status = 'SUCCEEDED';
+    const rolledBack = await fetch(`${base}/kazan`, { headers: headers('pub-a') });
+    assert.equal(rolledBack.status, 200); assert.equal((await rolledBack.json()).name, 'pub-a');
+    publications.get('pub-b').status = 'FAILED';
+    assert.equal((await fetch(`${base}/kazan`, { headers: headers('pub-b') })).status, 503);
+    assert.equal((await fetch(`${base}/kazan`, { headers: headers('missing-publication') })).status, 503);
+    assert.equal((await fetch(`${base}/missing-city`, { headers: headers('pub-a') })).status, 404);
+    assert.equal((await fetch(base.replace('domru-site', 'foreign-site') + '/kazan', { headers: headers('pub-a') })).status, 404);
+    assert.deepEqual(catalogReads, []);
+    const projectionCount = projectionReads.length;
+    const spoof = await fetch(`${base}/kazan`, { headers: { 'x-site-publication-id': 'pub-b', 'x-site-publication-token': process.env.ADMIN_API_TOKEN } });
+    assert.equal(spoof.status, 200); assert.equal((await spoof.json()).name, 'pub-a'); assert.equal(activeReads, 1);
+    assert.equal(projectionReads.length, projectionCount);
+    assert.deepEqual(catalogReads, ['pub-a']);
   } finally {
     await app?.close(); await new Promise(resolve => controller.close(resolve));
     for (const [key, value] of [['REBUILD_PROVIDER', previous.provider], ['ADMIN_API_TOKEN', previous.token], ['STATIC_PUBLICATION_URL', previous.url]]) {
@@ -179,6 +225,61 @@ test('admin variable values and usages wait for SQL ACK while Caddy can serve RU
     for (const key of keys) {
       if (previous[key] === undefined) delete process.env[key];
       else process.env[key] = previous[key];
+    }
+  }
+});
+
+test('a stored projection checks the active digest and falls back only to the same captured publication', async () => {
+  const { servingCityProjection } = require('../apps/api/dist/serving-publication-context.js');
+  const previous = Object.fromEntries(['REBUILD_PROVIDER', 'ADMIN_API_TOKEN', 'STATIC_PUBLICATION_URL', 'SERVING_CATALOG_PROJECTIONS_ENABLED']
+    .map(key => [key, process.env[key]]));
+  const originalFetch = global.fetch;
+  Object.assign(process.env, {
+    REBUILD_PROVIDER: 'static', ADMIN_API_TOKEN: 'fixture-token', STATIC_PUBLICATION_URL: 'http://web:8081',
+    SERVING_CATALOG_PROJECTIONS_ENABLED: 'true',
+  });
+  const city = { id: 'city-a', slug: 'kazan', name: 'Published city' };
+  const catalog = { site: { slug: 'domru-site' }, cities: [city] };
+  const publication = { id: 'pub-a', siteId: 'site-1', siteRevision: 7, releaseSequence: 9, status: 'RUNNING', catalog };
+  const digest = createHash('sha256').update(JSON.stringify(catalog)).digest('hex');
+  let activeReads = 0, fullReads = 0;
+  let projection = { ...publication, catalogSiteSlug: 'domru-site', digest, complete: false,
+    data: { cityFound: false, value: null } };
+  const client = {
+    $queryRaw: async query => {
+      assert.equal(query.values.at(-1), 'pub-a');
+      return [projection];
+    },
+    sitePublication: { findUnique: async ({ where }) => {
+      assert.equal(where.id, 'pub-a');
+      fullReads++;
+      return publication;
+    } },
+  };
+  try {
+    global.fetch = async () => {
+      activeReads++;
+      return Response.json({
+        publicationId: 'pub-a', siteId: publication.siteId, siteSlug: 'domru-site',
+        siteRevision: publication.siteRevision, releaseSequence: publication.releaseSequence, catalogDigest: digest,
+      });
+    };
+    const incomplete = await servingCityProjection(client, 'domru-site', city.slug);
+    assert.deepEqual(incomplete, { cityFound: true, value: city });
+    assert.equal(fullReads, 1);
+    assert.equal(activeReads, 1);
+
+    projection = { ...projection, digest: '0'.repeat(64) };
+    await assert.rejects(servingCityProjection(client, 'domru-site', city.slug), error => error.getStatus() === 503);
+    assert.equal(fullReads, 1);
+
+    projection = { ...projection, digest, complete: true, data: { cityFound: true, value: city } };
+    assert.deepEqual(await servingCityProjection(client, 'domru-site', city.slug), projection.data);
+    assert.equal(fullReads, 1);
+  } finally {
+    global.fetch = originalFetch;
+    for (const [key, value] of Object.entries(previous)) {
+      if (value === undefined) delete process.env[key]; else process.env[key] = value;
     }
   }
 });

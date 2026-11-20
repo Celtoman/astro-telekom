@@ -5,6 +5,7 @@ import { PrismaService } from './prisma.service';
 import { releaseOnePaths } from './public-route-policy';
 import { PublicationWorkflowService } from './publication-workflow.service';
 import { normalizeRedirectPath } from './redirect-path';
+import { servingRedirectProjection } from './serving-publication-context';
 
 export { normalizeRedirectPath } from './redirect-path';
 
@@ -110,15 +111,23 @@ export class RedirectService {
   }
 
   async resolvePublished(siteSlug: string, id: string) {
-    const catalog = await this.publications.getPublishedCatalog(siteSlug);
-    const redirects = Array.isArray(catalog.redirects) ? catalog.redirects as Array<Record<string, unknown>> : [];
-    const routes = Array.isArray(catalog.routes) ? catalog.routes as Array<Record<string, unknown>> : [];
-    const redirect = redirects.find((item) => item.id === id && item.status === PublishStatus.PUBLISHED);
+    const projection = await servingRedirectProjection(this.prisma, siteSlug, id);
+    if (projection && !projection.data) throw new NotFoundException('Redirect not found');
+    const stored = projection?.data && 'redirect' in projection.data ? projection.data : null;
+    const catalog = !projection ? await this.publications.getPublishedCatalog(siteSlug)
+      : projection.data && 'catalog' in projection.data ? projection.data.catalog : null;
+    const redirects = Array.isArray(catalog?.redirects) ? catalog.redirects as Array<Record<string, unknown>> : [];
+    const redirect = stored?.redirect ?? redirects.find(item => item.id === id && item.status === PublishStatus.PUBLISHED);
     if (!redirect) throw new NotFoundException('Redirect not found');
     const sourcePath = normalizeRedirectPath(redirect.sourcePath, 'sourcePath');
     const targetPath = normalizeRedirectPath(redirect.targetPath, 'targetPath');
-    const publishedPaths = new Set(routes.map((route) => String(route.path || '')));
-    if (publishedPaths.has(sourcePath) || !publishedPaths.has(targetPath)) throw new NotFoundException('Redirect not found');
+    if (stored) {
+      if (!stored.routeAllowed) throw new NotFoundException('Redirect not found');
+    } else {
+      const routes = Array.isArray(catalog?.routes) ? catalog.routes as Array<Record<string, unknown>> : [];
+      const publishedPaths = new Set(routes.map(route => String(route.path || '')));
+      if (publishedPaths.has(sourcePath) || !publishedPaths.has(targetPath)) throw new NotFoundException('Redirect not found');
+    }
     const updated = await this.prisma.redirect.updateMany({
       where: { id },
       data: { hitCount: { increment: 1 }, lastHitAt: new Date() },

@@ -31,6 +31,7 @@ const { createGlobalValidationPipe } = load('security-options');
 const { AdminTokenGuard } = load('admin-token.guard');
 const { AuthService } = load('auth.service');
 const { ServingPublicationInterceptor, derivePublicationProxyToken } = load('serving-publication-context');
+const { warmServingCatalogProjection } = load('serving-catalog-projection');
 const { Module } = apiRequire('@nestjs/common');
 const { NestFactory } = apiRequire('@nestjs/core');
 const { FastifyAdapter } = apiRequire('@nestjs/platform-fastify');
@@ -46,6 +47,7 @@ const root = await mkdtemp(join(temporary, 'astro-static-pipeline-'));
 const safeRoot = await realpath(root);
 const token = 'synthetic-pipeline-machine-token-'.repeat(2);
 process.env.ADMIN_API_TOKEN = token; process.env.REBUILD_PROVIDER = 'static';
+process.env.SERVING_CATALOG_PROJECTIONS_ENABLED = 'true';
 function docker(args, optional = false) {
   const result = spawnSync('docker', args, { encoding: 'utf8', timeout: 90000 });
   if (!optional && result.status !== 0) throw new Error(result.stderr || result.stdout || String(result.error));
@@ -156,6 +158,12 @@ try {
     process.env.STATIC_PUBLICATION_URL = `http://127.0.0.1:${server.address().port}`;
   };
   await startController();
+  const cityPath = `/public/sites/${source.site.slug}/cities/${savedCity.slug}`;
+  const coldCity = await jsonRequest(`${apiUrl}${cityPath}`);
+  assert.equal(await db.sitePublicationProjection.count(), 0);
+  const sealA = await warmServingCatalogProjection(db, baseline.id);
+  assert.equal(sealA.catalogDigest, artifactA.catalogDigest);
+  assert.deepEqual(await jsonRequest(`${publicUrl}/api/v1${cityPath}`), coldCity);
   const initialHtml = await fetch(`${publicUrl}/kazan`).then(response => response.text());
   const oldAsset = initialHtml.match(/(?:src|href)="(\/__publication_assets\/[^" ]+\.(?:js|css))"/)?.[1]; assert.ok(oldAsset);
   const patch = await jsonRequest(`${apiUrl}/admin/sites/${source.site.id}/seo-templates/CITY_HOME`, { method: 'PATCH',
@@ -200,6 +208,13 @@ try {
   const nextHtml = await fetch(`${publicUrl}/kazan`).then(response => response.text()); assert.match(nextHtml, /<title>Новый Title города/);
   const activeCatalog = await jsonRequest(`${publicUrl}/api/v1/public/sites/${source.site.slug}/cities`, { headers: { 'x-site-publication-id': 'spoofed', 'x-site-publication-token': 'spoofed' } });
   assert.match(activeCatalog.seoByPath['/kazan'].title, /^Новый Title города/); assert.equal((await fetch(`${publicUrl}${oldAsset}`)).status, 200);
+  const sealB = await warmServingCatalogProjection(db, pending.publication.id);
+  assert.equal(sealB.catalogDigest, active.active.catalogDigest);
+  const directCity = await jsonRequest(`${apiUrl}${cityPath}`);
+  assert.deepEqual(await jsonRequest(`${publicUrl}/api/v1${cityPath}`), directCity);
+  await db.sitePublicationCityProjection.delete({ where: { publicationId_citySlug: { publicationId: pending.publication.id, citySlug: savedCity.slug } } });
+  assert.deepEqual(await jsonRequest(`${apiUrl}${cityPath}`), directCity, 'Incomplete projection must fall back to the same served catalog');
+  assert.equal((await warmServingCatalogProjection(db, pending.publication.id)).catalogDigest, sealB.catalogDigest);
   // Working draft/archive changes cannot alter the already served snapshot.
   await db.site.update({ where: { id: source.site.id }, data: { status: 'DRAFT' } });
   await db.city.update({ where: { id: savedCity.id }, data: { name: 'Рабочий город', status: 'DRAFT' } });
@@ -215,6 +230,8 @@ try {
   assert.equal(storedCheck.siteId, source.site.id); assert.equal(storedCheck.cityId, savedCity.id);
   const quote = await jsonRequest(`${publicUrl}/api/v1/public/sites/${source.site.slug}/cities/kazan/tariffs/${savedTariff.slug}/quote`, { method: 'POST', body: '{}' });
   assert.equal(quote.totals.monthly, 700);
+  const directQuote = await jsonRequest(`${apiUrl}${cityPath}/tariffs/${savedTariff.slug}/quote`, { method: 'POST', body: '{}' });
+  assert.deepEqual(directQuote, quote);
   const lead = await jsonRequest(`${publicUrl}/api/v1/leads`, { method: 'POST', body: JSON.stringify({
     siteSlug: source.site.slug, citySlug: savedCity.slug, tariffSlug: savedTariff.slug, reasonCode: 'billing',
     phone: '+7 999 123-45-67', submissionKey: randomUUID(), consentVersion: LEAD_CONSENT_VERSION,
@@ -249,6 +266,19 @@ try {
   delete brokenCatalog.seoByPath['/kazan'];
   await db.sitePublication.create({ data: { id: 'publication-build-rejected', siteId: source.site.id, siteRevision: 2,
     status: 'PENDING', catalog: brokenCatalog, triggerEntity: 'synthetic-invalid-candidate', triggerEntityId: source.site.id } });
+  const failedCandidateSeal = await warmServingCatalogProjection(db, 'publication-build-rejected');
+  const replacement = { ...brokenCatalog, fixtureGeneration: 'replacement' };
+  const rollback = new Error('Synthetic catalog replacement rollback');
+  await assert.rejects(db.$transaction(async tx => {
+    await tx.sitePublication.update({ where: { id: 'publication-build-rejected' }, data: { status: 'FAILED' } });
+    assert.equal(await tx.sitePublicationProjection.count({ where: { publicationId: 'publication-build-rejected' } }), 1);
+    const retried = await tx.sitePublication.update({ where: { id: 'publication-build-rejected' }, data: { status: 'PENDING', catalog: replacement } });
+    assert.equal(retried.catalogGeneration, failedCandidateSeal.generation + 1);
+    assert.equal(await tx.sitePublicationProjection.count({ where: { publicationId: retried.id } }), 0);
+    assert.equal(await tx.sitePublicationCityProjection.count({ where: { publicationId: retried.id } }), 0);
+    throw rollback;
+  }), error => error === rollback);
+  assert.equal((await db.sitePublicationProjection.findUnique({ where: { publicationId: 'publication-build-rejected' } })).catalogDigest, failedCandidateSeal.catalogDigest);
   const rejected = await fetch(`${process.env.STATIC_PUBLICATION_URL}/publish`, { method: 'POST',
     headers: { 'content-type': 'application/json', 'x-admin-token': token }, body: JSON.stringify({
       publicationId: 'publication-build-rejected', siteId: source.site.id, siteSlug: source.site.slug, rebuildId: 'build-rejected', rebuildRevision: 2,

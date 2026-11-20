@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, HttpCode, NotFoundException, Param, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, HttpCode, Param, Post } from '@nestjs/common';
 import { SiteCatalogService } from './site-catalog.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
 import { configurationSnapshot, quoteFingerprint, quoteTariffConfiguration, type TariffSelection } from './tariff-configuration.service';
@@ -34,10 +34,7 @@ export class CitiesController {
     @Param('tariffSlug') tariffSlug: string,
     @Body() selection: TariffSelection,
   ) {
-    const city = await this.publications.getPublishedCity(siteSlug, citySlug);
-    const tariffs = Array.isArray(city.tariffs) ? city.tariffs as Array<Record<string, unknown>> : [];
-    const tariff = tariffs.find((item) => item.slug === tariffSlug);
-    if (!tariff) throw new NotFoundException('Published tariff not found');
+    const tariff = await this.publications.getPublishedTariff(siteSlug, citySlug, tariffSlug);
     try {
       const quote = quoteTariffConfiguration(tariff as unknown as Parameters<typeof quoteTariffConfiguration>[0], selection);
       return { ...quote, fingerprint: quoteFingerprint(configurationSnapshot(quote)) };
