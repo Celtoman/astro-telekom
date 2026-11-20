@@ -12,10 +12,11 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
-| #631 | [#631](https://github.com/Celtoman/astro-telekom/issues/631) 🟢 | Полное ревью при входе на экран публикации |
-| #632 | [#632](https://github.com/Celtoman/astro-telekom/issues/632) 🟢 | Повторное построение справочника и форматтеров |
+| #631 | [#631](https://github.com/Celtoman/astro-telekom/issues/631) ✅ | Полное ревью при входе на экран публикации |
+| #632 | [#632](https://github.com/Celtoman/astro-telekom/issues/632) ✅ | Повторное построение справочника и форматтеров |
 | #633 | [#633](https://github.com/Celtoman/astro-telekom/issues/633) 🟢 | Ревью задерживает соседние API-запросы |
 | #634 | [#634](https://github.com/Celtoman/astro-telekom/issues/634) 🟢 | Подготовка выпуска под блокировкой строки Site |
+| #645 | [#645](https://github.com/Celtoman/astro-telekom/issues/645) 🟢 | Плановый backup БД и медиа завершился без подтверждения восстановления |
 
 ## Проверка SPEED_TEST, 14 ноября 2026
 
