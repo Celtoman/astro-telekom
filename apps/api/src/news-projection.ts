@@ -1,6 +1,7 @@
 import { NEWS_PAGE_SIZE, newsSettingsDefaults, newsMediaUseKey } from './news-types';
 import type { EditorialSource } from './editorial-publication-model';
 export type NewsRoute = {id:'NEWS'|'NEWS_ARTICLE'|'NEWS_CATEGORY';kind:'NEWS_LIST'|'NEWS_ARTICLE'|'NEWS_CATEGORY';path:string;page?:number;newsSlug?:string;categorySlug?:string};
+export type NewsRouteSource = Pick<EditorialSource, 'newsEnabled' | 'articles' | 'categories'>;
 export type PublishedNews = Record<string,any> & {id:string;slug:string;categoryId:string;publishedDate:string};
 export function sortedNews(articles: Array<Record<string,any>>): PublishedNews[] {
   return [...articles].sort((a,b)=>Date.parse(b.publishedDate)-Date.parse(a.publishedDate)||String(a.id).localeCompare(String(b.id),'en')) as PublishedNews[];
@@ -17,7 +18,7 @@ export function newsPage(editorial:EditorialSource,page=1,categorySlug?:string) 
   if(page>totalPages)return null;
   return {articles:items.slice((page-1)*NEWS_PAGE_SIZE,page*NEWS_PAGE_SIZE),category,total:items.length,totalPages,page,base:category?`/news/category/${category.slug}`:'/news'};
 }
-export function newsRoutes(editorial:EditorialSource):NewsRoute[] {
+export function newsRoutes(editorial:NewsRouteSource):NewsRoute[] {
   if(editorial.newsEnabled===false)return [];
   const routes:NewsRoute[]=[];
   const addPages=(base:string,count:number,categorySlug?:string)=>{

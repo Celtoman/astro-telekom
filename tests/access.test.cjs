@@ -8,7 +8,7 @@ function request(path, headers = { authorization: 'Bearer session' }) {
   return guard.canActivate({ switchToHttp: () => ({ getRequest: () => req }) });
 }
 test('one authenticated administrator can access every administrative area', async () => {
-  for (const path of ['/api/v1/admin/providers', '/api/v1/admin/pages', '/api/v1/admin/tariffs', '/api/v1/admin/tariffs/purge-preview', '/api/v1/admin/tariffs/purge', '/api/v1/admin/sites/site-1/publication-review', '/api/v1/admin/sites/site-1/preview-catalog', '/api/v1/admin/sites/site-1/tariff-template/preview', '/api/v1/admin/audit-events', '/api/v1/admin/trash', '/api/v1/crm/leads']) {
+  for (const path of ['/api/v1/admin/providers', '/api/v1/admin/pages', '/api/v1/admin/tariffs', '/api/v1/admin/tariffs/purge-preview', '/api/v1/admin/tariffs/purge', '/api/v1/admin/sites/site-1/publication-review', '/api/v1/admin/sites/site-1/preview-catalog', '/api/v1/admin/sites/site-1/preview-options', '/api/v1/admin/sites/site-1/preview-page', '/api/v1/admin/sites/site-1/tariff-template/preview', '/api/v1/admin/audit-events', '/api/v1/admin/trash', '/api/v1/crm/leads']) {
     assert.equal(await request(path), true);
   }
 });

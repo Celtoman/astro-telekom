@@ -25,9 +25,13 @@ import { generalHomeFromTemplate } from './general-home-template';
 import { readSitePublicDisplay } from './site-public-display';
 import { CITY_HOME_VERSION } from './city-home-model';
 import type { EditorialSource } from './editorial-publication-model';
-import { editorialServingSource } from './editorial-serving-source';
-import { newsRoutes, newsSeoForRoute } from './news-projection';
+import { editorialServingRouteInventory, editorialServingSource, editorialServingWorkingPreviewBase } from './editorial-serving-source';
+
+type WorkingPreviewCapture = { base?: Awaited<ReturnType<typeof editorialServingWorkingPreviewBase>> | null };
+import { newsRoutes, newsSeoForRoute, type NewsRouteSource } from './news-projection';
 import { cityTariffFacts } from './city-tariff-facts';
+import { previewRouteOptions } from './preview-route-labels';
+import { resolveVariableText } from './variable-registry';
 
 type CatalogClient = Prisma.TransactionClient | PrismaService;
 export type CatalogSource = {
@@ -55,15 +59,78 @@ export class SiteCatalogService {
     return this.build({ id: siteId, status: 'PUBLISHED' }, client);
   }
 
-  captureSourceBySiteId(siteId: string, client: CatalogClient = this.prisma) {
-    return this.loadSource({ id: siteId, status: 'PUBLISHED' }, client);
+  captureSourceBySiteId(siteId: string, client: CatalogClient = this.prisma, preview?: WorkingPreviewCapture) {
+    return this.loadSource({ id: siteId, status: 'PUBLISHED' }, client, preview);
+  }
+
+  async readWorkingPreviewBase(site: { id: string; slug: string }, client: CatalogClient) {
+    return await this.editorialRelease(client, site.id) ? editorialServingWorkingPreviewBase(client, site) : null;
+  }
+
+  async previewInventory(siteId: string, client: CatalogClient = this.prisma) {
+    const site = await client.site.findUnique({
+      where: { id: siteId },
+      select: { id: true, slug: true, status: true, workingRevision: true, publishedRevision: true,
+        settings: true, connectionPhone: true, supportPhone: true, provider: { select: { name: true } } },
+    });
+    if (!site || site.status !== 'PUBLISHED') throw new NotFoundException('Site not found');
+    const [cities, pages, templates, editorialRelease] = await Promise.all([
+      client.city.findMany({
+        where: { siteId, status: 'PUBLISHED' }, orderBy: { name: 'asc' }, select: {
+          slug: true, name: true,
+          pages: { where: { status: 'PUBLISHED' }, select: { type: true, slug: true } },
+          tariffs: { where: { status: 'PUBLISHED', availability: 'ACTIVE' }, orderBy: { createdAt: 'asc' }, select: { slug: true, name: true } },
+        },
+      }),
+      client.page.findMany({
+        where: { siteId, cityId: null, status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, select: { type: true, slug: true, title: true },
+      }),
+      client.pageTemplate.findMany({ where: { siteId }, select: { kind: true } }),
+      this.editorialRelease(client, siteId),
+    ]);
+    const editorial = editorialRelease ? await editorialServingRouteInventory(client, site) : null;
+    const { allRoutes } = this.catalogRoutes(cities, pages, templates, editorial?.editorial);
+    const context = {
+      site: { ...readSitePublicDisplay(site.settings), connectionPhone: site.connectionPhone, supportPhone: site.supportPhone,
+        corporatePhone: readCorporatePhone(site.settings) },
+      provider: site.provider, now: new Date(),
+    };
+    const globalPages = pages.map((page, index) => ({
+      ...page, title: resolveVariableText(page.title, context, { path: `globalPages[${index}].title`, field: 'TEXT' }).text,
+    }));
+    return {
+      siteId: site.id, workingRevision: site.workingRevision, publishedRevision: site.publishedRevision,
+      basePublicationId: editorial?.publicationId ?? null,
+      options: previewRouteOptions({ routes: allRoutes, cities, globalPages }),
+    };
+  }
+
+  private editorialRelease(client: CatalogClient, siteId: string) {
+    return client.sitePublication?.findFirst?.({
+      where: { siteId, scopeKey: { not: 'legacy' }, status: { in: ['PENDING', 'RUNNING', 'SUCCEEDED'] } },
+      select: { id: true },
+    });
+  }
+
+  private catalogRoutes(cities: Parameters<typeof buildReleaseOneRoutes>[0], pages: Parameters<typeof buildReleaseOneRoutes>[1],
+    templates: Array<{ kind: string }> | undefined, editorial?: NewsRouteSource) {
+    const routes = buildReleaseOneRoutes(cities, pages, {
+      addressCheck: templates?.some(template => template.kind === 'CITY_ADDRESS_CHECK'),
+      support: templates?.some(template => template.kind === 'CITY_SUPPORT'),
+    });
+    const editorialRoutes = editorial ? newsRoutes(editorial) : [];
+    const allRoutes = [...routes, ...editorialRoutes];
+    if (new Set(allRoutes.map(route => route.path)).size !== allRoutes.length) {
+      throw new BadRequestException('Адрес раздела новостей занят существующей страницей');
+    }
+    return { routes, editorialRoutes, allRoutes };
   }
 
   private async build(siteWhere: Prisma.SiteWhereInput, client: CatalogClient) {
     return this.renderSource(await this.loadSource(siteWhere, client));
   }
 
-  private async loadSource(siteWhere: Prisma.SiteWhereInput, client: CatalogClient): Promise<CatalogSource> {
+  private async loadSource(siteWhere: Prisma.SiteWhereInput, client: CatalogClient, preview?: WorkingPreviewCapture): Promise<CatalogSource> {
     const site = await client.site.findFirst({
       where: siteWhere,
       include: { provider: { select: { name: true, settings: true } } },
@@ -110,19 +177,19 @@ export class SiteCatalogService {
     // is authoritative even when working legacy content has changed.
     let editorial:EditorialSource|undefined;
     let publicationBaseId:string|undefined;
-    if (client.sitePublication?.findFirst) {
-      const editorialRelease=await client.sitePublication.findFirst({where:{siteId:site.id,scopeKey:{not:'legacy'},status:{in:['PENDING','RUNNING','SUCCEEDED']}},select:{id:true}});
-      if(editorialRelease){
-        const serving=await editorialServingSource(client,site),baseline=serving.source;
-        publicationBaseId=serving.publication.id;
-        editorial=baseline.editorial;
-        const owned=new Set(editorial?.redirectIds??[]);
-        const aliases=baseline.redirects.filter(item=>owned.has(item.id));
-        for(const alias of aliases){
-          if(alias.status!=='PUBLISHED')throw new BadRequestException('Некорректный статус опубликованного редакционного перенаправления');
-          const index=redirects.findIndex(item=>item.id===alias.id);
-          if(index>=0)redirects.splice(index,1,{...alias,status:'PUBLISHED'});else redirects.push({...alias,status:'PUBLISHED'});
-        }
+    const serving = preview
+      ? (preview.base === undefined ? await this.readWorkingPreviewBase(site, client) : preview.base)
+      : await this.editorialRelease(client, site.id) ? await editorialServingSource(client, site) : null;
+    if (serving) {
+      const baseline = serving.source;
+      publicationBaseId=serving.publication.id;
+      editorial=baseline.editorial;
+      const owned=new Set(editorial?.redirectIds??[]);
+      const aliases=baseline.redirects.filter(item=>owned.has(item.id));
+      for(const alias of aliases){
+        if(alias.status!=='PUBLISHED')throw new BadRequestException('Некорректный статус опубликованного редакционного перенаправления');
+        const index=redirects.findIndex(item=>item.id===alias.id);
+        if(index>=0)redirects.splice(index,1,{...alias,status:'PUBLISHED'});else redirects.push({...alias,status:'PUBLISHED'});
       }
     }
     const supportMedia=await captureSupportMedia(site.id,pageTemplates,client.mediaAsset);
@@ -140,10 +207,7 @@ export class SiteCatalogService {
     if (source.pageTemplates?.some(t => t.kind === 'CITY_SUPPORT') && !readCorporatePhone(site.settings)) throw new BadRequestException('CITY_SUPPORT: заполните телефон корпоративной поддержки в общих настройках сайта.');
     if (homeScreen) validateFirstScreen('HOME', homeHero, false, homeScreen.passportVersion);
     const resolvedGlobalPages = globalPages.map((page: any) => this.pageResponse(page, mergeContent(publicContent(site.provider.settings), publicContent(site.settings)), {}));
-    const routes = buildReleaseOneRoutes(cities, resolvedGlobalPages, { addressCheck: source.pageTemplates?.some(template => template.kind === 'CITY_ADDRESS_CHECK'), support: source.pageTemplates?.some(template => template.kind === 'CITY_SUPPORT') });
-    const editorialRoutes=source.editorial?newsRoutes(source.editorial):[];
-    const allRoutes=[...routes,...editorialRoutes];
-    if(new Set(allRoutes.map(route=>route.path)).size!==allRoutes.length)throw new BadRequestException('Адрес раздела новостей занят существующей страницей');
+    const { routes, editorialRoutes, allRoutes } = this.catalogRoutes(cities, resolvedGlobalPages, source.pageTemplates, source.editorial);
     const resolved = resolveCatalogVariables({
       ...(generalHome ? { generalHome } : {}),
       ...(homeHero ? { homeHero, homeHeroVersion: homeScreen!.passportVersion, homeHeroBlockId: homeTemplate.blocks.find((block: any) => block.blockType === 'home.hero').id } : {}),

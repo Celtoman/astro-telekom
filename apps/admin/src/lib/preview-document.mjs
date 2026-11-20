@@ -18,6 +18,8 @@ import { generalHomeCatalog, generalHomeBlock } from '../../../web/src/data/gene
 import { renderProviderAbout, renderBenefits, renderConnectionSteps, renderMovix, renderMorePossibilities, renderConnectionHelp, renderCityDirectory, renderHomeFaq, renderAddressEntry } from '../../../web/src/lib/general-home-render.ts'
 import { renderHomeHeader, renderHomeFooter } from '../../../web/src/lib/general-home-shell.ts'
 import { publishedMoscow } from '../../../web/src/lib/city-context.mjs'
+import { previewRouteLabel } from '../../../api/src/preview-route-labels.ts'
+export { previewRouteOptions } from '../../../api/src/preview-route-labels.ts'
 
 const list = value => Array.isArray(value) ? value : []
 const record = value => value && typeof value === 'object' && !Array.isArray(value) ? value : {}
@@ -33,20 +35,8 @@ const cityNameIn = city => text(city?.namePrepositional, text(city?.nameIn, text
 const inactiveLink = (label, className = '') => `<a class="${className}" aria-disabled="true">${html(label)}</a>`
 const button = (label, className = 'button') => `<button type="button" class="${className}" disabled>${html(label)}</button>`
 
-function routeLabel(catalog, route) {
-  const city = cityBySlug(catalog, route.citySlug)
-  if (route.kind === 'HOME') return 'Главная сайта'
-  if (route.kind === 'CITY_HOME') return city?.name || route.citySlug
-  if(route.kind==='CITY_SUPPORT')return `Поддержка — ${city?.name||route.citySlug}`
-  if (route.kind === 'CITY_ADDRESS_CHECK') return `Проверка подключения — ${city?.name || route.citySlug}`
-  if (route.kind === 'CITY_TARIFF_DETAIL') return `${list(city?.tariffs).find(tariff => tariff.slug === route.tariffSlug)?.name || route.tariffSlug} — ${city?.name || route.citySlug}`
-  return pageByType(catalog, route.pageType)?.title || route.pageType || route.path
-}
-export function previewRouteOptions(catalog) {
-  return list(catalog?.routes).map(route => ({ path: String(route.path || ''), kind: String(route.kind || ''), label: routeLabel(catalog, route) }))
-}
-function asset(catalog, path) {
-  if (catalog.previewAssets?.[path]) return catalog.previewAssets[path]
+export function previewAsset(catalog, path, assets = catalog.previewAssets) {
+  if (assets?.[path]) return assets[path]
   if (/^https:\/\//i.test(path)) {
     try { const url = new URL(path); if (!url.username && !url.password) return url.href } catch { /* invalid content URL */ }
     return ''
@@ -54,6 +44,7 @@ function asset(catalog, path) {
   const domain = text(catalog.site?.domain)
   return /^\/[\w/.-]+$/.test(path) && /^[a-z0-9.-]+$/i.test(domain) ? `https://${domain}${path}` : ''
 }
+const asset = previewAsset
 function image(catalog, path, alt = '', extra = '') {
   const source = asset(catalog, path)
   return source ? `<img src="${html(source)}" alt="${html(alt)}" referrerpolicy="no-referrer" ${extra}>` : ''
@@ -238,5 +229,5 @@ export function buildPreviewDocument(catalog, routePath, publicStyles = '', asse
   else if (route.kind === 'GLOBAL_PAGE') content = renderGlobal(catalog, route)
   else throw new Error('Тип маршрута не поддерживается предпросмотром')
   const assetOrigins = [...new Set(Object.values(assets).filter(value => /^https?:\/\//.test(value)).map(value => new URL(value).origin))].map(html).join(' ')
-  return `<!doctype html><html lang="ru" class="full-general-home"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data: https: ${assetOrigins}; font-src data:"><title>${html(override?.title || routeLabel(catalog, route))} — предпросмотр</title><style>${previewStyleText(publicStyles)}</style></head><body class="general-home-page${route.kind === 'CITY_HOME' && city?.pages?.find(page => page.type === 'HOME' && page.slug === '')?.content?.homeCompositionVersion === '3.0.0' ? ' city-home-page' : ''}">${wrap('homeshell', renderHomeHeader(catalog.site, shellOptions))}<main>${content}</main>${wrap('homeshell', renderHomeFooter(catalog.site, { ...shellOptions, footerRoutes: catalog.routes, addressPageSlug: list(catalog.routes).some(item => item.kind === 'CITY_ADDRESS_CHECK') ? 'proverka-podklyucheniya-k-domru-po-adresu' : undefined }))}</body></html>`
+  return `<!doctype html><html lang="ru" class="full-general-home"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data: https: ${assetOrigins}; font-src data:"><title>${html(override?.title || previewRouteLabel(catalog, route))} — предпросмотр</title><style>${previewStyleText(publicStyles)}</style></head><body class="general-home-page${route.kind === 'CITY_HOME' && city?.pages?.find(page => page.type === 'HOME' && page.slug === '')?.content?.homeCompositionVersion === '3.0.0' ? ' city-home-page' : ''}">${wrap('homeshell', renderHomeHeader(catalog.site, shellOptions))}<main>${content}</main>${wrap('homeshell', renderHomeFooter(catalog.site, { ...shellOptions, footerRoutes: catalog.routes, addressPageSlug: list(catalog.routes).some(item => item.kind === 'CITY_ADDRESS_CHECK') ? 'proverka-podklyucheniya-k-domru-po-adresu' : undefined }))}</body></html>`
 }

@@ -182,7 +182,13 @@ test('admin preview is a private sandboxed screen with three canonical viewport 
     readFile(new URL('../apps/admin/src/pages/preview.astro', import.meta.url), 'utf8'),
   ]);
 
-  assert.match(component, /preview-catalog/);
+  assert.match(component, /preview-options/);
+  assert.match(component, /preview-page/);
+  assert.doesNotMatch(component, /preview-catalog/);
+  assert.match(component, /<form onSubmit=.*[\s\S]*type="search"/);
+  assert.match(component, /selectedOutsidePage \? <option/);
+  assert.match(component, /aria-disabled=\{!canGoBack\}.*>Назад<\/Button>/);
+  assert.match(component, /aria-disabled=\{!canGoForward\}.*>Дальше<\/Button>/);
   assert.match(component, /sandbox=""/);
   assert.match(component, /desktop:\s*\{[^}]*width:\s*1440/s);
   assert.match(component, /tablet:\s*\{[^}]*width:\s*834/s);

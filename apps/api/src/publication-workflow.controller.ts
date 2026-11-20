@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PublicationWorkflowService } from './publication-workflow.service';
 import { RebuildQueueService } from './rebuild-queue.service';
 import { CreateSitePublicationDto } from './publication-workflow.dto';
+import { readAdminRoutePage, readAdminWorkingRevision } from './admin-route-pagination';
 
 interface AdminRequest {
   user?: { id: string };
@@ -74,6 +75,26 @@ export class PublicationWorkflowController {
   @Get('admin/sites/:siteId/preview-catalog')
   preview(@Param('siteId') siteId: string) {
     return this.publications.getWorkingPreview(siteId);
+  }
+
+  @Get('admin/sites/:siteId/preview-options')
+  previewOptions(@Param('siteId') siteId: string, @Query('page') page?: string,
+    @Query('search') search?: string, @Query('preferred') preferred?: string) {
+    if (search !== undefined && (typeof search !== 'string' || search.length > 250)
+      || preferred !== undefined && (typeof preferred !== 'string' || preferred.length > 600)) {
+      throw new BadRequestException('Некорректный поиск страницы предпросмотра');
+    }
+    return this.publications.getWorkingPreviewOptions(siteId, { page: readAdminRoutePage(page), search, preferred });
+  }
+
+  @Get('admin/sites/:siteId/preview-page')
+  previewPage(@Param('siteId') siteId: string, @Query('path') path: string, @Query('workingRevision') revision: string,
+    @Query('basePublicationId') basePublicationId?: string) {
+    if (typeof path !== 'string' || path.length > 600 || !/^\/[a-z0-9._~/-]*$/.test(path) || path.includes('//') || path.includes('..')
+      || basePublicationId !== undefined && (typeof basePublicationId !== 'string' || !/^[a-zA-Z0-9_-]{1,200}$/.test(basePublicationId))) {
+      throw new BadRequestException('Некорректный маршрут или снимок предпросмотра');
+    }
+    return this.publications.getWorkingPreviewPage(siteId, path, readAdminWorkingRevision(revision), basePublicationId ?? null);
   }
 
   @Get('internal/site-publications/:siteSlug/catalog')

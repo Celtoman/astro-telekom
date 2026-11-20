@@ -52,6 +52,10 @@ export async function activeServing(timeoutMs = 10000): Promise<ActiveServingIde
 }
 
 export async function servingPublication(client: Pick<PrismaService, 'sitePublication'>, siteSlug: string) {
+  return (await servingPublicationProof(client, siteSlug))?.publication ?? null;
+}
+
+export async function servingPublicationProof(client: Pick<PrismaService, 'sitePublication'>, siteSlug: string) {
   if (!staticServing()) return null;
   const identity = requestPublication.getStore() || await activeServing();
   return fullServingPublication(client, identity, siteSlug);
@@ -60,13 +64,14 @@ export async function servingPublication(client: Pick<PrismaService, 'sitePublic
 async function fullServingPublication(client: Pick<PrismaService, 'sitePublication'>, identity: ServingIdentity, siteSlug: string) {
   const publication = await client.sitePublication.findUnique({ where: { id: identity.publicationId } });
   const catalog = publication?.catalog as { site?: { slug?: unknown } } | undefined;
-  return checkedServingPublication(publication, identity, siteSlug, catalog?.site?.slug,
+  const checked = checkedServingPublication(publication, identity, siteSlug, catalog?.site?.slug,
     () => catalogDigest(publication?.catalog ?? null));
+  return { publication: checked, verifiedCatalogDigest: identity.catalogDigest ?? null };
 }
 
 type ServingPublicationRow = { id: string; status: string; siteId: string; siteRevision: number; releaseSequence: number };
 type ServingProjectionClient = Pick<PrismaService, 'sitePublication' | '$queryRaw'>;
-type FullServingPublication = Awaited<ReturnType<typeof fullServingPublication>>;
+type FullServingPublication = Awaited<ReturnType<typeof fullServingPublication>>['publication'];
 
 function checkedServingPublication<T extends ServingPublicationRow>(publication: T | null | undefined, identity: ServingIdentity,
   siteSlug: string, catalogSiteSlug: unknown, digest?: () => string): T {
@@ -108,11 +113,11 @@ export async function readStoredProjection<T>(client: ServingProjectionClient, s
   const digest = row?.digest;
   if (row && digest) {
     const publication = checkedServingPublication(row, identity, siteSlug, row.catalogSiteSlug, () => digest);
-    if (publication.complete) return { publication, data: publication.data };
+    if (publication.complete) return { publication, data: publication.data, verifiedCatalogDigest: digest };
   }
   // Read the same captured identity even when the controller switches in flight.
-  const publication = await fullServingPublication(client, identity, siteSlug);
-  return { publication, data: await fallback(publication.catalog, publication) };
+  const { publication, verifiedCatalogDigest } = await fullServingPublication(client, identity, siteSlug);
+  return { publication, data: await fallback(publication.catalog, publication), verifiedCatalogDigest };
 }
 
 type CityValue = { cityFound: boolean; value: Record<string, unknown> | null };

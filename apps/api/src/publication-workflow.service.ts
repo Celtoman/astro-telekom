@@ -11,6 +11,10 @@ import { sitePhoneReadinessErrors } from './site-phone';
 import { APP_VERSION } from './app-version';
 import { validatePublicationSource, type PublicationValidationReport } from './publication-validation';
 import { publicationChangeSummary } from './publication-change-summary';
+import { ADMIN_ROUTE_PAGE_SIZE } from './admin-route-pagination';
+import { prepareWorkingPreviewCatalog, workingPreviewPage } from './working-preview-model';
+import { readWorkingPreviewFingerprint } from './working-preview-fingerprint';
+import { WorkingPreviewReuse, type WorkingPreviewLease } from './working-preview-reuse';
 import {
   readCmsProgress, estimatePublicationRemaining, preparePublicationEstimate, type CmsProgress, type PublicationEstimate,
 } from './publication-progress';
@@ -21,6 +25,7 @@ type JsonObject = Record<string, unknown>;
 // Full publication catalogs share a bounded budget; ordinary CMS transactions keep their defaults.
 const PUBLICATION_CATALOG_TRANSACTION_TIMEOUT_MS = 60_000;
 const PUBLICATION_ETA_CACHE_LIMIT = 32;
+const WORKING_PREVIEW_RULES_VERSION = process.env.APP_SOURCE_COMMIT || `local:${APP_VERSION}:working-preview-v1`;
 
 function auditFieldValue(snapshot: JsonObject, field: string): unknown {
   if (Object.hasOwn(snapshot, field)) return snapshot[field] ?? null;
@@ -66,6 +71,7 @@ type BlockedPublication = { blocked: true; validationId: string; report: Publica
 @Injectable()
 export class PublicationWorkflowService {
   private readonly publicationEstimates = new Map<string, { key: string; result: Promise<PublicationEstimate | null> }>();
+  private readonly workingPreviewReuse = new WorkingPreviewReuse();
 
   constructor(
     private readonly prisma: PrismaService,
@@ -435,6 +441,85 @@ export class PublicationWorkflowService {
           : catalog) as JsonObject,
       };
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable, timeout: PUBLICATION_CATALOG_TRANSACTION_TIMEOUT_MS });
+  }
+
+  async getWorkingPreviewOptions(siteId: string, query: { page: number; search?: string; preferred?: string }) {
+    const inventory = await this.prisma.$transaction(
+      tx => this.catalog.previewInventory(siteId, tx),
+      { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead, timeout: PUBLICATION_CATALOG_TRANSACTION_TIMEOUT_MS },
+    );
+    const { options, ...stamp } = inventory;
+    const selected = options.find(option => option.path === query.preferred || option.kind === query.preferred)
+      ?? options.find(option => option.kind === 'CITY_HOME') ?? options[0] ?? null;
+    const search = query.search?.trim().toLocaleLowerCase('ru') || '';
+    const matches = search ? options.filter(option => `${option.path} ${option.label}`.toLocaleLowerCase('ru').includes(search)) : options;
+    const offset = (query.page - 1) * ADMIN_ROUTE_PAGE_SIZE;
+    return {
+      ...stamp, selected, total: matches.length, page: query.page, pageSize: ADMIN_ROUTE_PAGE_SIZE,
+      items: matches.slice(offset, offset + ADMIN_ROUTE_PAGE_SIZE),
+    };
+  }
+
+  async getWorkingPreviewPage(siteId: string, path: string, workingRevision: number, basePublicationId: string | null) {
+    const { site, catalog } = await this.readWorkingPreviewCatalog(siteId, workingRevision, basePublicationId);
+    return {
+      siteId, path, workingRevision, basePublicationId, publishedRevision: site.publishedRevision,
+      catalog: this.jsonSnapshot(workingPreviewPage(catalog, path)) as JsonObject,
+    };
+  }
+
+  private async readWorkingPreviewCatalog(siteId: string, workingRevision: number, basePublicationId: string | null) {
+    const owned: { lease?: WorkingPreviewLease } = {};
+    const staleBase = () => new ConflictException('Опубликованный редакционный снимок изменился. Обновите список страниц.');
+    try {
+      const snapshot = await this.prisma.$transaction(async tx => {
+        const site = await tx.site.findUnique({ where: { id: siteId }, select: {
+          id: true, slug: true, status: true, workingRevision: true, publishedRevision: true,
+        } });
+        if (!site) throw new NotFoundException('Site not found');
+        if (site.workingRevision !== workingRevision) {
+          throw new ConflictException('Рабочая версия изменилась. Обновите список страниц.');
+        }
+        if (process.env.WORKING_PREVIEW_REUSE_ENABLED !== 'true') {
+          const source = await this.catalog.captureSourceBySiteId(site.id, tx, {});
+          if ((source.publicationBaseId ?? null) !== basePublicationId) throw staleBase();
+          return { state: 'build' as const, site, source, now: new Date() };
+        }
+        if (site.status !== 'PUBLISHED') throw new NotFoundException('Site not found');
+
+        // Stamp and full capture use one SQL snapshot. Re-check the exact serving
+        // identity through the normal verified read before any result can be reused.
+        const base = await this.catalog.readWorkingPreviewBase(site, tx);
+        if ((base?.publication.id ?? null) !== basePublicationId) throw staleBase();
+        const fingerprint = await readWorkingPreviewFingerprint(tx, site.id);
+        const servingCatalog = base && 'catalog' in base.publication ? base.publication.catalog : undefined;
+        const servingDigest = base?.verifiedCatalogDigest
+          ?? (servingCatalog === undefined ? null : createHash('sha256').update(JSON.stringify(servingCatalog)).digest('hex'));
+        const now = new Date();
+        const key = createHash('sha256').update(JSON.stringify([
+          siteId, workingRevision, site.publishedRevision, WORKING_PREVIEW_RULES_VERSION, now.toISOString().slice(0, 10),
+          fingerprint, basePublicationId, base?.publication.releaseSequence ?? null, base?.publication.validationId ?? null,
+          base?.publication.catalogGeneration ?? null, servingDigest,
+          base?.source.editorial ?? null, base?.source.redirects ?? null,
+        ])).digest('hex');
+        const reservation = this.workingPreviewReuse.reserve(key);
+        if (reservation.state === 'ready' || reservation.state === 'waiting') return { ...reservation, site };
+        if (reservation.state === 'owner') owned.lease = reservation.entry;
+        const source = await this.catalog.captureSourceBySiteId(site.id, tx, { base });
+        return { state: 'build' as const, site, source, now };
+      }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable, timeout: PUBLICATION_CATALOG_TRANSACTION_TIMEOUT_MS });
+
+      // The checked catalog is immutable. A joiner releases its SQL connection
+      // before waiting and has already independently verified the same input.
+      if (snapshot.state === 'ready') return { site: snapshot.site, catalog: snapshot.catalog };
+      if (snapshot.state === 'waiting') return { site: snapshot.site, catalog: await snapshot.result };
+      const catalog = prepareWorkingPreviewCatalog(this.catalog.renderSource(snapshot.source, snapshot.now));
+      if (owned.lease) this.workingPreviewReuse.finish(owned.lease, catalog);
+      return { site: snapshot.site, catalog };
+    } catch (error) {
+      if (owned.lease) this.workingPreviewReuse.abort(owned.lease, error);
+      throw error;
+    }
   }
 
   async getPublicationReview(siteId: string) {

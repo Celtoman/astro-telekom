@@ -1,10 +1,11 @@
 import { ConflictException } from '@nestjs/common';
 import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
-import { readStoredProjection, servingPublication } from './serving-publication-context';
+import { readStoredProjection, servingPublication, servingPublicationProof } from './serving-publication-context';
 import type { CatalogSource } from './site-catalog.service';
 import { emptyEditorial, type EditorialKind, type EditorialSource } from './editorial-publication-model';
 import { editorialPreviewShell } from './editorial-preview-model';
+import type { NewsRouteSource } from './news-projection';
 
 type EditorialClient = PrismaService | Prisma.TransactionClient;
 type EditorialSite = { id: string; slug: string };
@@ -29,6 +30,16 @@ async function resolveEditorialPublication(client: EditorialClient, site: Editor
     orderBy: { releaseSequence: 'desc' },
   });
   return validatedPublication(publication, site);
+}
+
+async function resolveEditorialWorkingPreviewPublication(client: EditorialClient, site: EditorialSite) {
+  const active = await servingPublicationProof(client, site.slug);
+  if (active) return { ...validatedPublication(active.publication, site), verifiedCatalogDigest: active.verifiedCatalogDigest };
+  const publication = await client.sitePublication.findFirst({
+    where: { siteId: site.id, status: 'SUCCEEDED' }, orderBy: { releaseSequence: 'desc' },
+    select: { id: true, siteId: true, releaseSequence: true, validationId: true, catalogGeneration: true },
+  });
+  return { ...validatedPublication(publication, site), verifiedCatalogDigest: null };
 }
 
 async function fullEditorialSnapshot(client: EditorialClient, site: EditorialSite, validationId: string) {
@@ -67,10 +78,12 @@ function editorialProjectionQuery(site: EditorialSite, validationId: string | Pr
   `;
 }
 
-async function readProjection<T>(client: EditorialClient, site: EditorialSite, validationId: string, columns: Prisma.Sql) {
+async function readProjection<T>(client: EditorialClient, site: EditorialSite, validationId: string, columns: Prisma.Sql,
+  missing?: (validationId: string) => Promise<T>) {
   const [result] = await client.$queryRaw<T[]>(editorialProjectionQuery(site, validationId, columns));
-  if (!result) throw missingSource();
-  return result;
+  if (result) return result;
+  if (missing) return missing(validationId);
+  throw missingSource();
 }
 
 const storedPreviewShell = Prisma.sql` || jsonb_build_object('catalogShell', (
@@ -91,21 +104,27 @@ const storedPreviewShell = Prisma.sql` || jsonb_build_object('catalogShell', (
   FROM jsonb_to_record(p.catalog) shell(cities jsonb, routes jsonb)
 ))`;
 
-async function readEditorialView<T>(client: EditorialClient, site: EditorialSite, columns: Prisma.Sql, preview = false) {
+async function readEditorialView<T>(client: EditorialClient, site: EditorialSite, columns: Prisma.Sql, options: {
+  shell?: boolean;
+  compactLegacy?: boolean;
+  missing?: (validationId: string) => Promise<T>;
+} = {}) {
   // The source link, catalog generation, and seal must come from the same SQL statement.
   const validatedSource = editorialProjectionQuery(site, Prisma.sql`p."validationId"`, columns);
   const stored = await readStoredProjection<T | null>(client, site.slug, Prisma.sql`(
-    SELECT to_jsonb(selected) ${preview ? storedPreviewShell : Prisma.empty}
+    SELECT to_jsonb(selected) ${options.shell ? storedPreviewShell : Prisma.empty}
     FROM (${validatedSource}) selected
     WHERE p."catalogGeneration" = projection."catalogGeneration"
-  )`, (_catalog, publication) => readProjection<T>(client, site, validatedPublication(publication, site).validationId, columns));
+  )`, (_catalog, publication) => readProjection<T>(client, site, validatedPublication(publication, site).validationId, columns, options.missing));
   if (stored) {
     const identity = validatedPublication(stored.publication, site);
-    if (!stored.data) throw missingSource();
-    return { ...identity, data: stored.data };
+    const data = stored.data ?? await options.missing?.(identity.validationId);
+    if (!data) throw missingSource();
+    return { ...identity, data, verifiedCatalogDigest: stored.verifiedCatalogDigest };
   }
-  const { publication, validationId } = await resolveEditorialPublication(client, site);
-  return { publication, validationId, data: await readProjection<T>(client, site, validationId, columns) };
+  const identity = options.compactLegacy ? await resolveEditorialWorkingPreviewPublication(client, site)
+    : { ...await resolveEditorialPublication(client, site), verifiedCatalogDigest: null };
+  return { ...identity, data: await readProjection<T>(client, site, identity.validationId, columns, options.missing) };
 }
 
 export async function editorialServingPreview(
@@ -140,7 +159,7 @@ export async function editorialServingPreview(
     ) END AS editorial`;
   const { publication, validationId, data } = await readEditorialView<{
     editorial: EditorialSource | null; catalogShell?: unknown;
-  }>(client, site, columns, true);
+  }>(client, site, columns, { shell: true });
   const { editorial } = data;
   return {
     publication,
@@ -148,6 +167,33 @@ export async function editorialServingPreview(
     editorial: editorial && kind === 'NOT_FOUND' ? { ...emptyEditorial(), notFound: editorial.notFound } : editorial ?? undefined,
     loadHistoricalSource: () => fullEditorialSnapshot(client, site, validationId),
   };
+}
+
+export async function editorialServingRouteInventory(client: EditorialClient, site: EditorialSite) {
+  const { publication, data } = await readEditorialView<{ editorial: NewsRouteSource | null }>(client, site, Prisma.sql`
+    CASE WHEN jsonb_typeof(source.editorial) = 'object' THEN jsonb_build_object(
+      'newsEnabled', source.editorial -> 'newsEnabled',
+      'categories', COALESCE((
+        SELECT jsonb_agg(jsonb_build_object('id', category -> 'id', 'slug', category -> 'slug') ORDER BY ordinal)
+        FROM jsonb_array_elements(source.editorial -> 'categories') WITH ORDINALITY AS items(category, ordinal)
+      ), '[]'::jsonb),
+      'articles', COALESCE((
+        SELECT jsonb_agg(jsonb_build_object('slug', article -> 'slug', 'categoryId', article -> 'categoryId') ORDER BY ordinal)
+        FROM jsonb_array_elements(${sourceArticles}) WITH ORDINALITY AS items(article, ordinal)
+      ), '[]'::jsonb)
+    ) END AS editorial
+  `, { compactLegacy: true });
+  return { publicationId: publication.id, editorial: data.editorial ?? undefined };
+}
+
+export async function editorialServingWorkingPreviewBase(client: EditorialClient, site: EditorialSite) {
+  const columns = Prisma.sql`source.editorial, validation."sourceSnapshot" -> 'redirects' AS redirects`;
+  const { publication, validationId, data, verifiedCatalogDigest } = await readEditorialView<Pick<CatalogSource, 'editorial' | 'redirects'>>(
+    client, site, columns, { compactLegacy: true, missing: id => fullEditorialSnapshot(client, site, id) },
+  );
+  // Historical malformed redirects follow the original capture of this exact validation.
+  const source = Array.isArray(data.redirects) ? data : await fullEditorialSnapshot(client, site, validationId);
+  return { publication, source, verifiedCatalogDigest };
 }
 
 export async function editorialServingArticles(client: EditorialClient, site: EditorialSite, ids: readonly string[]) {
