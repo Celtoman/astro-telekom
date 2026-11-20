@@ -12,8 +12,23 @@ function fixture(check, recentLeads = [], enqueueNotification = async () => true
   let notificationEnqueues = 0;
   let decisionEnqueues = 0;
   const decisionEvents = [];
+  const duplicateQueries = [];
+  const findMany = async ({ where, orderBy, select }) => {
+    duplicateQueries.push({ where, select });
+    assert.deepEqual(orderBy, [{ createdAt: 'desc' }, { id: 'desc' }]);
+    const rows = where.id?.in
+      ? recentLeads.filter(candidate => where.id.in.includes(candidate.id))
+      : recentLeads.filter(candidate => (candidate.siteId === undefined || candidate.siteId === where.siteId)
+        && (!candidate.createdAt || candidate.createdAt >= where.createdAt.gte));
+    if (!where.id?.in) {
+      assert.equal(where.siteId, 'site');
+      assert.ok(where.createdAt.gte instanceof Date);
+    }
+    return rows.map(row => Object.fromEntries(Object.keys(select).map(field => [field, row[field]])));
+  };
+
   const transaction = {
-    lead: { create: async ({ data }) => {
+    lead: { findMany, create: async ({ data }) => {
       leadCreates += 1;
       saved = { ...data, id: 'lead', status: 'NEW' };
       savedBody = submittedBody;
@@ -44,12 +59,7 @@ function fixture(check, recentLeads = [], enqueueNotification = async () => true
           tariff: saved.tariffId ? { slug: savedBody.tariffSlug, serviceType: saved.serviceType } : null,
         } : null
       ),
-      findMany: async ({ where, orderBy }) => {
-        assert.equal(where.siteId, 'site');
-        assert.ok(where.createdAt.gte instanceof Date);
-        assert.deepEqual(orderBy, [{ createdAt: 'desc' }, { id: 'desc' }]);
-        return recentLeads.filter((candidate) => !candidate.createdAt || candidate.createdAt >= where.createdAt.gte);
-      },
+      findMany,
     },
     $transaction: async (callback) => callback(transaction),
   };
@@ -80,6 +90,7 @@ function fixture(check, recentLeads = [], enqueueNotification = async () => true
     notificationCreated: () => notificationCreated,
     notificationEnqueues: () => notificationEnqueues,
     leadCreates: () => leadCreates,
+    duplicateQueries: () => duplicateQueries,
     decisionEvents: () => decisionEvents,
   };
 }
@@ -367,6 +378,7 @@ test('lead with the same normalized phone within 24 hours is suppressed as dupli
   assert.equal(f.saved().processingStatus, 'DUPLICATE_SUPPRESSED');
   assert.equal(f.saved().duplicateOfId, 'existing-phone');
   assert.equal(f.saved().duplicateReason, 'phone_24h');
+  assert.deepEqual(f.duplicateQueries().map(query => query.select), [{ id: true, phone: true }]);
   assert.equal(f.decisionEvents()[0]?.outcome, 'DUPLICATE_SUPPRESSED');
   assert.equal(f.decisionEvents()[0]?.evidence.duplicate, true);
   assert.equal(f.contractChecks(), 0);
@@ -375,13 +387,20 @@ test('lead with the same normalized phone within 24 hours is suppressed as dupli
 
 test('lead with the same verified apartment within 24 hours is suppressed as duplicate', async () => {
   const check = premiseCheck('7');
-  const f = fixture(check, [{ id: 'existing-address', phone: '+79010000000', address: 'ул. Ленина, д. 1', apiResult: { response: check.response } }]);
+  const f = fixture(check, [
+    { id: 'another-address', phone: '+79030000000', address: 'ул. Тестовая, 2', apiResult: { response: check.response } },
+    { id: 'existing-address', phone: '+79010000000', address: 'ул. Ленина, д. 1', apiResult: { response: check.response } },
+  ]);
 
   await f.create({ ...base, phone: '+79020000000', addressCheckId: 'check' });
 
   assert.equal(f.saved().processingStatus, 'DUPLICATE_SUPPRESSED');
   assert.equal(f.saved().duplicateOfId, 'existing-address');
   assert.equal(f.saved().duplicateReason, 'address_24h');
+  assert.deepEqual(f.duplicateQueries().map(query => query.select), [
+    { id: true, phone: true, address: true }, { id: true, apiResult: true },
+  ]);
+  assert.deepEqual(f.duplicateQueries()[1].where, { id: { in: ['existing-address'] } });
   assert.equal(f.decisionEvents()[0]?.outcome, 'DUPLICATE_SUPPRESSED');
   assert.equal(f.decisionEvents()[0]?.evidence.duplicateReason, 'address_24h');
   assert.equal(f.decisionEvents()[0]?.evidence.duplicateOfId, 'existing-address');
@@ -679,4 +698,49 @@ test('lead schema and forward migration preserve submission and consent evidence
   assert.match(schema, /consentAcceptedAt\s+DateTime\?/);
   assert.match(migration, /ADD COLUMN\s+"submissionKey"/);
   assert.match(migration, /CREATE UNIQUE INDEX\s+"Lead_submissionKey_key"/);
+});
+
+test('concurrent replay of the same submission key creates one lead and one outbox row', async () => {
+  const leads = new Map();
+  let arrived = 0, outbox = 0, enqueued = 0;
+  let proceed;
+  const barrier = new Promise(resolve => { proceed = resolve; });
+  const readExisting = ({ where }) => leads.get(where.submissionKey) ?? null;
+  const prisma = {
+    site: { findFirst: async () => ({ id: 'synthetic-site' }) },
+    lead: {
+      findUnique: readExisting,
+      findMany: async ({ select }) => {
+        assert.deepEqual(select, { id: true, phone: true });
+        if (++arrived === 2) proceed();
+        await barrier;
+        return [];
+      },
+    },
+    $transaction: async callback => callback({
+      lead: { create: async ({ data }) => {
+        if (leads.has(data.submissionKey)) throw Object.assign(new Error('duplicate submission key'), { code: 'P2002' });
+        const row = {
+          ...data, id: 'synthetic-lead', status: 'NEW', site: { slug: 'domru-site' },
+          city: null, page: null, tariff: null, addressCheckId: null,
+        };
+        leads.set(data.submissionKey, row);
+        return row;
+      } },
+      leadDecisionEvent: { create: async () => ({}) },
+    }),
+  };
+  const controller = new PublicLeadsController(prisma, { enqueueTracked: () => assert.fail('callback has no sales decision') }, {
+    create: async () => { outbox++; return { id: 'synthetic-outbox' }; },
+    enqueueTracked: async () => { enqueued++; },
+  });
+  const callback = {
+    ...base, citySlug: undefined, reasonCode: 'callback_consultation', consentAccepted: true,
+  };
+  const pair = await Promise.all([controller.create(callback, {}), controller.create(callback, {})]);
+  assert.deepEqual(pair[0], pair[1]);
+  assert.equal(arrived, 2);
+  assert.equal(leads.size, 1);
+  assert.equal(outbox, 1);
+  assert.equal(enqueued, 1);
 });

@@ -4,7 +4,8 @@ import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
 import { LeadDecisionService } from './lead-decision.service';
 import { LeadNotificationOutboxService } from './lead-notification-outbox.service';
-import { normalizeAddress, normalizePhone } from './lead-utils';
+import { findRecentLeadDuplicate } from './lead-duplicates';
+import { normalizePhone } from './lead-utils';
 import { CreateLeadDto, LeadDecisionStatusDto } from './public.dto';
 import { readTarifnikCoverageSnapshot } from './coverage.service';
 import { LEAD_CONSENT_VERSION } from './lead-consent';
@@ -14,14 +15,6 @@ import { analyzeLeadComment } from './lead-comment-analyzer';
 import { buildLeadAttribution } from './lead-attribution';
 import { servingEntities, servingPublication } from './serving-publication-context';
 import { ACCOUNT_PAGE_SLUG } from './account-page-model';
-
-function premiseKey(data: Record<string, unknown> | undefined): string {
-  if (!data) return '';
-  const flat = typeof data.flat === 'string' ? normalizeAddress(data.flat) : '';
-  if (flat) return `flat:${normalizeAddress(typeof data.flat_type === 'string' ? data.flat_type : '')}:${flat}`;
-  const room = typeof data.room === 'string' ? normalizeAddress(data.room) : '';
-  return room ? `room:${normalizeAddress(typeof data.room_type === 'string' ? data.room_type : '')}:${room}` : '';
-}
 
 @Controller('leads')
 export class PublicLeadsController {
@@ -198,25 +191,10 @@ export class PublicLeadsController {
     }
 
     const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);
-    const recentLeads = await this.prisma.lead.findMany({
-      where: { siteId: site.id, createdAt: { gte: cutoff } },
-      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
-      select: { id: true, phone: true, address: true, apiResult: true },
+    const duplicate = await findRecentLeadDuplicate(this.prisma, {
+      siteId: site.id, cutoff, phone, address, premise: coverage?.suggestion.data,
     });
-    const normalizedPhone = phone;
-    const normalizedInputAddress = normalizeAddress(address);
-    const phoneDuplicate = recentLeads.find((candidate) => normalizePhone(candidate.phone) === normalizedPhone);
-    const inputPremise = premiseKey(coverage?.suggestion.data);
-    const addressDuplicate = !phoneDuplicate && normalizedInputAddress && inputPremise
-      ? recentLeads.find((candidate) => {
-        const result = candidate.apiResult as { response?: unknown } | null;
-        const candidateCoverage = readTarifnikCoverageSnapshot(result?.response);
-        return normalizeAddress(candidate.address) === normalizedInputAddress
-          && premiseKey(candidateCoverage?.suggestion.data) === inputPremise;
-      })
-      : undefined;
-    const duplicate = phoneDuplicate || addressDuplicate;
-    const duplicateReason = phoneDuplicate ? 'phone_24h' : addressDuplicate ? 'address_24h' : undefined;
+    const duplicateReason = duplicate?.reason;
 
     let processingStatus: 'DECISION_PENDING' | 'DUPLICATE_SUPPRESSED' | 'NON_SALES_NOT_SENT' | 'MANUAL_CHECK' = 'DECISION_PENDING';
     if (commentAnalysis?.outcome === 'MANUAL_REVIEW') processingStatus = 'MANUAL_CHECK';
