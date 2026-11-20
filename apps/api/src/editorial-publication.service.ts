@@ -8,14 +8,14 @@ import { EditorialStoreService, editorialMissing } from './editorial-store.servi
 import { SiteCatalogService } from './site-catalog.service';
 import { EditorialMediaRegistryService } from './editorial-media-registry.service';
 import { RebuildQueueService } from './rebuild-queue.service';
-import { editorialServingSource } from './editorial-serving-source';
+import { editorialServingArticles, editorialServingArticleOptions, editorialServingCategories, editorialServingSource } from './editorial-serving-source';
 import { applyEditorialChangeSet, type EditorialChange, type EditorialKind } from './editorial-publication-model';
 import { editorialDigest } from './editorial-revisions';
 import { newsRoutes, relatedNewsOptions } from './news-projection';
 import { normalizeRedirectPath } from './redirect-path';
 import { validatePublicationSource } from './publication-validation';
 import { APP_VERSION } from './app-version';
-import { editorialLiveUrl } from './editorial-live-url';
+import { editorialLiveUrl, editorialPublicUrl } from './editorial-live-url';
 import { prepareCategoryRetirement } from './editorial-category-retirement';
 import { confirmedEditorialTransfers,remapEditorialAliasOwners,restoreEditorialAliases } from './editorial-redirects';
 type Tx=Prisma.TransactionClient;
@@ -29,6 +29,12 @@ export function editorialBatchInputs(raw:unknown):EditorialReleaseInput[]{
   }).sort((a,b)=>a.entityId.localeCompare(b.entityId,'en'));
 }
 const json=(value:unknown)=>JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue;
+function firstById<T extends { id: string }>(rows: readonly T[]) {
+  const unique = new Map<string, T>();
+  for (const row of rows) if (!unique.has(row.id)) unique.set(row.id, row);
+  return unique;
+}
+
 @Injectable()
 export class EditorialPublicationService {
   constructor(private readonly prisma:PrismaService,private readonly store:EditorialStoreService,private readonly catalog:SiteCatalogService,private readonly media:EditorialMediaRegistryService,private readonly rebuilds:RebuildQueueService){}
@@ -196,25 +202,95 @@ export class EditorialPublicationService {
     const categoryNames=Object.fromEntries((categoryIds.length?await this.prisma.newsCategory.findMany({where:{siteId,id:{in:categoryIds}},select:{id:true,name:true}}):[]).map(category=>[category.id,category.name||'Категория без названия']));
     return {...working,published:content,publishedAvailable,publishedRevision:published?.revision??null,state,publicUrl,pendingRemoval,categoryNames};
   }
-  async list(siteId:string,query:{search?:string;categoryId?:string;state?:string;page?:number}={}){
-    const site=await this.store.requireSite(siteId),rows=await this.prisma.newsArticle.findMany({where:{siteId,archivedAt:null,...(query.search?{title:{contains:query.search.slice(0,250),mode:'insensitive' as const}}:{}),...(query.categoryId?{categoryId:query.categoryId}:{})},orderBy:[{publishedDate:'desc'},{id:'asc'}],select:{id:true,title:true,summary:true,slug:true,categoryId:true,publishedDate:true,revision:true,content:true,everPublished:true,updatedAt:true}});
-    let publishedAvailable=true,live:Array<Record<string,any>>=[];
-    try{live=(await editorialServingSource(this.prisma,site)).source.editorial?.articles??[]}catch{publishedAvailable=false}
-    const items=rows.map(row=>{
-      const published=live.find(a=>a.id===row.id),content=published?Object.fromEntries(Object.keys(row.content as object).map(key=>[key,published[key]])):null;
-      const state=!publishedAvailable?'UNKNOWN':published?editorialDigest(content)===editorialDigest(row.content)?'PUBLISHED':'CHANGED':row.everPublished?'WITHDRAWN':'DRAFT';
-      const {content:_content,...item}=row;return {...item,state};
-    }).filter(item=>!query.state||item.state===query.state);
-    const page=Math.max(1,Number.isSafeInteger(query.page)?Number(query.page):1),pageSize=25;
-    return {items:items.slice((page-1)*pageSize,page*pageSize),total:items.length,page,pageSize,publishedAvailable};
+  async list(siteId: string, query: { search?: string; categoryId?: string; state?: string; page?: number } = {}) {
+    const site = await this.store.requireSite(siteId);
+    const page = Math.max(1, Number.isSafeInteger(query.page) ? Number(query.page) : 1);
+    const pageSize = 25;
+    const offset = (page - 1) * pageSize;
+    const where: Prisma.NewsArticleWhereInput = {
+      siteId,
+      archivedAt: null,
+      ...(query.search ? { title: { contains: query.search.slice(0, 250), mode: 'insensitive' } } : {}),
+      ...(query.categoryId ? { categoryId: query.categoryId } : {}),
+    };
+    const select = {
+      id: true, title: true, summary: true, slug: true, categoryId: true,
+      publishedDate: true, revision: true, content: true, everPublished: true, updatedAt: true,
+    } as const;
+    const orderBy: Prisma.NewsArticleOrderByWithRelationInput[] = [{ publishedDate: 'desc' }, { id: 'asc' }];
+    const find = { where, orderBy, select };
+    // A state filter needs the exact content comparison before counting and slicing.
+    const { rows, total } = query.state
+      ? { rows: await this.prisma.newsArticle.findMany(find), total: null }
+      : await this.prisma.$transaction(async tx => {
+        const total = await tx.newsArticle.count({ where });
+        const rows = offset < total ? await tx.newsArticle.findMany({ ...find, skip: offset, take: pageSize }) : [];
+        return { rows, total };
+      }, { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead });
+
+    const live = await editorialServingArticles(this.prisma, site, rows.map(row => row.id)).catch(() => null);
+    const published = firstById(live ?? []);
+    const items = rows.map(({ content, ...item }) => {
+      const match = published.get(item.id);
+      const snapshot = match ? Object.fromEntries(Object.keys(content as object).map(key => [key, match[key]])) : null;
+      const state = !live ? 'UNKNOWN'
+        : match ? editorialDigest(snapshot) === editorialDigest(content) ? 'PUBLISHED' : 'CHANGED'
+        : item.everPublished ? 'WITHDRAWN' : 'DRAFT';
+      return { ...item, state };
+    }).filter(item => !query.state || item.state === query.state);
+
+    return {
+      items: total === null ? items.slice(offset, offset + pageSize) : items,
+      total: total ?? items.length, page, pageSize, publishedAvailable: live !== null,
+    };
   }
-  async categories(siteId:string){
-    const site=await this.store.requireSite(siteId),rows=await this.prisma.newsCategory.findMany({where:{siteId,archivedAt:null},orderBy:{name:'asc'},include:{_count:{select:{articles:{where:{archivedAt:null}}}}}});
-    const pending=await this.prisma.editorialPublicationItem.findMany({where:{kind:'CATEGORY',action:{in:['WITHDRAW','REASSIGN']},publication:{siteId,status:{in:['PENDING','RUNNING']}}},select:{entityId:true}});
-    let publishedAvailable=true,live:Array<Record<string,any>>=[],categories:Array<Record<string,any>>=[],baseline:Awaited<ReturnType<typeof editorialServingSource>>['source']|null=null;
-    try{baseline=(await editorialServingSource(this.prisma,site)).source;const source=baseline.editorial;live=source?.articles??[];categories=source?.categories??[]}catch{publishedAvailable=false}
-    return {items:rows.map(row=>({id:row.id,name:row.name,slug:row.slug,revision:row.revision,totalCount:row._count.articles,liveCount:publishedAvailable?live.filter(a=>a.categoryId===row.id).length:null,publishedRevision:categories.find(c=>c.id===row.id)?.revision??null,publishedName:categories.find(c=>c.id===row.id)?.name??null,publicUrl:baseline?editorialLiveUrl(baseline,'CATEGORY',row.id):null,pendingRemoval:pending.some(item=>item.entityId===row.id)})),publishedAvailable};
+
+  async categoryOptions(siteId: string) {
+    await this.store.requireSite(siteId);
+    const items = await this.prisma.newsCategory.findMany({
+      where: { siteId, archivedAt: null },
+      orderBy: { name: 'asc' },
+      select: { id: true, name: true },
+    });
+    return { items };
   }
+
+  async categories(siteId: string) {
+    const site = await this.store.requireSite(siteId);
+    const [rows, pending, live] = await Promise.all([
+      this.prisma.newsCategory.findMany({
+        where: { siteId, archivedAt: null },
+        orderBy: { name: 'asc' },
+        select: { id: true, name: true, slug: true, revision: true, _count: { select: { articles: { where: { archivedAt: null } } } } },
+      }),
+      this.prisma.editorialPublicationItem.findMany({
+        where: { kind: 'CATEGORY', action: { in: ['WITHDRAW', 'REASSIGN'] }, publication: { siteId, status: { in: ['PENDING', 'RUNNING'] } } },
+        select: { entityId: true },
+      }),
+      editorialServingCategories(this.prisma, site).catch(() => null),
+    ]);
+    const published = firstById(live?.categories ?? []);
+    const counts = new Map(Object.entries(live?.liveCounts ?? {}));
+    const pendingIds = new Set(pending.map(item => item.entityId));
+    return {
+      items: rows.map(({ _count, ...row }) => {
+        const category = published.get(row.id);
+        const liveCount = live ? counts.get(row.id) ?? 0 : null;
+        return {
+          ...row,
+          totalCount: _count.articles,
+          liveCount,
+          publishedRevision: category?.revision ?? null,
+          publishedName: category?.name ?? null,
+          publicUrl: live && live.newsEnabled !== false && category && liveCount
+            ? editorialPublicUrl(live.domain, `/news/category/${category.slug}`) : null,
+          pendingRemoval: pendingIds.has(row.id),
+        };
+      }),
+      publishedAvailable: live !== null,
+    };
+  }
+
   async preview(siteId:string,kind:EditorialKind,id:string,expectedRevision:number,mode:string='draft') {
     if(!Number.isSafeInteger(expectedRevision)||expectedRevision<0||!['draft','published'].includes(mode))throw new BadRequestException('Укажите сохранённую редакцию и режим предпросмотра.');
     const site=await this.store.requireSite(siteId),row=await this.store.read(siteId,kind,id);
@@ -240,7 +316,7 @@ export class EditorialPublicationService {
     return {available:true,mode,kind,entityId:row.id,revision:row.revision,selectedRevision:selected?.revision??null,publicationId:baseline.publication.id,editorial:editorial??null,mediaRequests,catalog:this.catalog.renderSource(baseline.source)};
   }
   async relatedOptions(siteId:string,query:Parameters<typeof relatedNewsOptions>[1]) {
-    const site=await this.store.requireSite(siteId),baseline=await editorialServingSource(this.prisma,site);
-    return relatedNewsOptions(baseline.source.editorial?.articles??[],query);
+    const site = await this.store.requireSite(siteId);
+    return relatedNewsOptions(await editorialServingArticleOptions(this.prisma, site), query);
   }
 }

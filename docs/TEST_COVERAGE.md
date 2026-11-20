@@ -55,7 +55,7 @@ Exact-SHA CI прошёл без failures/skips; внешний test-конту�
 
 ## Scoped backend — T4
 
-- `editorial-api.test.cjs`: настоящий Nest/Fastify HTTP, cookie guard всех scopes, static categories/operations против dynamic article route, допустимые settings keys, write-body whitelist и actor.
+- `editorial-api.test.cjs`: настоящий Nest/Fastify HTTP, cookie guard всех scopes, static categories/operations против dynamic article route, cookie guard и компактный view=options, SQL-пагинация списка без фильтра и exact content statuses перед пагинацией с фильтром, допустимые settings keys, write-body whitelist и actor.
 - `news-catalog.test.cjs`: article/category/pagination inventory и отдельные SEO overrides поверх прежних routes; malformed slug даёт blocking report.
 - `news-projection.test.cjs`: 12 записей, empty/out-of-range, скрытие пустых категорий, стабильная дата/id сортировка, related category/fresh/manual fallback; 7/5-slot pagination без скрытия одной страницы многоточием.
 - `editorial-release-order.test.mjs`: независимый sequence, CODE upgrade старого manifest при неизменном snapshot, CMS при одинаковом legacy revision, stale baseline и CODE sequence mutation. Caddy control HTTP — fixture.

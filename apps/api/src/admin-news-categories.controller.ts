@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { AdminTokenGuard } from './admin-token.guard';
 import { EditorialStoreService } from './editorial-store.service';
 import { EditorialPublicationService } from './editorial-publication.service';
@@ -8,7 +8,9 @@ import { editorialBody, type EditorialRequest } from './admin-news.controller';
 export class AdminNewsCategoriesController {
   constructor(private readonly store:EditorialStoreService,private readonly publications:EditorialPublicationService){}
   @Get()
-  list(@Param('siteId') siteId:string){return this.publications.categories(siteId)}
+  list(@Param('siteId') siteId: string, @Query('view') view?: string) {
+    return view === 'options' ? this.publications.categoryOptions(siteId) : this.publications.categories(siteId);
+  }
   @Post()
   create(@Param('siteId') siteId:string,@Body() raw:unknown,@Req() request:EditorialRequest){const body=editorialBody(raw,['clientId','content']);return this.store.create(siteId,'CATEGORY',body.clientId,body.content,request.user?.id)}
   @Get(':id')

@@ -34,7 +34,7 @@ export function NewsApp({apiUrl}:{apiUrl:string}) {
   useEffect(()=>{if(siteId)window.history.replaceState(window.history.state,'',listUrl)},[siteId,listUrl])
   useEffect(()=>{
     if(!siteId)return;let active=true;setCategories([]);setCategoryError('')
-    requestJson<{items:Category[]}>(apiUrl,`/admin/sites/${encodeURIComponent(siteId)}/news/categories`).then(result=>{if(active)setCategories(result.items)}).catch(error=>{if(active)setCategoryError(editorialErrorMessage(error,'Не удалось загрузить категории'))})
+    requestJson<{items:Category[]}>(apiUrl,`/admin/sites/${encodeURIComponent(siteId)}/news/categories?view=options`).then(result=>{if(active)setCategories(result.items)}).catch(error=>{if(active)setCategoryError(editorialErrorMessage(error,'Не удалось загрузить категории'))})
     return()=>{active=false}
   },[apiUrl,siteId,refresh])
   useEffect(()=>{
