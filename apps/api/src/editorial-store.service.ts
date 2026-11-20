@@ -2,7 +2,7 @@ import { BadRequestException, ConflictException, Injectable, NotFoundException }
 import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
 import { newsSettingsDefaults, notFoundDefaults, validateNewsArticle, validateNewsCategory, validateNewsSettings, validateNotFound } from './news-model';
-import { editorialDigest, retainedEditorialRevisions } from './editorial-revisions';
+import { DRAFT_CHECKPOINT_LIMIT, editorialDigest } from './editorial-revisions';
 import type { EditorialKind } from './editorial-publication-model';
 import type { EditorialCategoryPatch } from './editorial-category-plan';
 
@@ -60,7 +60,11 @@ export class EditorialStoreService {
         const query={...data,slug:next.slug||null,name:next.name};
         after=previous?await tx.newsCategory.update({where:{id:previous.id,revision:expectedRevision},data:query}):await tx.newsCategory.create({data:{id,siteId,...query}});
       }else after=previous?await tx.editorialSettings.update({where:{id:previous.id,revision:expectedRevision},data}):await tx.editorialSettings.create({data:{id:`${kind.toLowerCase()}-${siteId}`,siteId,kind,...data}});
-      const lastCheckpoint=await tx.editorialRevision.findFirst({where:{siteId,kind,entityId:after.id,checkpoint:true},orderBy:{revision:'desc'}});
+      const lastCheckpoint = checkpoint ? null : await tx.editorialRevision.findFirst({
+        where: { siteId, kind, entityId: after.id, checkpoint: true },
+        orderBy: { revision: 'desc' },
+        select: { createdAt: true },
+      });
       await tx.editorialRevision.create({data:{siteId,kind,entityId:after.id,revision,snapshot:next as Prisma.InputJsonValue,digest:editorialDigest(next),actorId:actorId??null,checkpoint:checkpoint||!lastCheckpoint||Date.now()-lastCheckpoint.createdAt.getTime()>=60_000}});
       await this.prune(tx,siteId,kind,after.id,revision);
       return {id:after.id,content:after.content,revision,updatedAt:after.updatedAt,missingFields};
@@ -72,11 +76,26 @@ export class EditorialStoreService {
       }throw error;
     }
   }
-  private async prune(tx:Tx,siteId:string,kind:EditorialKind,entityId:string,revision:number){
-    const [rows,pending]=await Promise.all([tx.editorialRevision.findMany({where:{siteId,kind,entityId},orderBy:{revision:'asc'}}),tx.editorialPublicationItem.findMany({where:{kind,entityId,publication:{siteId,status:{in:['PENDING','RUNNING']}}},select:{revision:true}})]);
-    const ids=new Set(rows.filter(row=>pending.some(item=>item.revision===row.revision)).map(row=>row.id));
-    const keep=retainedEditorialRevisions(rows,revision,ids).map(row=>row.id);
-    await tx.editorialRevision.deleteMany({where:{siteId,kind,entityId,id:{notIn:keep}}});
+  private async prune(tx: Tx, siteId: string, kind: EditorialKind, entityId: string, workingRevision: number) {
+    const scope = { siteId, kind, entityId };
+    const [checkpoints, pending] = await Promise.all([
+      tx.editorialRevision.findMany({
+        where: { ...scope, checkpoint: true, publishedAt: null },
+        orderBy: { revision: 'desc' },
+        take: DRAFT_CHECKPOINT_LIMIT,
+        select: { revision: true },
+      }),
+      tx.editorialPublicationItem.findMany({
+        where: { kind, entityId, publication: { siteId, status: { in: ['PENDING', 'RUNNING'] } } },
+        select: { revision: true },
+      }),
+    ]);
+
+    const protectedRevisions = new Set([workingRevision, ...checkpoints.map(row => row.revision), ...pending.map(item => item.revision)]);
+    const candidates = { ...scope, publishedAt: null, revision: { notIn: [...protectedRevisions] } };
+    if (await tx.editorialRevision.findFirst({ where: candidates, select: { id: true } })) {
+      await tx.editorialRevision.deleteMany({ where: candidates });
+    }
   }
   async applyCategoryPatches(tx:Tx,siteId:string,patches:EditorialCategoryPatch[],actorId?:string) {
     for(const patch of patches){

@@ -7,9 +7,4 @@ function canonical(value: unknown): unknown {
 }
 export function editorialDigest(value: unknown): string { return createHash('sha256').update(JSON.stringify(canonical(value))).digest('hex'); }
 
-/** Publication and pending references override the draft checkpoint retention window. */
-export function retainedEditorialRevisions<T extends { id: string; revision: number; checkpoint: boolean; publishedAt: unknown }>(rows: T[], workingRevision: number, protectedIds: ReadonlySet<string> = new Set()): T[] {
-  const checkpoints = [...rows].filter(row => row.checkpoint && !row.publishedAt).sort((a, b) => b.revision - a.revision).slice(0, 20);
-  const keep = new Set(checkpoints.map(row => row.id));
-  return rows.filter(row => !!row.publishedAt || row.revision === workingRevision || protectedIds.has(row.id) || keep.has(row.id));
-}
+export const DRAFT_CHECKPOINT_LIMIT = 20;
