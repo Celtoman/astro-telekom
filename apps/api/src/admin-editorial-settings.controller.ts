@@ -14,7 +14,7 @@ export class AdminEditorialSettingsController {
   @Patch()
   save(@Param('siteId') siteId:string,@Param('kind') kind:string,@Body() raw:unknown,@Req() request:EditorialRequest){const body=editorialBody(raw,['content','expectedRevision','checkpoint']);return this.store.save(siteId,settingsKind(kind),'settings',body.expectedRevision,body.content,request.user?.id,body.checkpoint===true)}
   @Post('preview')
-  preview(@Param('siteId') siteId:string,@Param('kind') kind:string,@Body() raw:unknown){const body=editorialBody(raw,['expectedRevision','mode']);return this.publications.preview(siteId,settingsKind(kind),'settings',body.expectedRevision,body.mode??'draft')}
+  preview(@Param('siteId') siteId:string,@Param('kind') kind:string,@Body() raw:unknown){const body=editorialBody(raw,['expectedRevision','mode','surface']);return this.publications.preview(siteId,settingsKind(kind),'settings',body.expectedRevision,body.mode??'draft',body.surface)}
   @Post('review')
   review(@Param('siteId') siteId:string,@Param('kind') kind:string,@Body() raw:unknown){const body=publishBody(raw,['expectedRevision']),type=settingsKind(kind);return this.publications.review(siteId,{kind:type,entityId:`${type.toLowerCase()}-${siteId}`,expectedRevision:body.expectedRevision,action:'PUBLISH'})}
   @Post('publish')

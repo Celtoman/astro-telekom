@@ -31,7 +31,7 @@ export class AdminNewsController {
   @Post(':id/restore')
   restore(@Param('siteId') siteId:string,@Param('id') id:string,@Body() raw:unknown,@Req() request:EditorialRequest){const body=editorialBody(raw,['revision','expectedRevision','categoryId']);return this.store.restore(siteId,'ARTICLE',id,body.revision,body.expectedRevision,request.user?.id,body.categoryId)}
   @Post(':id/preview')
-  preview(@Param('siteId') siteId:string,@Param('id') id:string,@Body() raw:unknown){const body=editorialBody(raw,['expectedRevision','mode']);return this.publications.preview(siteId,'ARTICLE',id,body.expectedRevision,body.mode??'draft')}
+  preview(@Param('siteId') siteId:string,@Param('id') id:string,@Body() raw:unknown){const body=editorialBody(raw,['expectedRevision','mode','surface']);return this.publications.preview(siteId,'ARTICLE',id,body.expectedRevision,body.mode??'draft',body.surface)}
   @Post(':id/review')
   review(@Param('siteId') siteId:string,@Param('id') id:string,@Body() raw:unknown){const body=editorialBody(raw,['expectedRevision','action']);return this.publications.review(siteId,{kind:'ARTICLE',entityId:id,expectedRevision:body.expectedRevision,action:body.action??'PUBLISH'})}
   @Post(':id/publish')

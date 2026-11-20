@@ -1,5 +1,5 @@
 import { retiredEditorialPaths } from './editorial-redirects';
-import { editorialPreviewOverlay } from './editorial-preview-model';
+import { editorialPreviewOverlay, editorialPreviewSelection, editorialPreviewShell, type EditorialPreviewSurface } from './editorial-preview-model';
 import { mediaCropKey } from './editorial-media';
 import { BadRequestException, ConflictException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '../generated';
@@ -8,7 +8,7 @@ import { EditorialStoreService, editorialMissing } from './editorial-store.servi
 import { SiteCatalogService } from './site-catalog.service';
 import { EditorialMediaRegistryService } from './editorial-media-registry.service';
 import { RebuildQueueService } from './rebuild-queue.service';
-import { editorialServingArticles, editorialServingArticleOptions, editorialServingCategories, editorialServingSource } from './editorial-serving-source';
+import { editorialServingArticles, editorialServingArticleOptions, editorialServingCategories, editorialServingPreview, editorialServingSource } from './editorial-serving-source';
 import { applyEditorialChangeToCandidate, type EditorialChange, type EditorialKind } from './editorial-publication-model';
 import { editorialDigest } from './editorial-revisions';
 import { newsRoutes, relatedNewsOptions } from './news-projection';
@@ -294,12 +294,15 @@ export class EditorialPublicationService {
     };
   }
 
-  async preview(siteId:string,kind:EditorialKind,id:string,expectedRevision:number,mode:string='draft') {
+  async preview(siteId:string,kind:EditorialKind,id:string,expectedRevision:number,mode:string='draft',surface?:EditorialPreviewSurface) {
     if(!Number.isSafeInteger(expectedRevision)||expectedRevision<0||!['draft','published'].includes(mode))throw new BadRequestException('Укажите сохранённую редакцию и режим предпросмотра.');
+    if(surface!==undefined&&!(kind==='ARTICLE'?['article','list','home']:['list']).includes(surface))throw new BadRequestException('Неизвестный вид редакционного предпросмотра.');
     const site=await this.store.requireSite(siteId),row=await this.store.read(siteId,kind,id);
     if(row.revision!==expectedRevision)throw new ConflictException('Редакция изменилась. Сохраните или обновите материал перед предпросмотром.');
-    const baseline=await editorialServingSource(this.prisma,site);
-    let editorial=baseline.source.editorial;
+    const baseline=surface
+      ? await editorialServingPreview(this.prisma,site,kind,mode==='published'&&surface==='article'?row.id:null)
+      : await editorialServingSource(this.prisma,site);
+    let editorial='source' in baseline ? baseline.source.editorial : baseline.editorial;
     if(mode==='draft'){
       const content=row.content as Record<string,any>;
       const category=kind==='ARTICLE'&&content.categoryId&&!editorial?.categories.some(c=>c.id===content.categoryId)?await this.store.row(siteId,'CATEGORY',content.categoryId):null;
@@ -309,14 +312,21 @@ export class EditorialPublicationService {
     if(mode==='draft'&&selected&&!(selected.title||selected.name)?.trim())throw new BadRequestException('Добавьте заголовок или название перед предпросмотром.');
     if(kind==='ARTICLE'&&selected&&!editorial?.categories.some(c=>c.id===selected.categoryId))throw new BadRequestException('Выберите категорию перед предпросмотром.');
     if(!selected&&kind!=='NOT_FOUND')return {available:false,mode,revision:row.revision,publicationId:baseline.publication.id};
-    if(editorial)editorial=await this.media.prepare(siteId,editorial);
+    const preview=surface?editorialPreviewSelection(editorial,kind,row.id,surface):null;
+    if(preview)editorial=preview.editorial;
+    if(editorial)editorial=preview
+      ? await this.media.preparePreview(siteId,editorial,surface==='article'?row.id:null)
+      : await this.media.prepare(siteId,editorial);
     const mediaRequests:Record<string,string>={};
     for(const [key,variants] of Object.entries(editorial?.media??{})){
       const [assetId,mediaKind,crop]=key.split('|');const area=crop==='default'?null:JSON.parse(crop);
       const cropKey=area?mediaCropKey(mediaKind as 'cover'|'social',{x:area[0],y:area[1],width:area[2],height:area[3]}):null;
       for(const variant of variants){const query=new URLSearchParams({kind:mediaKind,variant:variant.sha256,...(cropKey?{crop:cropKey}:{})});mediaRequests[variant.src]=`/admin/sites/${encodeURIComponent(siteId)}/news/media/${encodeURIComponent(assetId)}/file?${query}`;}
     }
-    return {available:true,mode,kind,entityId:row.id,revision:row.revision,selectedRevision:selected?.revision??null,publicationId:baseline.publication.id,editorial:editorial??null,mediaRequests,catalog:this.catalog.renderSource(baseline.source)};
+    const catalog='source' in baseline ? this.catalog.renderSource(baseline.source)
+      : editorialPreviewShell(baseline.publication.catalog)??editorialPreviewShell(this.catalog.renderSource(await baseline.loadHistoricalSource()));
+    if(!catalog)throw new ConflictException('Оболочка опубликованного предпросмотра недоступна.');
+    return {available:true,mode,kind,entityId:row.id,revision:row.revision,selectedRevision:selected?.revision??null,publicationId:baseline.publication.id,editorial:editorial??null,mediaRequests,catalog,...(preview?{view:preview.view}:{})};
   }
   async relatedOptions(siteId:string,query:Parameters<typeof relatedNewsOptions>[1]) {
     const site = await this.store.requireSite(siteId);

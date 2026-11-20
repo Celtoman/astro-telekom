@@ -3,6 +3,7 @@ import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
 import { servingPublication } from './serving-publication-context';
 import type { CatalogSource } from './site-catalog.service';
+import { emptyEditorial, type EditorialKind, type EditorialSource } from './editorial-publication-model';
 
 type EditorialClient = PrismaService | Prisma.TransactionClient;
 type EditorialSite = { id: string; slug: string };
@@ -25,13 +26,17 @@ async function resolveEditorialPublication(client: EditorialClient, site: Editor
   return { publication, validationId: publication.validationId };
 }
 
-// Mutation, review and preview still work on an independent copy of the full source.
-export async function editorialServingSource(client: EditorialClient, site: EditorialSite) {
-  const { publication, validationId } = await resolveEditorialPublication(client, site);
+async function fullEditorialSnapshot(client: EditorialClient, site: EditorialSite, validationId: string) {
   const validation = await client.sitePublicationValidation.findUnique({ where: { id: validationId } });
   const source = validation?.sourceSnapshot as unknown as CatalogSource;
   if (!source?.site || source.site.id !== site.id || !Array.isArray(source.cities) || !Array.isArray(source.globalPages)) throw missingSource();
-  return { publication, source: structuredClone(source) };
+  return structuredClone(source);
+}
+
+// Mutation, review and legacy preview work on an independent copy of the full source.
+export async function editorialServingSource(client: EditorialClient, site: EditorialSite) {
+  const { publication, validationId } = await resolveEditorialPublication(client, site);
+  return { publication, source: await fullEditorialSnapshot(client, site, validationId) };
 }
 
 const sourceArticles = Prisma.sql`CASE WHEN jsonb_typeof(source.editorial -> 'articles') = 'array'
@@ -39,6 +44,10 @@ const sourceArticles = Prisma.sql`CASE WHEN jsonb_typeof(source.editorial -> 'ar
 
 async function readEditorialProjection<T>(client: EditorialClient, site: EditorialSite, columns: Prisma.Sql) {
   const { validationId } = await resolveEditorialPublication(client, site);
+  return readProjection<T>(client, site, validationId, columns);
+}
+
+async function readProjection<T>(client: EditorialClient, site: EditorialSite, validationId: string, columns: Prisma.Sql) {
   const [result] = await client.$queryRaw<T[]>(Prisma.sql`
     SELECT ${columns}
     FROM "SitePublicationValidation" validation
@@ -54,6 +63,45 @@ async function readEditorialProjection<T>(client: EditorialClient, site: Editori
   `);
   if (!result) throw missingSource();
   return result;
+}
+
+export async function editorialServingPreview(
+  client: EditorialClient,
+  site: EditorialSite,
+  kind: EditorialKind,
+  detailId: string | null,
+) {
+  const { publication, validationId } = await resolveEditorialPublication(client, site);
+  const columns = kind === 'NOT_FOUND'
+    ? Prisma.sql`CASE WHEN jsonb_typeof(source.editorial) = 'object'
+        THEN jsonb_build_object('notFound', source.editorial -> 'notFound') END AS editorial`
+    : Prisma.sql`CASE WHEN jsonb_typeof(source.editorial) = 'object' THEN jsonb_build_object(
+      'version', source.editorial -> 'version',
+      'newsEnabled', source.editorial -> 'newsEnabled',
+      'settings', source.editorial -> 'settings',
+      'notFound', NULL::jsonb,
+      'categories', COALESCE((
+        SELECT jsonb_agg(jsonb_build_object(
+          'id', category -> 'id', 'slug', category -> 'slug', 'revision', category -> 'revision',
+          'name', category -> 'name', 'description', category -> 'description'
+        ) ORDER BY ordinal)
+        FROM jsonb_array_elements(source.editorial -> 'categories') WITH ORDINALITY AS items(category, ordinal)
+      ), '[]'::jsonb),
+      'articles', COALESCE((
+        SELECT jsonb_agg(CASE WHEN article -> 'id' = to_jsonb(${detailId}::text) THEN article ELSE jsonb_build_object(
+          'id', article -> 'id', 'slug', article -> 'slug', 'revision', article -> 'revision',
+          'categoryId', article -> 'categoryId', 'publishedDate', article -> 'publishedDate',
+          'title', article -> 'title', 'summary', article -> 'summary', 'cover', article -> 'cover'
+        ) END ORDER BY ordinal)
+        FROM jsonb_array_elements(${sourceArticles}) WITH ORDINALITY AS items(article, ordinal)
+      ), '[]'::jsonb)
+    ) END AS editorial`;
+  const { editorial } = await readProjection<{ editorial: EditorialSource | null }>(client, site, validationId, columns);
+  return {
+    publication,
+    editorial: editorial && kind === 'NOT_FOUND' ? { ...emptyEditorial(), notFound: editorial.notFound } : editorial ?? undefined,
+    loadHistoricalSource: () => fullEditorialSnapshot(client, site, validationId),
+  };
 }
 
 export async function editorialServingArticles(client: EditorialClient, site: EditorialSite, ids: readonly string[]) {

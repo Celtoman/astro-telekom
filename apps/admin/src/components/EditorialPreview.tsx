@@ -16,7 +16,7 @@ export function EditorialPreview<T extends {version:string}>({draft,kind,disable
   const run=++generation.current;controller.current?.abort();const abort=new AbortController();controller.current=abort;setOpen(true);setBusy(true);setError('');setData(null);setAssets({})
   try{
    const saved=await draft.flush();if(run!==generation.current)return
-   const payload=await requestJson<EditorialPreviewPayload>(draft.apiUrl,`${draft.endpoint}/preview`,{method:'POST',body:{expectedRevision:saved.revision,mode:nextMode},signal:abort.signal});if(run!==generation.current)return
+   const payload=await requestJson<EditorialPreviewPayload>(draft.apiUrl,`${draft.endpoint}/preview`,{method:'POST',body:{expectedRevision:saved.revision,mode:nextMode,surface:nextSurface},signal:abort.signal});if(run!==generation.current)return
    if(!payload.available)throw new Error('У этого материала пока нет опубликованной версии. Выберите «Черновик».')
    const [renderer,styleModule]=await Promise.all([import('../lib/editorial-preview-document'),import('virtual:preview-public-styles')]);if(run!==generation.current)return
    const loaded:Record<string,string>=Object.fromEntries(Object.entries(styleModule.assets).map(([path,url])=>[path,new URL(url,window.location.origin).href]))
