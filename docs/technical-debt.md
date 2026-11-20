@@ -238,6 +238,7 @@
 | TD-99 | [#128](https://github.com/Celtoman/astro-telekom/issues/128) ✅ | Ссылка звонка в публичной шапке нормализуется из показанного пользователю номера |
 | TD-132 | [#215](https://github.com/Celtoman/astro-telekom/issues/215) ✅ | Ручной редактор тарифа отклоняет некорректные коды в `promoText` до сохранения |
 | TD-133 | [#216](https://github.com/Celtoman/astro-telekom/issues/216) ✅ | SEO/OG-редактор отклоняет некорректные коды в четырёх текстовых полях до сохранения |
+| TD-263 | [#647](https://github.com/Celtoman/astro-telekom/issues/647) 🟢 | При одновременной отправке с разными ключами две заявки могут пройти проверку дублей до коммита |
 
 ## P3
 
