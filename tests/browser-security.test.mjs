@@ -139,6 +139,7 @@ test('Coolify and direct Caddy edges apply browser security headers before authe
   assert.match(coolifyPublicCaddy, /X-Robots-Tag "noindex, nofollow"/);
   assert.match(adminCaddy, /Content-Security-Policy "frame-ancestors 'none';"/);
   assert.match(adminCaddy, /X-Frame-Options "DENY"/);
+  assert.ok(adminCaddy.includes('header /workspace-version.json Cache-Control "no-store"'));
   assert.match(directEdge, /\{\$PUBLIC_DOMAIN\}[\s\S]*?import public_security_headers/);
   const directPublicPolicy = directEdge.slice(
     directEdge.indexOf('(public_security_headers)'),
@@ -154,6 +155,8 @@ test('admin production build emits hash-based CSP while allowing only checkbox s
   const build = await runAdminBuild();
   assert.equal(build.code, 0, build.output);
 
+  const version = JSON.parse(await readFile(join(adminDist, 'workspace-version.json'), 'utf8'));
+  assert.match(version.componentUrl, /^\/_astro\/AdminWorkspace\.[a-zA-Z0-9_-]+\.js$/);
   const htmlFiles = await collectHtmlFiles(adminDist);
   assert.deepEqual(htmlFiles.map((path) => path.slice(adminDist.length + 1).replaceAll('\\', '/')).sort(), [
     'audit/index.html', 'cities/import/index.html', 'cities/index.html', 'index.html', 'lead-access/index.html', 'leads/index.html',
@@ -162,6 +165,9 @@ test('admin production build emits hash-based CSP while allowing only checkbox s
   for (const path of htmlFiles) {
     const html = await readFile(path, 'utf8');
     const csp = extractCsp(html, path);
+    if (html.includes('component-export="AdminWorkspace"')) {
+      assert.ok(html.includes(`component-url="${version.componentUrl}"`), `${path}: workspace uses the published version marker`);
+    }
     assert.equal(getDirective(csp, 'default-src', path), "default-src 'self'");
     assert.equal(getDirective(csp, 'base-uri', path), "base-uri 'none'");
     assert.equal(getDirective(csp, 'object-src', path), "object-src 'none'");
@@ -191,7 +197,7 @@ test('admin production build emits hash-based CSP while allowing only checkbox s
       assert.ok(styles.includes(`'sha256-${previewHash}'`), 'srcdoc stylesheet must be authorized by the inherited parent CSP');
       assert.match(getDirective(csp, 'img-src', path), /https:/);
     } else {
-      assert.equal(styles.includes(`'sha256-${previewHash}'`), html.includes('admin:history-navigation'), 'only persistent workspaces inherit the exact build-owned editorial preview CSS');
+      assert.equal(styles.includes(`'sha256-${previewHash}'`), html.includes('component-export="AdminWorkspace"'), 'only workspaces inherit the exact build-owned editorial preview CSS');
       assert.doesNotMatch(getDirective(csp, 'img-src', path), /https:/);
     }
     assert.equal(getDirective(csp, 'style-src-attr', path), "style-src-attr 'unsafe-inline'");

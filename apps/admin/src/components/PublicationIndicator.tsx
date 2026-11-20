@@ -21,8 +21,8 @@ export function PublicationIndicator({ apiUrl, editorial=false }: { apiUrl: stri
   const [open, setOpen] = useState(false)
   useEffect(() => {
     const close = () => setOpen(false)
-    document.addEventListener("astro:after-swap", close)
-    return () => document.removeEventListener("astro:after-swap", close)
+    document.addEventListener("admin:workspace-navigated", close)
+    return () => document.removeEventListener("admin:workspace-navigated", close)
   }, [])
   const requestSequence = useRef(0)
 

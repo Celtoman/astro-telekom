@@ -1,11 +1,10 @@
-import { lazy, Suspense, useCallback, useEffect, useState } from "react"
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react"
 import { AdminShellLayout } from "./AdminShell"
 import { AdminWorkspaceContext, type Administrator } from "./AdminWorkspaceContext"
-import { installNavigationGuards } from "../lib/admin-navigation-guards.mjs"
-import { workspaceRoute } from "../lib/admin-workspace-routes.mjs"
+import { installWorkspaceNavigation, type WorkspaceScroll } from "../lib/admin-navigation-guards.mjs"
+import { isWorkspacePath, workspaceRoute } from "../lib/admin-workspace-routes.mjs"
 import { Skeleton } from "./ui/skeleton"
-import { navigate as navigatePage } from "astro:transitions/client"
-import { Dialog, Heading, Modal, ModalOverlay, Text } from "react-aria-components"
+import { Dialog, Heading, Modal, ModalOverlay, RouterProvider, Text } from "react-aria-components"
 import { Button } from "./ui/button"
 import { WorkspaceBoundary } from "./WorkspaceBoundary"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
@@ -47,14 +46,82 @@ const screenLoaders = {
 
 const screens = Object.fromEntries(Object.entries(screenLoaders).map(([key, loader]) => [key, lazy(loader)])) as Record<keyof typeof screenLoaders, ReturnType<typeof lazy>>
 
+function restoreWorkspaceScroll(hash: string, position: WorkspaceScroll | null) {
+  const main = document.getElementById("admin-content")
+  if (!hash) main?.focus({ preventScroll: true })
+  let fragment = hash.slice(1)
+  try { fragment = decodeURIComponent(fragment) } catch { /* Unknown fragment. */ }
+  const observer = new MutationObserver(() => { if (apply()) cleanup() })
+  const stop = window.setTimeout(() => {
+    if (position) window.scrollTo(position.left, position.top)
+    cleanup()
+  }, 6000)
+  const frame = window.requestAnimationFrame(() => {
+    if (apply()) cleanup()
+    else if (main) observer.observe(main, { childList: true, subtree: true })
+  })
+
+  function apply() {
+    if (position) {
+      const height = document.scrollingElement?.scrollHeight ?? 0
+      if (position.top > Math.max(0, height - window.innerHeight) + 1) return false
+      window.scrollTo(position.left, position.top)
+    } else if (fragment) {
+      const anchor = document.getElementById(fragment)
+      if (!anchor) return false
+      anchor.scrollIntoView()
+      anchor.focus({ preventScroll: true })
+    } else window.scrollTo(0, 0)
+    return true
+  }
+
+  function cleanup() {
+    observer.disconnect()
+    window.clearTimeout(stop)
+    window.cancelAnimationFrame(frame)
+    window.removeEventListener("wheel", cleanup)
+    window.removeEventListener("touchstart", cleanup)
+  }
+  window.addEventListener("wheel", cleanup, { once: true, passive: true })
+  window.addEventListener("touchstart", cleanup, { once: true, passive: true })
+  return cleanup
+}
+
 export function AdminWorkspace({ apiUrl, initialPath }: { apiUrl: string; initialPath: string }) {
   const [path, setPath] = useState(initialPath)
   const [mounted, setMounted] = useState(false)
   const [user, setUser] = useState<Administrator | null>(null)
   const [sessionError, setSessionError] = useState(false)
+  const [outdated, setOutdated] = useState(false)
+  const [scrollRequest, setScrollRequest] = useState<{ hash: string; position: WorkspaceScroll | null } | null>(null)
   const [confirmation, setConfirmation] = useState<{ resolve: (approved: boolean) => void } | null>(null)
+  const navigation = useRef<ReturnType<typeof installWorkspaceNavigation> | null>(null)
+  const openAriaLink = useCallback((href: string) => {
+    const target = new URL(href, window.location.href)
+    if (!navigation.current?.openWorkspace(target)) window.location.assign(target.href)
+  }, [])
   useEffect(() => {
-    const navigate = () => setPath(window.location.pathname + window.location.search)
+    let disposed = false
+    let staleBundle = false
+    let checkedAt = 0
+    const currentBundle = document.querySelector('astro-island[component-export="AdminWorkspace"]')?.getAttribute("component-url")
+    const checkVersion = () => {
+      if (import.meta.env.DEV || !currentBundle || disposed || staleBundle || Date.now() - checkedAt < 60_000) return
+      checkedAt = Date.now()
+      void fetch("/workspace-version.json", { cache: "no-store" }).then(response => response.ok ? response.json() : null).then(version => {
+        if (!disposed && typeof version?.componentUrl === "string" && version.componentUrl !== currentBundle) {
+          staleBundle = true
+          setOutdated(true)
+        }
+      }).catch(() => undefined)
+    }
+    const navigate = (target: URL, position: WorkspaceScroll | null) => {
+      setPath(target.pathname + target.search)
+      document.title = workspaceRoute(target.pathname).title
+      setScrollRequest({ hash: target.hash, position })
+      document.dispatchEvent(new Event("admin:workspace-navigated"))
+      checkVersion()
+    }
     const expired = () => { setUser(null); window.location.replace("/login") }
     const verified = () => setSessionError(false)
     const verificationFailed = () => setSessionError(true)
@@ -62,54 +129,53 @@ export function AdminWorkspace({ apiUrl, initialPath }: { apiUrl: string; initia
       const anchor = event.target instanceof Element ? event.target.closest('a[href]') : null
       if (!anchor || anchor.hasAttribute('download')) return
       const url = new URL(anchor.getAttribute('href') || '', window.location.href)
-      if (url.origin !== window.location.origin) return
+      if (url.origin !== window.location.origin || !isWorkspacePath(url.pathname) || staleBundle) return
       const loader = screenLoaders[workspaceRoute(url.pathname).screen]
       // Chunk preloading never reads API data or full publication catalogs.
       if (loader) void loader().catch(() => undefined)
     }
-    navigate()
+    setPath(window.location.pathname + window.location.search)
+    if (window.location.hash) setScrollRequest({ hash: window.location.hash, position: null })
     setMounted(true)
-    document.addEventListener("astro:after-swap", navigate)
-    const versionBoundary = (event: Event) => {
-      const nextDocument = (event as Event & { newDocument: Document }).newDocument
-      const selector = 'astro-island[data-astro-transition-persist="admin-workspace"]'
-      const current = document.querySelector(selector), next = nextDocument.querySelector(selector)
-      if (current && next && current.getAttribute("component-url") !== next.getAttribute("component-url")) {
-        // A code deployment must mount its new runtime, not persist the old one.
-        next.removeAttribute("data-astro-transition-persist")
-      }
-    }
-    document.addEventListener("astro:before-swap", versionBoundary)
+    checkVersion()
+    window.addEventListener("focus", checkVersion)
     window.addEventListener("admin:session-expired", expired)
     window.addEventListener("admin:session-changed", expired)
     window.addEventListener("admin:session-verified", verified)
     window.addEventListener("admin:session-verification-failed", verificationFailed)
     document.addEventListener("pointerover", preload)
     document.addEventListener("focusin", preload)
-    const removeGuards = installNavigationGuards(window, document, {
+    const guards = installWorkspaceNavigation(window, document, {
       confirm: () => new Promise<boolean>(resolve => setConfirmation({ resolve })),
-      navigate: href => { void navigatePage(href) },
+      navigate,
+      canNavigate: () => !staleBundle,
     })
+    navigation.current = guards
     return () => {
-      document.removeEventListener("astro:after-swap", navigate)
-      document.removeEventListener("astro:before-swap", versionBoundary)
+      navigation.current = null
+      disposed = true
+      window.removeEventListener("focus", checkVersion)
       window.removeEventListener("admin:session-expired", expired)
       window.removeEventListener("admin:session-changed", expired)
       window.removeEventListener("admin:session-verified", verified)
       window.removeEventListener("admin:session-verification-failed", verificationFailed)
       document.removeEventListener("pointerover", preload)
       document.removeEventListener("focusin", preload)
-      removeGuards()
+      guards.dispose()
     }
   }, [])
+  useEffect(() => {
+    if (scrollRequest) return restoreWorkspaceScroll(scrollRequest.hash, scrollRequest.position)
+  }, [scrollRequest])
   const sessionReady = useCallback((next: Administrator) => {
     setUser(current => current?.id === next.id && current.email === next.email ? current : next)
     if (!window.location.hash) document.getElementById("admin-content")?.focus({ preventScroll: true })
   }, [])
   const route = workspaceRoute(path)
   const Screen = screens[route.screen]
-  return <AdminWorkspaceContext.Provider value={sessionReady}>
+  return <RouterProvider navigate={openAriaLink}><AdminWorkspaceContext.Provider value={sessionReady}>
     <AdminShellLayout apiUrl={apiUrl} user={user} active={route.active}>
+      {outdated ? <Alert className="m-6 w-auto"><AlertTitle>Админка обновилась</AlertTitle><AlertDescription>Откройте новую версию, когда закончите работу на этой странице.</AlertDescription><Button variant="outline" onClick={() => window.location.reload()}>Обновить админку</Button></Alert> : null}
       {sessionError ? <Alert variant="destructive" className="m-6 w-auto"><AlertTitle>Не удалось проверить доступ</AlertTitle><AlertDescription>Проверка сессии временно недоступна. При следующем переходе доступ будет проверен заново.</AlertDescription></Alert> : null}
       <WorkspaceBoundary key={path}><Suspense fallback={<div className="mx-auto flex max-w-7xl flex-col gap-6 p-6" aria-busy="true" aria-label="Загружаем раздел"><Skeleton className="h-10 w-72" /><Skeleton className="h-80 w-full" /></div>}>
         {mounted ? <Screen key={path} apiUrl={apiUrl} /> : <div aria-busy="true" aria-label="Загружаем раздел" className="p-6"><Skeleton className="h-80 w-full" /></div>}
@@ -127,5 +193,5 @@ export function AdminWorkspace({ apiUrl, initialPath }: { apiUrl: string; initia
         </Dialog>
       </Modal>
     </ModalOverlay>
-  </AdminWorkspaceContext.Provider>
+  </AdminWorkspaceContext.Provider></RouterProvider>
 }

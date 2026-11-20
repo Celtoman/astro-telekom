@@ -148,7 +148,7 @@ export function PublicationApp({ apiUrl }: { apiUrl: string }) {
             </>}
           </CardContent></Card>
         </div>
-        <aside id="publication-launch" className="min-w-0 scroll-mt-4 space-y-4" aria-label="Запуск и результат публикации">
+        <aside id="publication-launch" tabIndex={-1} className="min-w-0 scroll-mt-4 space-y-4" aria-label="Запуск и результат публикации">
           {site ? <PublicationStatusCard apiUrl={apiUrl} siteId={site.id} publicationRefreshKey={refreshKey} review={currentReview} reviewUnavailable={checking || Boolean(reviewError)} onStateChange={setState} /> : null}
           {currentReview ? <p className="text-xs text-muted-foreground">Проверена версия {currentReview.workingRevision} · {new Date(currentReview.validation.validatedAt).toLocaleString("ru-RU")}.</p> : null}
         </aside>

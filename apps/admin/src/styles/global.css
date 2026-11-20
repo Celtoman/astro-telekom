@@ -1,15 +1,5 @@
 @import "tailwindcss";
 
-/* Keep the persistent workspace instantaneous without per-route inline CSS.
-   ClientRouter still owns navigation, history and its swap fallback. */
-::view-transition-old(root),
-::view-transition-new(root),
-::view-transition-group(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
-::view-transition-old(root) { opacity: 0; }
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

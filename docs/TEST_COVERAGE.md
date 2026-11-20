@@ -264,7 +264,7 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 | Файл | Что проверяет |
 | --- | --- |
 | `tests/rate-limit-request-target.test.cjs` | Реальный установленный Fastify/@fastify/rate-limit и raw TCP POST: origin/absolute targets делят строгие лимиты, excess 429 не достигает handler, buckets изолированы; dot/percent raw path сохраняется. |
-| `tests/admin-navigation-performance.test.mjs` | Совпадающие одновременные GET объединяются, завершённые/после mutation/401 остаются свежими; dirty click и async history cancel/accept сохраняют editor/history; каждая shared route имеет persistence, preview сохраняет CSP boundary. |
+| `tests/admin-navigation-performance.test.mjs` | Совпадающие одновременные GET объединяются, завершённые/после mutation/401 остаются свежими; Обычные ссылки и React Aria menu используют один dirty guard. Проверяются Back/Forward, отмена и подтверждение, позиции прокрутки, отдельные документы, прямой HTML каждого рабочего маршрута с тем же заголовком и резервный переход при смене версии. Preview сохраняет отдельную границу CSP. |
 | `tests/variable-context-performance.test.cjs` | Serializable typed context без рендера Page/SEO graph, published city/ACTIVE tariff filters, Decimal и нулевая цена; summary без graph сохраняет legacy GET, guarded bulk values соответствует одиночному formatter. |
 
 ## CITY_HOME / #193

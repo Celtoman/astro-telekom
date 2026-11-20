@@ -61,8 +61,8 @@ export function AdminShellLayout({ apiUrl, user, active, children }: {
   useEffect(() => { setMobileOpen(false) }, [active])
   useEffect(() => {
     const close = () => setMobileOpen(false)
-    document.addEventListener("astro:after-swap", close)
-    return () => document.removeEventListener("astro:after-swap", close)
+    document.addEventListener("admin:workspace-navigated", close)
+    return () => document.removeEventListener("admin:workspace-navigated", close)
   }, [])
 
   useEffect(() => {

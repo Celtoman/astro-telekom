@@ -101,5 +101,5 @@ test('editor retains guarded draft saving, field errors, dirty navigation, FAQ o
   assert.doesNotMatch(source, /iframe|dangerouslySetInnerHTML|method: 'POST'|\/publish|type="color"/)
   const wrapper = await readFile(new URL('../apps/admin/src/pages/templates/speed-test.astro', import.meta.url), 'utf8')
   assert.match(wrapper, /initialPath="\/templates\/speed-test"/)
-  assert.match(wrapper, /transition:persist="admin-workspace"/)
+  assert.match(wrapper, /<AdminWorkspace\b[^>]*client:load/)
 })

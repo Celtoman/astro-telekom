@@ -14,6 +14,6 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
     <title>Категории новостей · Дом.ру Платформа</title>
   <AdminRuntime /></head>
   <body>
-    <AdminWorkspace apiUrl={apiUrl} initialPath="/news/categories" client:load transition:persist="admin-workspace" transition:persist-props />
+    <AdminWorkspace apiUrl={apiUrl} initialPath="/news/categories" client:load />
   </body>
 </html>

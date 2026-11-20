@@ -253,7 +253,7 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
       setPublicationRefreshKey((current) => current + 1)
       if (isCreate) {
         setIsCreate(false)
-        window.history.replaceState(null, "", `/tariffs/edit?id=${encodeURIComponent(result.tariff.id)}`)
+        window.history.replaceState(window.history.state, "", `/tariffs/edit?id=${encodeURIComponent(result.tariff.id)}`)
       }
     } catch (caught: unknown) {
       setError(caught instanceof Error ? caught.message : "Тариф не сохранен")

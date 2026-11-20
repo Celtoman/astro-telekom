@@ -1,12 +1,16 @@
 # Резервирование редакционных медиа и БД
 
-Пункт принятого плана новостей T3/T10, [#534](https://github.com/Celtoman/astro-telekom/issues/534), [#546](https://github.com/Celtoman/astro-telekom/issues/546). Код установлен изd5a12f0f; два реальных S3 download/hash/PG18 restore пройдены до и после переноса. После переноса проверены6 assets / 38 files / 12 editorial references; timer enabled/active, production DB не восстанавливалась. Первый автоматический ночной запуск ещё не наблюдался. [Внешние доказательства](../research/2026-11-07-news-external-release.md). Старый publication-retention продолжает резервировать только immutable публичные артефакты, его поведение не меняется.
+Пункт принятого плана новостей T3/T10, [#534](https://github.com/Celtoman/astro-telekom/issues/534), [#546](https://github.com/Celtoman/astro-telekom/issues/546). Код установлен изd5a12f0f; два реальных S3 download/hash/PG18 restore пройдены до и после переноса. После переноса проверены6 assets / 38 files / 12 editorial references; timer enabled/active, production DB не восстанавливалась. [Внешние доказательства](../research/2026-11-07-news-external-release.md). Старый publication-retention продолжает резервировать только immutable публичные артефакты, его поведение не меняется.
 
 `deploy/editorial-backup.py` делает custom PostgreSQL dump работающей БД приложения и копию immutable originals/derivatives из фиксированного editorial-media volume. API сначала сохраняет неизменяемые файлы, затем коммитит ready metadata; удаления медиа нет. Поэтому снимок БД вместе с последующим полным набором immutable файлов содержит все ссылки этого снимка. Во время backup приложение не останавливается. Параллельный DDL может прервать dump; такой комплект не принимается.
 
 Manifest перечисляет каждый файл, размер и SHA256. Существующий private Timeweb S3 используется через отдельный PHP bridge внутри Coolify; credentials остаются в его модели. Префикс `astro-telekom/editorial-backups/{archiveSha256}.tar.gz`, существующий объект не перезаписывается, удаление объектов отсутствует. После download проверяются все байты и полный архив, затем настоящая PostgreSQL18 восстанавливается в invocation-owned контейнере с network=none и tmpfs. Проверяются originals/derivatives и ссылки текущих статей, категорий, settings, истории и опубликованных catalogs. Это не production restore и не активация сайта.
 
 До начала проверяется пиковое место по размерам БД/media с запасом; symlink/неизвестные пути отклоняются. API origin сверяется с фактическими props AdminWorkspace в admin-контейнере того же фиксированного ресурса. Неудачное восстановление или cleanup контейнера запрещает успешный proof. Приватный proof записывается в `/var/lib/astro-editorial-backup`; stdout содержит только counts/hashes/status, без текста статей, строк БД и секретов. Ошибки cleanup содержат только имя собственного fixture для адресной диагностики.
+
+## Проверка расписания
+
+20 ноября 2026 в 03:45 МСК плановый запуск завершился ошибкой [#645](https://github.com/Celtoman/astro-telekom/issues/645). В тот же день ручной запуск штатной службы завершился в 12:46 МСК. Подтверждены чтение архива из S3, совпадение контрольных сумм и изолированное восстановление PostgreSQL 18 с 10 медиаобъектами, 70 файлами, 443 ссылками и 93 редакционными записями. Сбой ночью не воспроизвёлся. Таймер активен. Для закрытия инцидента остаётся сверить следующий запуск именно от таймера и его новый proof.
 
 ## Применение после gates
 
