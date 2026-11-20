@@ -21,7 +21,7 @@ const navigationLimit = 32
 function navigationRoute(route) {
   return /^\/admin\/(?:cities|tariffs)\?/.test(route)
     || ['/admin/regions', '/admin/cities/profiles', '/admin/tariffs/filter-options', '/admin/block-passports', '/admin/sites?summary=true'].includes(route)
-    || /^\/admin\/sites\/[^/]+\/variable-catalog(?:\?|$)/.test(route)
+    || /^\/admin\/sites\/[^/]+\/variable-catalog(?:\/(?:values|usages))?(?:\?|$)/.test(route)
 }
 function readKey(baseUrl, route) { return `${baseUrl.replace(/\/$/, '')}:${route}` }
 function sessionKey(baseUrl) { return baseUrl.replace(/\/$/, '') }

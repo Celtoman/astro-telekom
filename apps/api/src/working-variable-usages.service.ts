@@ -37,8 +37,8 @@ export class WorkingVariableUsagesService {
 
   async list(siteId: string, expectedWorkingRevision: number): Promise<VariableUsage[]> {
     return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
-      const site = await transaction.site.findUnique({ where: { id: siteId }, select: { workingRevision: true } });
-      if (!site) throw new NotFoundException('Сайт не найден');
+      const site = await transaction.site.findUnique({ where: { id: siteId }, select: { status: true, workingRevision: true } });
+      if (!site || site.status !== 'PUBLISHED') throw new NotFoundException('Сайт не найден');
       if (site.workingRevision !== expectedWorkingRevision) throw new ConflictException('Рабочая ревизия изменилась; обновите каталог переменных');
       const [pages, pageTemplates, tariffs, seoTemplates] = await Promise.all([
         transaction.page.findMany({

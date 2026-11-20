@@ -3,7 +3,7 @@ import { useNavigationQuery } from "./useNavigationQuery"
 import { useCallback, useEffect, useState } from "react"
 import { CircleAlert, Save } from "lucide-react"
 import { AdminApiError, requestJson, requestSession } from "../lib/admin-api.mjs"
-import { filterVariableCatalogItems } from "../lib/variable-catalog.mjs"
+import { filterVariableCatalogItems, variableUsagePath } from "../lib/variable-catalog.mjs"
 import { AdminShell } from "./AdminShell"
 import { useUnsavedChanges } from "./useUnsavedChanges"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
@@ -79,18 +79,26 @@ interface VariableItem {
   working: VariableValue
   published: VariableValue
   changed: boolean | null
-  workingUsages: VariableUsage[]
-  publishedUsages: VariableUsage[] | null
 }
 interface VariableCatalog {
   siteId: string
   workingRevision: number
   publishedRevision: number
+  publishedPublicationId: string | null
   cities: Array<{ id: string; name: string; slug: string }>
   tariffs: Array<{ id: string; name: string; slug: string }>
   publishedUsageAvailable: boolean
   publishedTemplateUsageAvailable: boolean
   items: VariableItem[]
+}
+
+interface VariableUsageIdentity { workingRevision: number; publishedPublicationId: string | null }
+interface VariableUsageCounts { workingCounts: Record<string, number>; publishedCounts: Record<string, number> | null }
+interface VariableUsagePage { total: number; page: number; items: VariableUsage[] }
+interface VariableUsageDetails {
+  pageSize: number
+  working: VariableUsagePage
+  published: VariableUsagePage | null
 }
 
 const typeLabels: Record<string, string> = { text: "Текст", number: "Число", phone: "Телефон", date: "Дата" }
@@ -134,6 +142,23 @@ function UsageList({ usages }: { usages: VariableUsage[] | null }) {
   </li>)}</ul>
 }
 
+function PagedUsageList({ title, value, pageSize, setPage }: {
+  title: string; value: VariableUsagePage | null; pageSize: number; setPage: (page: number) => void
+}) {
+  const pageCount = Math.max(1, Math.ceil((value?.total ?? 0) / pageSize))
+  return <section>
+    <h3 className="mb-2 font-semibold">{title} ({value?.total ?? "—"})</h3>
+    {value && value.total > 0 && value.items.length === 0
+      ? <p className="text-sm text-muted-foreground">На этой странице нет мест использования.</p>
+      : <UsageList usages={value?.items ?? null} />}
+    {value && (pageCount > 1 || value.page > pageCount) ? <div className="mt-3 flex flex-wrap items-center gap-2" aria-label={title}>
+      <Button variant="outline" size="sm" disabled={value.page <= 1} onClick={() => setPage(Math.min(pageCount, value.page - 1))}>Назад</Button>
+      <span>Страница {value.page} из {pageCount}</span>
+      <Button variant="outline" size="sm" disabled={value.page >= pageCount} onClick={() => setPage(value.page + 1)}>Далее</Button>
+    </div> : null}
+  </section>
+}
+
 function VariableCatalogPanel({ apiUrl, siteId }: { apiUrl: string; siteId: string }) {
   const [cityId, setCityId] = useState("")
   const [tariffId, setTariffId] = useState("")
@@ -144,12 +169,37 @@ function VariableCatalogPanel({ apiUrl, siteId }: { apiUrl: string; siteId: stri
   const [source, setSource] = useState("")
   const [selectedCode, setSelectedCode] = useState("")
 
+  const [workingPage, setWorkingPage] = useState(1)
+  const [publishedPage, setPublishedPage] = useState(1)
+  const [lastUsageIdentity, setLastUsageIdentity] = useState<VariableUsageIdentity | null>(null)
+
+  function selectCode(code: string) {
+    if (code !== selectedCode) {
+      setSelectedCode(code)
+      setWorkingPage(1)
+      setPublishedPage(1)
+    }
+  }
+
   const params = new URLSearchParams()
   if (cityId) params.set("cityId", cityId)
   if (tariffId) params.set("tariffId", tariffId)
-  const path = `/admin/sites/${siteId}/variable-catalog${params.size ? `?${params}` : ""}`
+  const path = `/admin/sites/${siteId}/variable-catalog/values${params.size ? `?${params}` : ""}`
   const { data: catalog, error, refreshing } = useNavigationQuery<VariableCatalog>(apiUrl, path, retry)
   const loading = !catalog && refreshing
+
+  const workingRevision = catalog?.workingRevision
+  const publishedPublicationId = catalog?.publishedPublicationId
+  const usageIdentity = workingRevision === undefined || publishedPublicationId === undefined
+    ? lastUsageIdentity : { workingRevision, publishedPublicationId }
+  useEffect(() => {
+    if (workingRevision !== undefined && publishedPublicationId !== undefined) {
+      setLastUsageIdentity({ workingRevision, publishedPublicationId })
+    }
+  }, [workingRevision, publishedPublicationId])
+  const counts = useNavigationQuery<VariableUsageCounts>(apiUrl, variableUsagePath(siteId, usageIdentity), retry)
+  const details = useNavigationQuery<VariableUsageDetails>(apiUrl, selectedCode
+    ? variableUsagePath(siteId, usageIdentity, { code: selectedCode, workingPage, publishedPage }) : null, retry)
 
   const filters = { q, status, type, source }
   const filtered = filterVariableCatalogItems(catalog?.items ?? [], filters) as VariableItem[]
@@ -173,21 +223,23 @@ function VariableCatalogPanel({ apiUrl, siteId }: { apiUrl: string; siteId: stri
           {!catalog.publishedUsageAvailable ? <Alert><CircleAlert /><AlertTitle>Исторический снимок</AlertTitle><AlertDescription>Места использования старой публикации не сохранены; нулевое число не предполагается. Новая публикация зафиксирует их отдельно.</AlertDescription></Alert> : null}
           {catalog.publishedUsageAvailable && !catalog.publishedTemplateUsageAvailable ? <Alert><CircleAlert /><AlertTitle>Неполный исторический снимок</AlertTitle><AlertDescription>Опубликованные использования SEO-шаблонов в этом снимке не сохранялись. Показаны только известные места использования; нулевое число не означает, что код не применён в SEO. Новая публикация зафиксирует полный индекс.</AlertDescription></Alert> : null}
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            <Field className="lg:col-span-2"><FieldLabel htmlFor="variable-search">Поиск по коду, названию или источнику</FieldLabel><Input id="variable-search" value={q} onChange={(event) => { setQ(event.target.value); setSelectedCode("") }} placeholder="Например, цена" /></Field>
-            <Field><FieldLabel htmlFor="variable-status">Статус</FieldLabel><select id="variable-status" className={selectClass} value={status} onChange={(event) => { setStatus(event.target.value); setSelectedCode("") }}><option value="">Все</option><option value="ACTIVE">Активна</option><option value="DEPRECATING">Устаревает</option></select></Field>
-            <Field><FieldLabel htmlFor="variable-type">Тип</FieldLabel><select id="variable-type" className={selectClass} value={type} onChange={(event) => { setType(event.target.value); setSelectedCode("") }}><option value="">Все</option>{Object.entries(typeLabels).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select></Field>
-            <Field><FieldLabel htmlFor="variable-source">Источник</FieldLabel><select id="variable-source" className={selectClass} value={source} onChange={(event) => { setSource(event.target.value); setSelectedCode("") }}><option value="">Все</option>{Object.entries(sourceLabels).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select></Field>
+            <Field className="lg:col-span-2"><FieldLabel htmlFor="variable-search">Поиск по коду, названию или источнику</FieldLabel><Input id="variable-search" value={q} onChange={(event) => { setQ(event.target.value); selectCode("") }} placeholder="Например, цена" /></Field>
+            <Field><FieldLabel htmlFor="variable-status">Статус</FieldLabel><select id="variable-status" className={selectClass} value={status} onChange={(event) => { setStatus(event.target.value); selectCode("") }}><option value="">Все</option><option value="ACTIVE">Активна</option><option value="DEPRECATING">Устаревает</option></select></Field>
+            <Field><FieldLabel htmlFor="variable-type">Тип</FieldLabel><select id="variable-type" className={selectClass} value={type} onChange={(event) => { setType(event.target.value); selectCode("") }}><option value="">Все</option>{Object.entries(typeLabels).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select></Field>
+            <Field><FieldLabel htmlFor="variable-source">Источник</FieldLabel><select id="variable-source" className={selectClass} value={source} onChange={(event) => { setSource(event.target.value); selectCode("") }}><option value="">Все</option>{Object.entries(sourceLabels).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select></Field>
           </div>
-          <Button variant="outline" size="sm" disabled={!filtersActive} onClick={() => { setQ(""); setStatus(""); setType(""); setSource(""); setSelectedCode("") }}>Сбросить фильтры</Button>
+          <Button variant="outline" size="sm" disabled={!filtersActive} onClick={() => { setQ(""); setStatus(""); setType(""); setSource(""); selectCode("") }}>Сбросить фильтры</Button>
           <p className="text-sm text-muted-foreground" aria-live="polite">Показано {filtered.length} из {catalog.items.length} кодов</p>
+          {counts.error ? <Alert variant="destructive"><AlertTitle>Счётчики использований не обновлены</AlertTitle><AlertDescription>{counts.error}</AlertDescription><Button variant="outline" size="sm" onClick={() => setRetry(value => value + 1)}>Повторить</Button></Alert>
+            : counts.refreshing && !counts.data ? <p role="status" className="text-sm text-muted-foreground">Считаем места использования…</p> : null}
           <Table><TableHeader><TableRow><TableHead>Код и назначение</TableHead><TableHead>Статус · тип · источник</TableHead><TableHead>Рабочее значение</TableHead><TableHead>Опубликованное значение</TableHead><TableHead>Использования</TableHead><TableHead><span className="sr-only">Подробнее</span></TableHead></TableRow></TableHeader>
             <TableBody>{filtered.map((item) => <TableRow key={item.code}>
               <TableCell className="min-w-52 whitespace-normal"><code className="font-semibold">{`{${item.code}}`}</code><div className="mt-1 text-muted-foreground">{item.name}</div></TableCell>
               <TableCell className="min-w-40 whitespace-normal"><Badge variant={item.status === "ACTIVE" ? "success" : "warning"}>{item.status === "ACTIVE" ? "Активна" : "Устаревает"}</Badge><div className="mt-2">{typeLabels[item.type] ?? "Неизвестный тип"} · {sourceLabels[item.source.split(".")[0]] ?? "Неизвестный источник"}</div></TableCell>
               <TableCell className="min-w-40 whitespace-normal">{valueLabel(item.working)}</TableCell>
               <TableCell className="min-w-40 whitespace-normal">{valueLabel(item.published)}{item.changed === true ? <Badge variant="warning" className="ml-2">Отличается</Badge> : null}</TableCell>
-              <TableCell>{item.workingUsages.length} / {item.publishedUsages?.length ?? "—"}{catalog.publishedUsageAvailable && !catalog.publishedTemplateUsageAvailable ? <span title="Опубликованный индекс не включает SEO-шаблоны">*</span> : null}<span className="sr-only"> рабочих / опубликованных{catalog.publishedUsageAvailable && !catalog.publishedTemplateUsageAvailable ? ", опубликованный индекс неполный" : ""}</span></TableCell>
-              <TableCell><Button variant="outline" size="sm" aria-label={`Подробнее о ${item.name}`} onClick={() => setSelectedCode(item.code)}>Подробнее</Button></TableCell>
+              <TableCell>{counts.data?.workingCounts[item.code] ?? "—"} / {counts.data?.publishedCounts?.[item.code] ?? "—"}{catalog.publishedUsageAvailable && !catalog.publishedTemplateUsageAvailable ? <span title="Опубликованный индекс не включает SEO-шаблоны">*</span> : null}<span className="sr-only"> рабочих / опубликованных{catalog.publishedUsageAvailable && !catalog.publishedTemplateUsageAvailable ? ", опубликованный индекс неполный" : ""}</span></TableCell>
+              <TableCell><Button variant="outline" size="sm" aria-label={`Подробнее о ${item.name}`} onClick={() => selectCode(item.code)}>Подробнее</Button></TableCell>
             </TableRow>)}</TableBody>
           </Table>
           {filtered.length === 0 ? <p className="py-6 text-center text-sm text-muted-foreground">По выбранным фильтрам ничего не найдено.</p> : null}
@@ -198,7 +250,12 @@ function VariableCatalogPanel({ apiUrl, siteId }: { apiUrl: string; siteId: stri
         <div><span className="text-muted-foreground">Допустимые страницы</span><p>{selected.allowedContexts.join(", ")}</p></div>
         <div><span className="text-muted-foreground">Допустимые поля</span><p className="break-words font-mono text-xs">{selected.allowedFields.join(", ")}</p></div>
         <p className="text-sm text-muted-foreground">Ссылки открывают текущую рабочую версию. Опубликованные места использования относятся к сохранённому снимку.</p>
-        <div className="grid gap-5 lg:grid-cols-2"><section><h3 className="mb-2 font-semibold">Места использования · рабочие ({selected.workingUsages.length})</h3><UsageList usages={selected.workingUsages} /></section><section><h3 className="mb-2 font-semibold">Места использования · опубликованные ({selected.publishedUsages?.length ?? "—"})</h3><UsageList usages={selected.publishedUsages} /></section></div>
+        {details.error ? <Alert variant="destructive"><AlertTitle>Места использования не обновлены</AlertTitle><AlertDescription>{details.error}</AlertDescription><Button variant="outline" size="sm" onClick={() => setRetry(value => value + 1)}>Повторить</Button></Alert>
+          : !details.data ? <p role="status">Загружаем места использования…</p> : null}
+        {details.data ? <div className="grid gap-5 lg:grid-cols-2">
+          <PagedUsageList title="Места использования · рабочие" value={details.data.working} pageSize={details.data.pageSize} setPage={setWorkingPage} />
+          <PagedUsageList title="Места использования · опубликованные" value={details.data.published} pageSize={details.data.pageSize} setPage={setPublishedPage} />
+        </div> : null}
       </CardContent></Card> : null}
     </> : null}
   </div>
@@ -299,7 +356,7 @@ export function VariablesApp({ apiUrl }: { apiUrl: string }) {
           </Card>
           <CookieNoticeCard key={state.site.id} apiUrl={apiUrl} siteId={state.site.id} />
         </TabsContent>
-        <TabsContent value="catalog"><VariableCatalogPanel apiUrl={apiUrl} siteId={state.site.id} /></TabsContent></TabsPanels>
+        <TabsContent value="catalog"><VariableCatalogPanel key={state.site.id} apiUrl={apiUrl} siteId={state.site.id} /></TabsContent></TabsPanels>
       </Tabs>
     </div>
   </AdminShell>

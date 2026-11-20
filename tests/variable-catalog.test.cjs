@@ -166,7 +166,7 @@ test('read-only working usage scan includes draft pages, hidden blocks and inact
   const { WorkingVariableUsagesService } = api('working-variable-usages.service');
   const calls = [];
   const transaction = {
-    site: { findUnique: async (query) => { calls.push(['site', query]); return { workingRevision: 8 }; } },
+    site: { findUnique: async (query) => { calls.push(['site', query]); return { status: 'PUBLISHED', workingRevision: 8 }; } },
     page: { findMany: async (query) => { calls.push(['pages', query]); return [{
       id: 'draft-page', cityId: 'city-1', type: 'HOME', status: 'DRAFT', title: 'В {CITY_NAME}', content: {}, seo: {},
       blocks: [{ id: 'hidden-block', blockType: 'hero', visible: false, archivedAt: null, data: { title: 'Звоните {CONNECTION_PHONE}' } }],
@@ -194,7 +194,7 @@ test('read-only working usage scan includes draft pages, hidden blocks and inact
 test('working usage scan reads a linked HOME template once and skips obsolete city copies', async () => {
   const { WorkingVariableUsagesService } = api('working-variable-usages.service');
   const transaction = {
-    site: { findUnique: async () => ({ workingRevision: 8 }) },
+    site: { findUnique: async () => ({ status: 'PUBLISHED', workingRevision: 8 }) },
     page: { findMany: async () => [1, 2].map((index) => ({
       id: `home-${index}`, templateId: 'template-1', cityId: `city-${index}`, type: 'HOME', status: 'PUBLISHED',
       title: 'Старая копия {CITY_NAME}', content: {}, blocks: [],
@@ -217,7 +217,7 @@ test('working usage scan reads a linked HOME template once and skips obsolete ci
 test('working usage scan includes authored SEO and OG templates once per field with a direct editor link', async () => {
   const { WorkingVariableUsagesService } = api('working-variable-usages.service');
   const transaction = {
-    site: { findUnique: async () => ({ workingRevision: 8 }) },
+    site: { findUnique: async () => ({ status: 'PUBLISHED', workingRevision: 8 }) },
     page: { findMany: async () => [] },
     pageTemplate: { findMany: async () => [] },
     tariff: { findMany: async () => [] },
@@ -234,4 +234,98 @@ test('working usage scan includes authored SEO and OG templates once per field w
     { code: 'CITY_NAME', path: 'seoTemplates[CITY_HOME].ogTitleTemplate', entityType: 'SEO_TEMPLATE', entityId: 'seo-city', editorHref: '/seo/templates?kind=CITY_HOME' },
     { code: 'PROVIDER_NAME', path: 'seoTemplates[HOME].ogDescriptionTemplate', entityType: 'SEO_TEMPLATE', entityId: 'seo-home', editorHref: '/seo/templates?kind=HOME' },
   ]);
+});
+
+test('compact context preserves city and tariff values without asking for usage evidence', async () => {
+  const { resolveCatalogVariables } = api('catalog-variables');
+  const { AdminVariableCatalogController } = api('admin-variable-catalog.controller');
+  const catalog = resolveCatalogVariables(rawCatalog(), sources);
+  const calls = [];
+  const controller = new AdminVariableCatalogController({
+    getVariableContext: async (siteId, cityId) => {
+      calls.push(['working', siteId, cityId]);
+      return { siteId, workingRevision: 8, publishedRevision: 7, catalog };
+    },
+    getPublishedVariableContext: async (slug, cityId, includeUsages) => {
+      calls.push(['published', slug, cityId, includeUsages]);
+      return { ...catalog, publicationId: 'pub-exact', publishedUsageAvailable: true, variableUsageVersion: 1 };
+    },
+  }, { list: async () => assert.fail('selecting values must not scan working usage') });
+
+  const result = await controller.values('site-1', 'city-1', 'tariff-1');
+  assert.deepEqual(calls, [['working', 'site-1', 'city-1'], ['published', 'domru-site', 'city-1', false]]);
+  assert.equal(result.publishedPublicationId, 'pub-exact');
+  assert.equal(result.publishedUsageAvailable, true);
+  assert.equal(result.publishedTemplateUsageAvailable, false);
+  const tariff = result.items.find(item => item.code === 'TARIFF_PRICE');
+  assert.deepEqual(tariff.working, { status: 'VALUE', value: '599' });
+  assert.equal(Object.hasOwn(tariff, 'workingUsages'), false);
+  assert.equal(Object.hasOwn(tariff, 'publishedUsages'), false);
+});
+
+test('usage counts and paged code details preserve nullable history, duplicates and editor links', async () => {
+  const { AdminVariableCatalogController } = api('admin-variable-catalog.controller');
+  const evidence = {
+    code: 'CONNECTION_PHONE', entityType: 'PAGE_TEMPLATE_BLOCK', entityId: 'block-1', pageType: 'CITY_HOME',
+    blockType: 'tariff_grid', path: 'pageTemplates[CITY_HOME].blocks[0].data.title',
+    template: 'Звоните {CONNECTION_PHONE}', editorHref: null,
+  };
+  const calls = [];
+  const controller = new AdminVariableCatalogController({
+    getPublishedVariableUsages: async (siteId, publicationId, page) => {
+      calls.push(['published', siteId, publicationId, page]);
+      return publicationId ? page ? { items: [evidence], total: 52 } : { counts: { CONNECTION_PHONE: 52 } } : null;
+    },
+  }, { list: async (siteId, rev) => {
+    calls.push(['working', siteId, rev]);
+    return Array(52).fill(evidence);
+  } });
+  const query = { workingRevision: '8', publishedPublicationId: 'pub-exact' };
+  const summary = await controller.usage('site-1', query);
+  assert.equal(summary.workingCounts.CONNECTION_PHONE, 52);
+  assert.equal(summary.publishedCounts.CONNECTION_PHONE, 52);
+  assert.equal(summary.workingCounts.TARIFF_PRICE, 0);
+  const details = await controller.usage('site-1', { ...query, code: 'CONNECTION_PHONE', workingPage: '2' });
+  assert.equal(details.working.total, 52);
+  assert.equal(details.working.items.length, 2);
+  assert.equal(details.published.total, 52);
+  assert.equal(details.published.items[0].editorHref, '/templates/tariffs?siteId=site-1');
+  assert.equal(evidence.editorHref, null);
+  assert.deepEqual(calls, [
+    ['working', 'site-1', 8], ['published', 'site-1', 'pub-exact', undefined],
+    ['working', 'site-1', 8], ['published', 'site-1', 'pub-exact', { code: 'CONNECTION_PHONE', offset: 0, pageSize: 50 }],
+  ]);
+  const missing = await controller.usage('site-1', { workingRevision: '8', publishedPublicationId: '' });
+  assert.equal(missing.publishedCounts, null);
+  await assert.rejects(controller.usage('site-1', { ...query, code: 'MISSING' }), error => error.getStatus() === 400);
+  await assert.rejects(controller.usage('site-1', { ...query, workingPage: '-1', code: 'CONNECTION_PHONE' }), error => error.getStatus() === 400);
+  await assert.rejects(controller.usage('site-1', { ...query, workingRevision: 'NaN' }), error => error.getStatus() === 400);
+});
+
+test('only the exact latest confirmed publication can supply usage evidence', async () => {
+  const { publishedVariableUsages } = api('published-variable-context');
+  let result = [{ publicationId: 'latest-exact', data: { counts: { CITY_NAME: 1 } } }];
+  const prisma = { $queryRaw: async query => {
+    assert.match(query.sql, /JOIN "Site" s ON s.id = p."siteId"/);
+    assert.match(query.sql, /s.id = \? AND s.status = 'PUBLISHED' AND p.status = 'SUCCEEDED'/);
+    assert.match(query.sql, /ORDER BY p."releaseSequence" DESC LIMIT 1/);
+    assert.match(query.sql, /p.id = \? AND jsonb_typeof\(p.catalog -> 'variableUsages'\) = 'array'/);
+    assert.equal(query.values.at(-1), 'site-exact');
+    return result;
+  } };
+  assert.deepEqual(await publishedVariableUsages(prisma, 'site-exact', 'latest-exact'), { counts: { CITY_NAME: 1 } });
+  await assert.rejects(publishedVariableUsages(prisma, 'site-exact', 'same-revision-older'), error => error.getStatus() === 409);
+  await assert.rejects(publishedVariableUsages(prisma, 'site-exact', null), error => error.getStatus() === 409);
+  result = [{ publicationId: 'latest-exact', data: null }];
+  assert.equal(await publishedVariableUsages(prisma, 'site-exact', 'latest-exact'), null);
+  result = [];
+  assert.equal(await publishedVariableUsages(prisma, 'site-exact', null), null);
+});
+
+test('usage scan requires the same published site and exact working revision', async () => {
+  const { WorkingVariableUsagesService } = api('working-variable-usages.service');
+  for (const [site, status] of [[null, 404], [{ status: 'DRAFT', workingRevision: 8 }, 404], [{ status: 'PUBLISHED', workingRevision: 9 }, 409]]) {
+    const service = new WorkingVariableUsagesService({ $transaction: cb => cb({ site: { findUnique: async () => site } }) });
+    await assert.rejects(service.list('s', 8), error => error.getStatus() === status);
+  }
 });

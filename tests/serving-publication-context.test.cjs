@@ -107,3 +107,78 @@ test('direct and spoofed requests read actual controller state; unavailable or i
     }
   }
 });
+
+test('admin variable values and usages wait for SQL ACK while Caddy can serve RUNNING', async () => {
+  const { createServer } = require('node:http');
+  const { AdminVariableCatalogController } = require('../apps/api/dist/admin-variable-catalog.controller.js');
+  const { PublicationWorkflowService } = require('../apps/api/dist/publication-workflow.service.js');
+  const keys = ['REBUILD_PROVIDER', 'ADMIN_API_TOKEN', 'STATIC_PUBLICATION_URL'];
+  const previous = Object.fromEntries(keys.map(key => [key, process.env[key]]));
+  const site = { id: 'site-1', slug: 'domru-site', status: 'PUBLISHED', workingRevision: 8, publishedRevision: 7 };
+  const snapshots = [
+    { id: 'older', releaseSequence: 10, siteRevision: 7, status: 'SUCCEEDED', phone: '78002222222', usageCount: 1 },
+    { id: 'confirmed', releaseSequence: 11, siteRevision: 7, status: 'SUCCEEDED', phone: '78003333333', usageCount: 2 },
+    { id: 'serving', releaseSequence: 12, siteRevision: 7, status: 'RUNNING', phone: '78004444444', usageCount: 3 },
+  ];
+  for (const snapshot of snapshots) {
+    snapshot.siteId = site.id;
+    snapshot.catalog = { site: { slug: site.slug, connectionPhone: snapshot.phone }, cities: [], variableUsageVersion: 2 };
+  }
+  const running = snapshots.at(-1);
+  const fakeCaddy = createServer((request, response) => {
+    assert.equal(request.url, '/active');
+    assert.equal(request.headers['x-admin-token'], process.env.ADMIN_API_TOKEN);
+    response.setHeader('content-type', 'application/json');
+    response.end(JSON.stringify({
+      publicationId: running.id, siteId: site.id, siteSlug: site.slug, siteRevision: running.siteRevision,
+      releaseSequence: running.releaseSequence, catalogDigest: createHash('sha256').update(JSON.stringify(running.catalog)).digest('hex'),
+    }));
+  });
+  const workflow = new PublicationWorkflowService({
+    $transaction: async cb => cb({
+      site: { findUnique: async () => ({ ...site, provider: { name: 'Дом.ру' } }) },
+      city: { findMany: async () => [] },
+    }),
+    sitePublication: { findUnique: async ({ where }) => snapshots.find(item => item.id === where.id) },
+    $queryRaw: async query => {
+      assert.match(query.sql, /p.status = 'SUCCEEDED'/);
+      assert.match(query.sql, /ORDER BY p."releaseSequence" DESC LIMIT 1/);
+      const row = snapshots.filter(item => item.status === 'SUCCEEDED').at(-1);
+      if (query.sql.includes('AS catalog')) {
+        return [{ catalog: { ...row.catalog, publicationId: row.id, publishedUsageAvailable: true } }];
+      }
+      return [{ publicationId: row.id, data: { counts: { CONNECTION_PHONE: row.usageCount } } }];
+    },
+  }, {});
+  const controller = new AdminVariableCatalogController(workflow, { list: async () => [] });
+  const evidence = id => controller.usage(site.id, { workingRevision: '8', publishedPublicationId: id });
+  try {
+    await new Promise(resolve => fakeCaddy.listen(0, '127.0.0.1', resolve));
+    process.env.REBUILD_PROVIDER = 'static';
+    process.env.ADMIN_API_TOKEN = 'fixture-token';
+    process.env.STATIC_PUBLICATION_URL = `http://127.0.0.1:${fakeCaddy.address().port}`;
+    const active = await workflow.getPublishedCatalog(site.slug);
+    assert.equal(active.site.connectionPhone, running.phone);
+    const beforeAck = await controller.values(site.id);
+    assert.equal(beforeAck.publishedRevision, 7);
+    assert.equal(beforeAck.publishedPublicationId, 'confirmed');
+    assert.equal(beforeAck.items.find(item => item.code === 'CONNECTION_PHONE').published.value, '+7 (800) 333-33-33');
+    assert.equal((await evidence('confirmed')).publishedCounts.CONNECTION_PHONE, 2);
+    await assert.rejects(evidence('older'), error => error.getStatus() === 409);
+    await assert.rejects(evidence('serving'), error => error.getStatus() === 409);
+
+    running.status = 'SUCCEEDED';
+    const afterAck = await controller.values(site.id);
+    assert.equal(afterAck.publishedRevision, 7);
+    assert.equal(afterAck.publishedPublicationId, 'serving');
+    assert.equal(afterAck.items.find(item => item.code === 'CONNECTION_PHONE').published.value, '+7 (800) 444-44-44');
+    assert.equal((await evidence('serving')).publishedCounts.CONNECTION_PHONE, 3);
+    await assert.rejects(evidence('confirmed'), error => error.getStatus() === 409);
+  } finally {
+    await new Promise(resolve => fakeCaddy.close(resolve));
+    for (const key of keys) {
+      if (previous[key] === undefined) delete process.env[key];
+      else process.env[key] = previous[key];
+    }
+  }
+});

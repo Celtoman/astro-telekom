@@ -9,3 +9,17 @@ export function filterVariableCatalogItems(items, filters = {}) {
       .some((value) => String(value || '').toLocaleLowerCase('ru').includes(query));
   });
 }
+
+export function variableUsagePath(siteId, identity, detail) {
+  if (!identity) return null;
+  const query = new URLSearchParams({
+    workingRevision: String(identity.workingRevision),
+    publishedPublicationId: identity.publishedPublicationId ?? '',
+  });
+  if (detail) {
+    query.set('code', detail.code);
+    query.set('workingPage', String(detail.workingPage));
+    query.set('publishedPage', String(detail.publishedPage));
+  }
+  return `/admin/sites/${encodeURIComponent(siteId)}/variable-catalog/usages?${query}`;
+}

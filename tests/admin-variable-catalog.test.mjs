@@ -37,3 +37,15 @@ test('variables workspace exposes two tabs and a read-only contextual catalog', 
   assert.match(app, /publishedTemplateUsageAvailable/);
   assert.doesNotMatch(app, /Создать переменн|Удалить код|Переименовать код/);
 });
+
+test('usage routes stay independent of city and tariff and follow the exact publication ID', async () => {
+  const { variableUsagePath } = await import('../apps/admin/src/lib/variable-catalog.mjs');
+  const identity = { workingRevision: 8, publishedPublicationId: 'pub-initial' };
+  assert.equal(variableUsagePath('site & demo', null), null);
+  const counts = '/admin/sites/site%20%26%20demo/variable-catalog/usages?workingRevision=8&publishedPublicationId=pub-initial';
+  assert.equal(variableUsagePath('site & demo', identity), counts);
+  assert.equal(variableUsagePath('site & demo', { ...identity, selectedCityId: 'city-1', selectedTariffId: 'tariff-1' }), counts);
+  assert.notEqual(variableUsagePath('site & demo', { ...identity, publishedPublicationId: 'pub-next' }), counts);
+  const page = { code: 'CITY_NAME', workingPage: 2, publishedPage: 1 };
+  assert.equal(variableUsagePath('site & demo', identity, page), counts + '&code=CITY_NAME&workingPage=2&publishedPage=1');
+});

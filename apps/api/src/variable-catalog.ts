@@ -62,7 +62,7 @@ function usagesOf(catalog?: CatalogRecord | null): VariableUsage[] | null {
   return Array.isArray(catalog?.variableUsages) ? catalog.variableUsages as VariableUsage[] : null;
 }
 
-function withEditorLink(usage: VariableUsage, siteId: string, published = false): VariableUsage {
+export function withEditorLink(usage: VariableUsage, siteId: string, published = false): VariableUsage {
   // Navigation metadata belongs to this view, never to immutable snapshot evidence.
   const field = usage.path.split('.data.')[1]?.replace(/\[(\d+)\]/g, '.$1');
   const cityKind = usage.pageType === 'CITY_HOME' || published && usage.pageType === 'HOME' && Boolean(usage.cityId);
@@ -87,7 +87,7 @@ function withEditorLink(usage: VariableUsage, siteId: string, published = false)
   return kind ? { ...usage, editorHref: `/templates/home?kind=${kind}${kind === 'CITY_HOME' ? '&mode=legacy' : ''}&siteId=${encodeURIComponent(siteId)}` } : usage;
 }
 
-export function buildVariableCatalogView(input: CatalogViewInput) {
+export function buildVariableCatalogValues(input: CatalogViewInput) {
   const { siteId, workingRevision, publishedRevision, working, published } = input;
   const allCities = new Map<string, { id: string; name: string; slug: string }>();
   for (const city of [...citiesOf(working), ...citiesOf(published)]) {
@@ -105,8 +105,6 @@ export function buildVariableCatalogView(input: CatalogViewInput) {
   }
   if (input.tariffId && !allTariffs.has(input.tariffId)) throw new BadRequestException('Выбранный тариф не принадлежит выбранному городу');
 
-  const workingUsages = (usagesOf(working) ?? []).map(usage => withEditorLink(usage, siteId));
-  const publishedUsages = usagesOf(published)?.map(usage => withEditorLink(usage, siteId, true)) ?? null;
   const items = listVariableDefinitions().map((definition) => {
     const workingValue = selectedValue(definition.code, definition.scope, working, input.cityId, input.tariffId);
     const publishedValue = selectedValue(definition.code, definition.scope, published, input.cityId, input.tariffId);
@@ -116,8 +114,6 @@ export function buildVariableCatalogView(input: CatalogViewInput) {
       published: publishedValue,
       changed: ['VALUE', 'EMPTY'].includes(workingValue.status) && ['VALUE', 'EMPTY'].includes(publishedValue.status)
         ? workingValue.value !== publishedValue.value : null,
-      workingUsages: workingUsages.filter((usage) => usage.code === definition.code),
-      publishedUsages: publishedUsages?.filter((usage) => usage.code === definition.code) ?? null,
     };
   });
   return {
@@ -128,8 +124,23 @@ export function buildVariableCatalogView(input: CatalogViewInput) {
     selectedTariffId: input.tariffId ?? null,
     cities: [...allCities.values()].sort((left, right) => left.name.localeCompare(right.name, 'ru')),
     tariffs: [...allTariffs.values()].sort((left, right) => left.name.localeCompare(right.name, 'ru')),
+    items,
+  };
+}
+
+export function buildVariableCatalogView(input: CatalogViewInput) {
+  const { siteId, working, published } = input;
+  const view = buildVariableCatalogValues(input);
+  const workingUsages = usagesOf(working) ?? [];
+  const publishedUsages = usagesOf(published);
+  return {
+    ...view,
     publishedUsageAvailable: publishedUsages !== null,
     publishedTemplateUsageAvailable: publishedUsages !== null && published?.variableUsageVersion === 2,
-    items,
+    items: view.items.map(item => ({
+      ...item,
+      workingUsages: workingUsages.filter(usage => usage.code === item.code).map(usage => withEditorLink(usage, siteId)),
+      publishedUsages: publishedUsages?.filter(usage => usage.code === item.code).map(usage => withEditorLink(usage, siteId, true)) ?? null,
+    })),
   };
 }

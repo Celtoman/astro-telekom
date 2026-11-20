@@ -1,6 +1,6 @@
 import { acknowledgedEditorialAliases,confirmedEditorialTransfers } from './editorial-redirects';
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { publishedVariableContext } from './published-variable-context';
+import { publishedVariableContext, publishedVariableUsages, type PublishedVariableUsagePage } from './published-variable-context';
 import { readCorporatePhone } from './site-contact-settings';
 import { createHash } from 'node:crypto';
 import { servingPublication } from './serving-publication-context';
@@ -540,10 +540,14 @@ export class PublicationWorkflowService {
     };
   }
 
-  async getPublishedVariableContext(siteSlug: string, cityId?: string): Promise<JsonObject> {
-    const context = await publishedVariableContext(this.prisma, siteSlug, cityId);
+  async getPublishedVariableContext(siteSlug: string, cityId?: string, includeUsages = true): Promise<JsonObject> {
+    const context = await publishedVariableContext(this.prisma, siteSlug, cityId, includeUsages);
     if (!context) throw new NotFoundException('Published variable context not found');
     return context as JsonObject;
+  }
+
+  getPublishedVariableUsages(siteId: string, publicationId: string | null, page?: PublishedVariableUsagePage) {
+    return publishedVariableUsages(this.prisma, siteId, publicationId, page);
   }
 
   async getPublishedCatalog(siteSlug: string): Promise<JsonObject> {

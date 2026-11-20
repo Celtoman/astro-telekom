@@ -141,7 +141,7 @@ GET `/admin/cities` читает компактные строки с SQL-счё
 
 Рабочий справочник выбора категории читает ID и название напрямую. Списки статусов новостей и счётчиков категорий сохраняют проверку обслуживаемой публикации. PostgreSQL выбирает нужную редакционную часть по `validationId`. [Замеры #629](research/2026-11-20-admin-news-list-performance.md).
 
-GET sites?summary=true исключает provider/regions/cities graph. GET sites/values объединяет выбор сайта и чтение телефонов. Variable-catalog читает serializable typed context без рендера Page/SEO/блоков: опубликованные города и ACTIVE/PUBLISHED тарифы только выбранного города. Authoritative usage scan проверяет ту же workingRevision; published evidence читается из прежнего immutable snapshot. UNKNOWN/null сохраняются.
+GET sites?summary=true исключает provider/regions/cities graph. GET sites/values объединяет выбор сайта и чтение телефонов. `variable-catalog/values` читает типизированный контекст в Serializable-транзакции. В выборку входят опубликованные города и активные опубликованные тарифы выбранного города. `variable-catalog/usages` отдельно проверяет ту же рабочую ревизию и точный ID подтверждённого SQL-снимка. PostgreSQL агрегирует опубликованные счётчики или выбирает страницу по коду из immutable evidence. Рабочие места использования собираются из авторитетных строк с проверкой ревизии при каждом новом чтении usages. Клиент сохраняет выданные счётчики и детали при переключении города и тарифа внутри той же пары ревизии и публикации. Снимки без evidence и снимки с неполным индексом сохраняют разные состояния. [Замеры и проверка двух выпусков одной ревизии](research/2026-11-20-variable-catalog-performance.md).
 
 ### Тарифный блок и переход композиции 2.0.0
 
