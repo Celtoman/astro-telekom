@@ -4,8 +4,8 @@ const {EditorialPublicationService}=require('../apps/api/dist/editorial-publicat
 const {SiteCatalogService}=require('../apps/api/dist/site-catalog.service.js');
 const {newsSource}=require('./helpers/news-source.cjs');
 
-function fixture(){
- const source=newsSource(3),site=source.site,contentOnly=({id,revision,dateModified,...content})=>content,rows=new Map(source.editorial.articles.map(a=>[a.id,{...a,siteId:site.id,content:contentOnly(a),everPublished:false}]));
+function fixture(count=3){
+ const source=newsSource(count),site=source.site,contentOnly=({id,revision,dateModified,...content})=>content,rows=new Map(source.editorial.articles.map(a=>[a.id,{...a,siteId:site.id,content:contentOnly(a),everPublished:false}]));
  source.editorial.articles=[];source.editorial.categories=[];
  const baseline={id:'baseline',siteId:site.id,validationId:'base-validation',releaseSequence:3,siteRevision:9};
  const publications=[],enqueues=[],aliases=[];
@@ -95,4 +95,34 @@ test('confirmed list aliases survive the next batch and keep their owner',async(
  f.prisma.redirect.findUnique=async({where})=>aliases.find(a=>a.sourcePath===where.siteId_sourcePath.sourcePath)??null;
  const review=await f.service.reviewBatch(f.site.id,f.input);
  assert.equal(review.ready,true);assert.ok(review.redirects.some(a=>a.sourcePath==='/novosti'&&a.targetPath==='/news'));
+});
+
+test('ten selected revisions and their aliases use one full source copy for each review or publish',async t=>{
+ const f=fixture(11),rows=[...f.rows.values()];
+ const selected=rows.slice(0,10).map(row=>({entityId:row.id,expectedRevision:row.revision}));
+ const untouched=rows[10],live={...untouched.content,id:untouched.id,revision:1,dateModified:'2024-11-01T09:00:00.000Z'};
+ f.source.editorial.articles.push(live);
+ f.source.editorial.categories.push(newsSource().editorial.categories.find(category=>category.id===live.categoryId));
+ untouched.content={...untouched.content,title:'Неопубликованная правка'};
+ untouched.revision=2;
+ const previous=structuredClone(f.source);
+ const clone=globalThis.structuredClone;
+ let fullCopies=0;
+ t.mock.method(globalThis,'structuredClone',value=>{
+  if(value?.site&&Array.isArray(value.cities)&&Array.isArray(value.globalPages))fullCopies++;
+  return clone(value);
+ });
+ const review=await f.service.reviewBatch(f.site.id,selected);
+ assert.equal(review.ready,true,JSON.stringify(review.report));
+ assert.equal(fullCopies,1,'review copies the full serving source once');
+ assert.equal(review.items.filter(item=>item.kind==='CATEGORY').length,1);
+ assert.ok(review.redirects.some(row=>row.sourcePath==='/novosti'&&row.targetPath==='/news'));
+ assert.deepEqual(f.source,previous);
+ fullCopies=0;
+ await f.service.publishBatch(f.site.id,selected,review.reviewDigest,'ten-revisions','owner');
+ assert.equal(fullCopies,1,'publish copies the full serving source once');
+ assert.equal(f.publications.length,1);
+ assert.equal(f.enqueues.length,1);
+ assert.deepEqual(f.publications[0].catalog.editorial.articles.find(item=>item.id===live.id),live);
+ assert.deepEqual(f.source,previous);
 });

@@ -6,13 +6,12 @@ export type EditorialChange = { kind: EditorialKind; entityId: string; revision:
 export type EditorialSource = { version: '1.0.0'; articles: Array<Record<string, any>>; categories: Array<Record<string, any>>; settings: Record<string, any>; notFound: Record<string, any> | null; media?:Record<string,PublishedNewsMediaVariant[]>;redirectIds?:string[];newsEnabled?:boolean };
 export function emptyEditorial(): EditorialSource { return { version: '1.0.0', articles: [], categories: [], settings: newsSettingsDefaults(), notFound: null }; }
 
-/** Only selected immutable revisions enter this source. Never load unselected working rows here. */
-export function applyEditorialChangeSet<T extends Record<string, any>>(baseline: T, change: EditorialChange): T & { editorial: EditorialSource } {
-  const next = structuredClone(baseline) as T & { editorial: EditorialSource; redirects?: Array<Record<string, any>> };
-  next.editorial = next.editorial ?? emptyEditorial();
-  if(!baseline.editorial&&(change.kind==='NOT_FOUND'||change.action!=='PUBLISH'))next.editorial.newsEnabled=false;
-  if(change.kind!=='NOT_FOUND'&&change.action==='PUBLISH')next.editorial.newsEnabled=true;
-  const e = next.editorial;
+/** Apply one selected immutable revision to a candidate whose caller owns the source. */
+export function applyEditorialChangeToCandidate(next: { editorial?: EditorialSource; redirects?: Array<Record<string, any>> }, change: EditorialChange): void {
+  const hadEditorial = Boolean(next.editorial);
+  const e = next.editorial ??= emptyEditorial();
+  if(!hadEditorial&&(change.kind==='NOT_FOUND'||change.action!=='PUBLISH'))e.newsEnabled=false;
+  if(change.kind!=='NOT_FOUND'&&change.action==='PUBLISH')e.newsEnabled=true;
   if (change.kind === 'ARTICLE') {
     const old = e.articles.find(item => item.id === change.entityId);
     if (change.action === 'PUBLISH' && change.snapshot) {
@@ -37,6 +36,12 @@ export function applyEditorialChangeSet<T extends Record<string, any>>(baseline:
     const owned=new Set([...(e.redirectIds??[]),...(change.redirects??[]).map(item=>item.id)]);
     e.redirectIds=(next.redirects??[]).filter(item=>owned.has(item.id)).map(item=>item.id);
   }
+}
+
+/** Only selected immutable revisions enter this source. */
+export function applyEditorialChangeSet<T extends Record<string, any>>(baseline: T, change: EditorialChange): T & { editorial: EditorialSource } {
+  const next = structuredClone(baseline) as T & { editorial: EditorialSource; redirects?: Array<Record<string, any>> };
+  applyEditorialChangeToCandidate(next, change);
   return next;
 }
 export function editorialState(input: { workingRevision: number; publishedRevision: number | null; everPublished: boolean }): 'DRAFT' | 'PUBLISHED' | 'CHANGED' | 'WITHDRAWN' {
