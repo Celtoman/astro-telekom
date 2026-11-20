@@ -28,3 +28,9 @@
 На стенде оба запроса проходили барьер после чтения дублей перед записью. Для одинакового `submissionKey` и одинакового payload создались одна запись и один outbox, оба ответа указали на один ID. Для одинакового ключа с разным payload создались одна запись и один outbox, второй ответ вернул 400. Для разных ключей при том же телефоне или помещении оба запроса могут пройти до записи и создать две заявки. Эта уже существовавшая гонка сохранена и зарегистрирована отдельно. [#647](https://github.com/Celtoman/astro-telekom/issues/647)
 
 [Задача #642](https://github.com/Celtoman/astro-telekom/issues/642) · [Модель данных](../data-model.md)
+
+## Внешний выпуск
+
+Код `9623aeebd49da7c9306b987abe0b67ae5093c5f4`, Compose `093a6e3db50fb1dd782f4e5a7d66c826899015e3`, Coolify deployment `dlwhdqz6covu8xkvbc4lggzq`. Прошли 1 212 тестов точного SHA. Пять образов сверены по digest и OCI SHA. Coolify подтвердил `running:healthy`, девять контейнеров и четыре прежних тома. [CI](https://github.com/Celtoman/astro-telekom/actions/runs/44824163683), [сборка образов](https://github.com/Celtoman/astro-telekom/actions/runs/44825777815), [манифест](https://github.com/Celtoman/astro-telekom-release/blob/093a6e3db50fb1dd782f4e5a7d66c826899015e3/release.json).
+
+Квитанция CODE `SUCCEEDED` связала новый артефакт `ef6aa7f41125e70178c215021bbae9788f50512f9bee119705dc5f9fc9741dac` с прежней публикацией `cmwnyi0yf000201o88kmlttsc`, ревизией 36, последовательностью 34 и неизменным digest каталога. Проверены readiness, админка, публичный HTTPS и сводка публикации. Проверки создания и повторной отправки заявок проводились на синтетическом стенде.

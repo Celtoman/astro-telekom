@@ -364,6 +364,7 @@
 | TD-260 | [#617](https://github.com/Celtoman/astro-telekom/issues/617) ✅ | SUPPORT: вернуть десктопную композицию карточек сообществ |
 | TD-261 | [#618](https://github.com/Celtoman/astro-telekom/issues/618) ✅ | SUPPORT: сверить мобильный первый экран |
 | TD-262 | [#619](https://github.com/Celtoman/astro-telekom/issues/619) 🟢 | SUPPORT: сверить типографику и высоту отдельного введения на ПК |
+| TD-263 | [#652](https://github.com/Celtoman/astro-telekom/issues/652) 🟢 | Начальное содержимое редакторов FAQ и cookie ошибочно блокирует навигацию |
 
 - [#625](https://github.com/Celtoman/astro-telekom/issues/625) — OPEN, P1: защищённый тестовый web-контур возвращает HTTP 503 на прежнем GHCR-выпуске.
 
