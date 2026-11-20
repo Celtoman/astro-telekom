@@ -71,7 +71,7 @@ export function FaqPageApp({ apiUrl }: { apiUrl: string }) {
     {!content && !editor.error && <p role="status">Загружаем страницу…</p>}
     {content && <form onSubmit={save} className="space-y-5">
       <div className="flex flex-wrap items-center gap-3">
-        <Button type="submit" disabled={editor.busy || !editor.dirty}>{editor.busy ? 'Сохраняем…' : 'Сохранить'}</Button>
+        <Button type="submit" disabled={!editor.canSave}>{editor.busy ? 'Сохраняем…' : 'Сохранить'}</Button>
         <Button type="button" variant="outline" disabled={editor.busy} onClick={() => { editor.refresh(); setSelection(null); }}>Обновить данные</Button>
         {editor.saved?.content && <>
           <a className="text-sm underline" href={'/preview?' + siteQuery + '&path=/faq'}>Предпросмотр</a>

@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { mkdir, mkdtemp, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { parse } from 'parse5';
+import { faqCookieEditorState } from '../apps/admin/src/lib/faq-cookie-editor-state.mjs';
 import { cookieNoticeClosed, COOKIE_NOTICE_DURATION } from '../apps/web/src/lib/cookie-notice-client.mjs';
 import { renderFaqPage, faqStructuredData } from '../apps/web/src/lib/faq-render.ts';
 import { buildSpeedTestFixture } from '../scripts/rehearse-speed-test-web.mjs';
@@ -22,6 +23,22 @@ const { officialSiteSource } = require('./helpers/official-site-source.cjs');
 const origin = new URL('https://partner.example.test');
 const site = { connectionPhone: '78005557244', supportPhone: '78002507777' };
 const fixtureRoot = fileURLToPath(new URL('../.codex-tmp/', import.meta.url));
+
+test('initial FAQ and cookie defaults allow explicit saving without marking navigation dirty', () => {
+  const faq = faqDemoContent();
+  const cookie = cookieNoticeDefaults();
+  for (const [initial, draft] of [[faq, { ...faq, h1: 'Новый заголовок' }], [cookie, { ...cookie, enabled: false }]]) {
+    const cloned = structuredClone(initial);
+    const firstLoad = { saved: { content: null }, initial };
+    const savedLoad = { saved: { content: initial }, initial };
+    assert.deepEqual(faqCookieEditorState(null, initial, false), { dirty: false, canSave: false });
+    assert.deepEqual(faqCookieEditorState(firstLoad, cloned, false), { dirty: false, canSave: true });
+    assert.deepEqual(faqCookieEditorState(firstLoad, cloned, true), { dirty: false, canSave: false });
+    assert.deepEqual(faqCookieEditorState(firstLoad, draft, false), { dirty: true, canSave: true });
+    assert.deepEqual(faqCookieEditorState(savedLoad, cloned, false), { dirty: false, canSave: false });
+    assert.deepEqual(faqCookieEditorState(savedLoad, draft, true), { dirty: true, canSave: false });
+  }
+});
 
 test('FAQ validates grouped editorial content and keeps HTML aligned with Schema', () => {
   const content = faqDemoContent();

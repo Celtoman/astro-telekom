@@ -45,7 +45,7 @@ export function CookieNoticeCard({ apiUrl, siteId }: { apiUrl: string; siteId: s
           </div>
         </details>
         <div className="flex flex-wrap items-center gap-2">
-          <Button type="submit" disabled={!editor.dirty || editor.busy}>{editor.busy ? 'Сохраняем…' : 'Сохранить уведомление'}</Button>
+          <Button type="submit" disabled={!editor.canSave}>{editor.busy ? 'Сохраняем…' : 'Сохранить уведомление'}</Button>
           <Button type="button" variant="outline" disabled={editor.busy} onClick={editor.refresh}>Обновить данные</Button>
           {editor.saved?.content && <a className="text-sm underline" href={'/publication?site=' + encodeURIComponent(siteId) + '#faq-cookie-release'}>Публикация</a>}
         </div>
