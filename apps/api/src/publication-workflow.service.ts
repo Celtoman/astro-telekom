@@ -168,7 +168,7 @@ export class PublicationWorkflowService {
       appVersion: APP_VERSION,
       requestedById: input.requestedById,
       siteRevision: input.siteRevision,
-    }, (candidate, now) => this.catalog.renderSource(candidate, now));
+    }, (candidate, now, seoCache) => this.catalog.renderSource(candidate, now, seoCache));
     const validation = await transaction.sitePublicationValidation.create({
       data: {
         siteId: input.siteId,
@@ -443,7 +443,7 @@ export class PublicationWorkflowService {
       const { report } = validatePublicationSource(source, {
         appVersion: APP_VERSION,
         siteRevision: site.workingRevision,
-      }, (candidate, now) => this.catalog.renderSource(candidate, now));
+      }, (candidate, now, seoCache) => this.catalog.renderSource(candidate, now, seoCache));
       const where = { siteId, siteRevision: { gt: site.publishedRevision, lte: site.workingRevision } };
       const [rows, totalChanges] = await Promise.all([
         transaction.contentRevision.findMany({

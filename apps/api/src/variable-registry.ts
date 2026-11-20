@@ -130,6 +130,21 @@ function sourceValue(code: VariableCode, context: VariableContext): unknown {
   }
 }
 
+export function snapshotVariableInputs(codes: readonly string[], context: VariableContext) {
+  const inputs: Array<string | number | null | undefined> = [];
+  for (const code of codes) {
+    const definition = BY_CODE.get(code);
+    if (!definition) return null;
+    const value = sourceValue(definition.code, context);
+    if (definition.type === 'date') {
+      if (!(value instanceof Date)) return null;
+      inputs.push(value.getTime());
+    } else if (value == null || typeof value === 'string' || typeof value === 'number') inputs.push(value);
+    else return null;
+  }
+  return inputs;
+}
+
 function formatValue(value: unknown, definition: VariableDefinition, path: string): string {
   const invalid = () => new BadRequestException(`Недопустимое значение переменной {${definition.code}} в ${path}`);
   if (definition.type === 'date') {
@@ -160,6 +175,8 @@ export function resolveVariableText(
   context: VariableContext,
   location: { path: string; field: 'TEXT' | 'URL' },
 ): { text: string; warnings: VariableWarning[] } {
+  if (!input.includes('{') && !input.includes('}')) return { text: input, warnings: [] };
+
   const matches = [...input.matchAll(/\{([^{}]*)\}/g)];
   if (matches.length && /[<>]/.test(input)) {
     throw new BadRequestException(`HTML-разметка запрещена при подстановке: ${location.path}`);

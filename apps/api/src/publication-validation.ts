@@ -15,7 +15,7 @@ import { normalizeRedirectPath } from './redirect-path';
 import { materializeCityHomeSource } from './page-template';
 import type { CatalogSource } from './site-catalog.service';
 import { sitePhoneReadinessErrors } from './site-phone';
-import { resolveSeoTemplates } from './seo-templates';
+import { resolveSeoTemplates, SeoRouteCache } from './seo-templates';
 import { tariffPreviewDiagnostics } from './tariff-preview-diagnostics';
 import { firstScreenFromTemplate, validateFirstScreen } from './first-screen';
 import { contentErrorLocation } from './content-validation-error';
@@ -95,9 +95,10 @@ function routeSources(source: CatalogSource): RouteSource[] {
 export function validatePublicationSource(
   rawSource: CatalogSource,
   input: { appVersion: string; requestedById?: string | null; siteRevision: number; now?: Date },
-  renderSource: (source: CatalogSource, now: Date) => unknown,
+  renderSource: (source: CatalogSource, now: Date, seoCache: SeoRouteCache) => unknown,
 ): { report: PublicationValidationReport; catalog: unknown | null } {
   const now = input.now || new Date();
+  const seoCache = new SeoRouteCache();
   const issues: PublicationValidationIssue[] = [];
   const issueKeys = new Set<string>();
   const add = (severity: PublicationValidationIssue['severity'], code: string, path: string, detail: string, relatedPath?: string,
@@ -300,7 +301,7 @@ export function validatePublicationSource(
         site: { connectionPhone: site.connectionPhone, supportPhone: site.supportPhone },
         provider: { name: provider.name },
         now,
-      });
+      }, seoCache);
       for (const warning of seo.warnings) add('WARNING', `SEO_${warning.code}`, route.path, `SEO ${warning.code}${warning.length ? `: ${warning.length}` : ''}`);
     } catch (error) {
       add('BLOCKING', 'SEO_RESOLUTION', route.path, message(error));
@@ -322,7 +323,7 @@ export function validatePublicationSource(
   let catalog: unknown | null = null;
   if (!issues.some((issue) => issue.severity === 'BLOCKING')) {
     try {
-      catalog = renderSource(rawSource, now);
+      catalog = renderSource(rawSource, now, seoCache);
       const rendered = catalog as { routes?: PublicRoute[]; variableWarnings?: Array<{ code: string; path: string; reason: string }>; seoWarnings?: Array<{ code: string; path: string; relatedPath?: string; length?: number }> };
       if (!Array.isArray(rendered.routes) || rendered.routes.length !== routes.length) {
         add('BLOCKING', 'CATALOG_ROUTE_COUNT', '/', 'Состав собранных маршрутов отличается от проверенного inventory');

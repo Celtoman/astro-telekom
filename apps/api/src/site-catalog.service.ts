@@ -17,7 +17,7 @@ import { validateAddressPageComposition } from './address-page';
 import { normalizeRedirectPath } from './redirect-path';
 import { materializeCityHomeSource } from './page-template';
 import { formatSitePhone } from './site-phone';
-import { resolveSeoTemplates } from './seo-templates';
+import { resolveSeoTemplates, type SeoRouteCache } from './seo-templates';
 import { collectSeoTemplateUsages } from './seo-template-usages';
 import { firstScreenFromTemplate, validateFirstScreen } from './first-screen';
 import { generalHomeFromTemplate } from './general-home-template';
@@ -128,7 +128,7 @@ export class SiteCatalogService {
     return { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates, pageTemplates, ...(Object.keys(supportMedia).length?{supportMedia}:{}), ...(editorial?{editorial}:{}),...(publicationBaseId?{publicationBaseId}:{}) };
   }
 
-  renderSource(source: CatalogSource, now = new Date()) {
+  renderSource(source: CatalogSource, now = new Date(), seoCache?: SeoRouteCache) {
     const { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates } = materializeCityHomeSource(source);
     const homeTemplate = source.pageTemplates?.find(template => template.kind === 'HOME');
     const homeScreen = homeTemplate ? firstScreenFromTemplate(homeTemplate) : undefined;
@@ -177,7 +177,7 @@ export class SiteCatalogService {
       site: { connectionPhone: site.connectionPhone, supportPhone: site.supportPhone },
       provider: { name: site.provider.name },
       now,
-    });
+    }, seoCache);
     const noindexPaths = Object.entries(seo.byPath).filter(([, meta]) => meta.indexState === 'NOINDEX').map(([path]) => path);
     return {
       ...resolved,

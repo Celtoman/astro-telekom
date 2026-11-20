@@ -154,7 +154,7 @@ export class EditorialPublicationService {
     source.editorial!.redirectIds=source.redirects.filter(alias=>managed.has(alias.id)).map(alias=>alias.id);
     source.editorial=await this.media.prepare(siteId,source.editorial!);
     source.publicationBaseId=baseline.publication.id;
-    const validation=validatePublicationSource(source,{appVersion:APP_VERSION,siteRevision:baseline.publication.siteRevision},(s,now)=>this.catalog.renderSource(s,now));
+    const validation=validatePublicationSource(source,{appVersion:APP_VERSION,siteRevision:baseline.publication.siteRevision},(s,now,seoCache)=>this.catalog.renderSource(s,now,seoCache));
     const reviewDigest=editorialDigest({basePublicationId:baseline.publication.id,items,editorial:source.editorial,redirects:source.redirects,...(retirement?{draftPatches:retirement.plan.patches,targetName:retirement.targetName}:{})});
     return {source,validation,reviewDigest,items,previousSource,baseline:baseline.publication,retirement,selectedTitle};
   }

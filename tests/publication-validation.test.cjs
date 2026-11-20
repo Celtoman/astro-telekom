@@ -111,3 +111,71 @@ test('the same serialized source and validation time reproduce the same report a
   assert.deepEqual(second, first);
   assert.equal(first.catalog.cities[0].tariffs[0].standardPrice, '700');
 });
+
+test('catalog rendering reuses SEO substitutions from validation and keeps cross-route warnings', () => {
+  const registry = require('../apps/api/dist/variable-registry.js');
+  const source = publicationSource([city('kazan', ['giga', 'fast']), city('moskva', ['giga'])]);
+  const tariffTemplate = source.seoTemplates.find((template) => template.kind === 'CITY_TARIFF_DETAIL');
+  tariffTemplate.ogTitleTemplate = '{TARIFF_NAME} — {CITY_NAME}';
+  tariffTemplate.descriptionTemplate = 'Длинное описание тарифа '.repeat(10);
+  tariffTemplate.indexState = 'NOINDEX';
+  const expected = validatePublicationSource(source, input, render);
+  const original = registry.resolveVariableText;
+  let rendering = false;
+  let seoRenderCalls = 0;
+  registry.resolveVariableText = (value, context, field) => {
+    if (rendering && field.path.includes('.seo.')) seoRenderCalls++;
+    return original(value, context, field);
+  };
+  try {
+    const service = new SiteCatalogService({});
+    const actual = validatePublicationSource(source, input, (value, now, seoCache) => {
+      rendering = true;
+      try { return service.renderSource(value, now, seoCache); }
+      finally { rendering = false; }
+    });
+    assert.deepEqual(actual, expected);
+    assert.equal(seoRenderCalls, 0);
+    assert.ok(actual.report.issues.some((issue) =>
+      issue.code === 'SEO_DUPLICATE_DESCRIPTION' && issue.path === '/kazan/fast' && issue.relatedPath === '/kazan/giga'));
+    assert.ok(actual.report.issues.some((issue) => issue.code === 'SEO_LONG_DESCRIPTION' && issue.path === '/moskva/giga'));
+    assert.ok(actual.catalog.sitemap.excludedPaths.includes('/kazan/fast'));
+  } finally {
+    registry.resolveVariableText = original;
+  }
+});
+
+test('a changed SEO input during rendering is resolved again at the same path', () => {
+  const source = publicationSource([city('kazan', ['giga'])]);
+  const service = new SiteCatalogService({});
+  const actual = validatePublicationSource(source, input, (value, now, seoCache) => {
+    const updated = structuredClone(value);
+    updated.cities[0].name = 'Казань';
+    updated.seoTemplates.find((template) => template.kind === 'CITY_TARIFF_DETAIL').titleTemplate = '{CITY_NAME} · {TARIFF_NAME}';
+    return service.renderSource(updated, now, seoCache);
+  });
+  assert.equal(actual.catalog.seoByPath['/kazan/giga'].title, 'Казань · giga');
+  assert.equal(actual.catalog.seoByPath['/kazan'].title, 'Заголовок CITY_HOME Казань');
+});
+
+test('validation retains separate SEO errors and validates even templates without routes before publishing', () => {
+  const invalid = publicationSource([city('kazan', ['giga']), city('moskva', ['fast'])]);
+  invalid.cities[0].name = '';
+  invalid.cities[1].name = '';
+  invalid.cities[0].tariffs[0].promoText = '{MISSING_TOKEN}';
+  const result = validatePublicationSource(invalid, input, () => { throw Error('must not render'); });
+  const seoPaths = result.report.issues.filter((issue) => issue.code === 'SEO_RESOLUTION').map((issue) => issue.path);
+  assert.deepEqual(seoPaths, ['/kazan', '/kazan/giga', '/moskva', '/moskva/fast']);
+  assert.ok(result.report.issues.some((issue) => issue.code === 'VARIABLE_RESOLUTION' &&
+    issue.path === '/kazan/giga' && issue.template === 'CITY_TARIFF_DETAIL' && issue.field === 'promoText'));
+  assert.equal(result.catalog, null);
+
+  const unused = publicationSource([city('kazan', ['giga'])]);
+  unused.seoTemplates.push({ kind: 'ACCOUNT', indexState: 'INVALID', titleTemplate: 'Аккаунт', descriptionTemplate: 'Описание' });
+  const service = new SiteCatalogService({});
+  const unrenderable = validatePublicationSource(unused, input, (value, now, seoCache) => service.renderSource(value, now, seoCache));
+  assert.equal(unrenderable.report.outcome, 'BLOCKED');
+  assert.deepEqual(unrenderable.report.issues.find((issue) => issue.code === 'CATALOG_RENDER'), {
+    severity: 'BLOCKING', code: 'CATALOG_RENDER', path: '/', message: 'Неизвестное состояние индексации: ACCOUNT',
+  });
+});

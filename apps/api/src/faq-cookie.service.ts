@@ -118,7 +118,7 @@ export class FaqCookieService {
     const before = { faq: source.globalPages.find(page => page.type === 'FAQ')?.content ?? null, seo: source.seoTemplates.find(item => item.kind === 'FAQ') ?? null, cookie: readCookieNotice(source.site.settings) ?? null };
     const after = { faq: selected.faq?.page.content ?? before.faq, seo: selected.faq?.seo ?? before.seo, cookie: selected.cookie ?? before.cookie };
     const changed = editorialDigest(json(before)) !== editorialDigest(json(after));
-    const report = validatePublicationSource(next, { appVersion: APP_VERSION, siteRevision: publication.siteRevision }, (data, now) => this.catalog.renderSource(data, now));
+    const report = validatePublicationSource(next, { appVersion: APP_VERSION, siteRevision: publication.siteRevision }, (data, now, seoCache) => this.catalog.renderSource(data, now, seoCache));
     const reviewDigest = editorialDigest({ baseline: publication.id, scopes, selected });
     return { next, publication, report, reviewDigest, changed, before, after, scopes };
   }
