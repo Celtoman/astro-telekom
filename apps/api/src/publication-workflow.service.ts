@@ -428,6 +428,23 @@ export class PublicationWorkflowService {
   }
 
   async getWorkingPreview(siteId: string, projection: 'FULL' | 'SEO' = 'FULL') {
+    const options = { isolationLevel: Prisma.TransactionIsolationLevel.Serializable, timeout: PUBLICATION_CATALOG_TRANSACTION_TIMEOUT_MS } as const;
+    if (projection === 'SEO') {
+      const { site, source, now } = await this.prisma.$transaction(async transaction => {
+        const site = await transaction.site.findUnique({ where: { id: siteId },
+          select: { id: true, workingRevision: true, publishedRevision: true } });
+        if (!site) throw new NotFoundException('Site not found');
+        const source = await this.catalog.captureSourceBySiteId(site.id, transaction, {});
+        return { site, source, now: new Date() };
+      }, options);
+      const { routes, seoByPath, seoWarnings } = this.catalog.renderSource(source, now);
+      return {
+        siteId: site.id,
+        workingRevision: site.workingRevision,
+        publishedRevision: site.publishedRevision,
+        catalog: this.jsonSnapshot({ routes, seoByPath, seoWarnings }) as JsonObject,
+      };
+    }
     return this.prisma.$transaction(async (transaction) => {
       const site = await transaction.site.findUnique({ where: { id: siteId } });
       if (!site) throw new NotFoundException('Site not found');
@@ -436,11 +453,9 @@ export class PublicationWorkflowService {
         siteId: site.id,
         workingRevision: site.workingRevision,
         publishedRevision: site.publishedRevision,
-        catalog: this.jsonSnapshot(projection === 'SEO'
-          ? { routes: catalog.routes, seoByPath: catalog.seoByPath, seoWarnings: catalog.seoWarnings }
-          : catalog) as JsonObject,
+        catalog: this.jsonSnapshot(catalog) as JsonObject,
       };
-    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable, timeout: PUBLICATION_CATALOG_TRANSACTION_TIMEOUT_MS });
+    }, options);
   }
 
   async getWorkingPreviewOptions(siteId: string, query: { page: number; search?: string; preferred?: string }) {

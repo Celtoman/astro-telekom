@@ -165,6 +165,56 @@ function fixture() {
   };
 }
 
+test('explicit SEO preview captures one SQL revision and runs the strict renderer after releasing the transaction', async () => {
+  const source = { site: { id: 'site-1' }, cities: [], globalPages: [] };
+  const rendered = { routes: [{ path: '/' }], seoByPath: { '/': { title: 'Home' } }, seoWarnings: [], cities: [] };
+  const site = { id: source.site.id, workingRevision: 7, publishedRevision: 6 };
+  const tx = { site: { findUnique: async () => site } };
+  const stages = [];
+  let inTransaction = false, renderError;
+  const service = new PublicationWorkflowService({
+    async $transaction(callback, options) {
+      assert.equal(options.isolationLevel, 'Serializable');
+      inTransaction = true;
+      try { return await callback(tx); }
+      finally { inTransaction = false; stages.push('release'); }
+    },
+  }, {
+    async captureSourceBySiteId(siteId, client, preview) {
+      assert.ok(inTransaction);
+      assert.equal(siteId, site.id);
+      assert.equal(client, tx);
+      assert.deepEqual(preview, {});
+      stages.push('capture');
+      return source;
+    },
+    renderSource(captured, now) {
+      assert.equal(captured, source);
+      assert.ok(now instanceof Date);
+      assert.equal(inTransaction, false);
+      stages.push('render');
+      if (renderError) throw renderError;
+      return rendered;
+    },
+    async listBySiteId(siteId, client) {
+      assert.ok(inTransaction);
+      assert.equal(siteId, site.id);
+      assert.equal(client, tx);
+      stages.push('full');
+      return rendered;
+    },
+  });
+  assert.deepEqual(await service.getWorkingPreview(site.id, 'SEO'), {
+    siteId: site.id, workingRevision: 7, publishedRevision: 6,
+    catalog: { routes: rendered.routes, seoByPath: rendered.seoByPath, seoWarnings: rendered.seoWarnings },
+  });
+  assert.deepEqual(stages, ['capture', 'release', 'render']);
+  renderError = new Error('Exact catalog validation error');
+  await assert.rejects(service.getWorkingPreview(site.id, 'SEO'), { message: renderError.message });
+  assert.deepEqual((await service.getWorkingPreview(site.id)).catalog, rendered);
+  assert.deepEqual(stages, ['capture', 'release', 'render', 'capture', 'release', 'render', 'full', 'release']);
+});
+
 test('saving an entity creates an immutable working revision and audit event', async () => {
   const f = fixture();
 
