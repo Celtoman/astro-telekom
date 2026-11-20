@@ -1,4 +1,5 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ADMIN_ROUTE_PAGE_SIZE } from './admin-route-pagination';
 import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
@@ -34,22 +35,45 @@ export class SitemapService {
     private readonly publications: PublicationWorkflowService,
   ) {}
 
-  async getWorkspace(siteId: string) {
-    const [site, pages, cities, exclusions, latestPublication] = await Promise.all([
-      this.prisma.site.findUnique({ where: { id: siteId }, select: { id: true, name: true, slug: true, domain: true, status: true, workingRevision: true, publishedRevision: true } }),
-      this.prisma.page.findMany({ where: { siteId, cityId: null }, orderBy: { createdAt: 'asc' }, select: { id: true, title: true, type: true, slug: true, status: true } }),
-      this.prisma.city.findMany({ where: { siteId }, orderBy: { name: 'asc' }, select: { id: true, name: true, slug: true, status: true, tariffs: { orderBy: { name: 'asc' }, select: { id: true, name: true, slug: true, status: true, availability: true } } } }),
-      this.prisma.sitemapExclusion.findMany({ where: { siteId }, orderBy: { path: 'asc' }, select: { id: true, path: true, reason: true, createdById: true, createdAt: true, updatedAt: true } }),
-      this.prisma.sitePublication.findFirst({ where: { siteId }, orderBy: { createdAt: 'desc' }, select: { id: true, siteRevision: true, status: true, updatedAt: true, publishedAt: true, lastError: true } }),
+  async getSettings(siteId: string, client: Prisma.TransactionClient = this.prisma) {
+    const [site, latestPublication] = await Promise.all([
+      client.site.findUnique({ where: { id: siteId }, select: { id: true, name: true, slug: true, domain: true, status: true, workingRevision: true, publishedRevision: true } }),
+      client.sitePublication.findFirst({ where: { siteId }, orderBy: { createdAt: 'desc' }, select: { id: true, siteRevision: true, status: true, updatedAt: true, publishedAt: true, lastError: true } }),
     ]);
     if (!site) throw new NotFoundException('Site not found');
+    return {
+      site,
+      origin: normalizeSitemapOrigin(process.env.PUBLIC_SITE_URL || site.domain || ''),
+      workingRevision: site.workingRevision,
+      publishedRevision: site.publishedRevision,
+      hasUnpublishedChanges: site.workingRevision > site.publishedRevision,
+      lastGeneration: latestPublication ? {
+        id: latestPublication.id,
+        siteRevision: latestPublication.siteRevision,
+        status: latestPublication.status,
+        generatedAt: latestPublication.publishedAt || latestPublication.updatedAt,
+        lastError: latestPublication.lastError,
+      } : null,
+      files: SITEMAP_FILES,
+    };
+  }
 
-    const origin = normalizeSitemapOrigin(process.env.PUBLIC_SITE_URL || site.domain || '');
+  private async readInventory(siteId: string, client: Prisma.TransactionClient, expectedWorkingRevision?: number) {
+    const settings = await this.getSettings(siteId, client);
+    if (expectedWorkingRevision !== undefined && settings.workingRevision !== expectedWorkingRevision) {
+      throw new ConflictException('Рабочая ревизия изменилась. Обновите данные и повторите действие.');
+    }
+    const [pages, cities, exclusions] = await Promise.all([
+      client.page.findMany({ where: { siteId, cityId: null }, orderBy: { createdAt: 'asc' }, select: { id: true, title: true, type: true, slug: true, status: true } }),
+      client.city.findMany({ where: { siteId }, orderBy: { name: 'asc' }, select: { id: true, name: true, slug: true, status: true, tariffs: { orderBy: { name: 'asc' }, select: { id: true, name: true, slug: true, status: true, availability: true } } } }),
+      client.sitemapExclusion.findMany({ where: { siteId }, orderBy: { path: 'asc' }, select: { id: true, path: true, reason: true, createdById: true, createdAt: true, updatedAt: true } }),
+    ]);
+
     const validation = { errors: [] as string[], warnings: [] as string[] };
     let routes: PublicRoute[] = [];
     let noindexPaths = new Set<string>();
     try {
-      const currentCatalog = await this.catalog.listBySiteId(siteId);
+      const currentCatalog = await this.catalog.listBySiteId(siteId, client);
       routes = currentCatalog.routes as PublicRoute[];
       noindexPaths = new Set(Object.entries(currentCatalog.seoByPath || {}).filter(([, meta]) => meta.indexState === 'NOINDEX').map(([path]) => path));
     } catch (error) {
@@ -65,34 +89,47 @@ export class SitemapService {
     }
     entries.sort((left, right) => left.group.localeCompare(right.group) || left.path.localeCompare(right.path));
 
-    const includedPaths = (group: SitemapGroup) => entries
-      .filter((entry) => entry.group === group && entry.included)
-      .map((entry) => entry.path);
-    const previews = {
-      index: buildSitemapIndexXml(origin, Object.values(SITEMAP_FILES)),
-      pages: buildSitemapXml(origin, includedPaths('PAGES')),
-      cities: buildSitemapXml(origin, includedPaths('CITIES')),
-      tariffs: buildSitemapXml(origin, includedPaths('TARIFFS')),
-    };
+    return { ...settings, entries, exclusions, validation };
+  }
 
+  async getInventory(siteId: string, query: { workingRevision: number; group?: string; page: number; search?: string }) {
+    if (query.group !== undefined && (typeof query.group !== 'string' || !Object.hasOwn(SITEMAP_FILES, query.group))) {
+      throw new BadRequestException('Неизвестная группа Sitemap');
+    }
+    if (query.search !== undefined && typeof query.search !== 'string') throw new BadRequestException('Укажите поисковый запрос');
+    const inventory = await this.prisma.$transaction(
+      tx => this.readInventory(siteId, tx, query.workingRevision),
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable, timeout: 60_000 },
+    );
+    if (!query.group) return { ...inventory, total: inventory.entries.length };
+    const search = (query.search ?? '').trim().toLocaleLowerCase('ru-RU');
+    const reasons = new Map(inventory.exclusions.map(item => [item.path, item.reason]));
+    const matches = inventory.entries.filter(item => item.group === query.group && (!search ||
+      `${item.path} ${item.sourceLabel} ${item.publishStatus} ${reasons.get(item.path) ?? ''}`.toLocaleLowerCase('ru-RU').includes(search)));
+    const offset = (query.page - 1) * ADMIN_ROUTE_PAGE_SIZE;
     return {
-      site,
-      origin,
-      workingRevision: site.workingRevision,
-      publishedRevision: site.publishedRevision,
-      hasUnpublishedChanges: site.workingRevision > site.publishedRevision,
-      lastGeneration: latestPublication ? {
-        id: latestPublication.id,
-        siteRevision: latestPublication.siteRevision,
-        status: latestPublication.status,
-        generatedAt: latestPublication.publishedAt || latestPublication.updatedAt,
-        lastError: latestPublication.lastError,
-      } : null,
-      files: SITEMAP_FILES,
-      entries,
-      exclusions,
-      validation,
-      previews,
+      ...inventory,
+      entries: matches.slice(offset, offset + ADMIN_ROUTE_PAGE_SIZE),
+      total: matches.length,
+      page: query.page,
+      pageSize: ADMIN_ROUTE_PAGE_SIZE,
+    };
+  }
+
+  async getWorkspace(siteId: string) {
+    const inventory = await this.readInventory(siteId, this.prisma);
+    const { origin, entries } = inventory;
+    const includedPaths = (group: SitemapGroup) => entries
+      .filter(entry => entry.group === group && entry.included)
+      .map(entry => entry.path);
+    return {
+      ...inventory,
+      previews: {
+        index: buildSitemapIndexXml(origin, Object.values(SITEMAP_FILES)),
+        pages: buildSitemapXml(origin, includedPaths('PAGES')),
+        cities: buildSitemapXml(origin, includedPaths('CITIES')),
+        tariffs: buildSitemapXml(origin, includedPaths('TARIFFS')),
+      },
     };
   }
 

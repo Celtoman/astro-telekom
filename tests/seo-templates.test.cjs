@@ -272,3 +272,68 @@ test('transition to noindex requires confirmation of exact affected route count'
   const result = await service.update('site-1', 'CITY_HOME', { ...body, confirmNoindexCount: 2 });
   assert.equal(result.indexState, 'NOINDEX');
 });
+
+test('SEO settings read only templates and revision metadata, even when preview is blocked', async () => {
+  const { SeoTemplateService } = require('../apps/api/dist/seo-template.service.js');
+  const site = { id: 's', slug: 'site', workingRevision: 8, publishedRevision: 7 };
+  const client = {
+    site: { findUnique: async ({ where }) => { assert.deepEqual(where, { id: 's' }); return site; } },
+    seoTemplate: { findMany: async () => templates() },
+  };
+  const service = new SeoTemplateService({ $transaction: async (cb, options) => {
+    assert.equal(options.isolationLevel, 'Serializable');
+    return cb(client);
+  } }, {
+    getWorkingPreview: () => assert.fail('settings cannot render any route'),
+    getPublishedSnapshot: () => assert.fail('settings cannot load published snapshot'),
+  });
+  const result = await service.getSettings('s');
+  assert.deepEqual(result, { ...site, templates: templates() });
+  assert.equal(Object.hasOwn(result, 'routes'), false);
+});
+
+test('explicit SEO review scopes page and URL, preserves old missing metadata and verifies both revisions', async () => {
+  const { SeoTemplateService } = require('../apps/api/dist/seo-template.service.js');
+  let workingRevision = 8;
+  let published = { id: 'pub-next', catalog: {} };
+  let reads = 0, failure = null;
+  const routes = [{ id: 'HOME', path: '/' }, ...Array.from({ length: 207 }, (_, index) => ({ id: 'CITY_HOME', path: `/city-${index+1}` }))];
+  const resolved = { title:'SEO для URL', description:'Описание', indexState:'NOINDEX' };
+  const diagnostic = { path: '/city-101', code: 'LONG_TITLE', length: 80 };
+  const service = new SeoTemplateService({
+    site: { findUnique: async () => ({ id: 's', slug: 'site', workingRevision }) },
+  }, {
+    getWorkingPreview: async (id, projection) => {
+      assert.equal(id, 's');
+      assert.equal(projection, 'SEO');
+      reads++;
+      if (failure) throw new Error(failure);
+      return { workingRevision, catalog: {
+        routes, seoByPath: { '/city-101': resolved },
+        seoWarnings: [diagnostic, { path:'/city-102', code:'LONG_TITLE' }],
+      } };
+    },
+    getPublishedSnapshot: async () => published,
+  });
+  const input = { kind: 'CITY_HOME', workingRevision: 8, page: 3, path: '/city-101' };
+  const result = await service.review('s', input);
+  assert.equal(result.total, 207);
+  assert.equal(result.routes.length, 50);
+  assert.equal(result.routes[0], '/city-101');
+  assert.deepEqual(result.detail, { path:'/city-101', working: resolved, published: null, publishedPublicationId:'pub-next', warnings:[diagnostic] });
+  await assert.rejects(service.review('s', { ...input, publishedPublicationId: 'pub-older-same-revision' }), error => error.getStatus() === 409);
+  await assert.rejects(service.review('s', { ...input, path: '/' }), error => error.getStatus() === 404);
+  assert.equal((await service.review('s', { ...input, path: undefined, page: 5 })).routes.length, 7);
+  published = { ...published, catalog: { seoByPath: { '/city-101': { ...resolved, indexState:'INDEX' } } } };
+  assert.equal((await service.review('s', input)).detail.published.indexState, 'INDEX');
+
+  failure = 'Ошибка в блоке другого города';
+  const blocked = await service.review('s', input);
+  assert.deepEqual(blocked.routes, []);
+  assert.equal(blocked.detail, null);
+  assert.equal(blocked.workingError, failure);
+  assert.equal(reads, 6);
+  workingRevision++;
+  await assert.rejects(service.review('s', input), error => error.getStatus() === 409);
+  assert.equal(reads, 6, 'stale inputs must fail before rendering the catalogue');
+});

@@ -17,8 +17,13 @@ test('SEO templates have a protected admin route and cookie-auth React editor', 
   assert.match(controller, /@Get\(\)/);
   assert.match(controller, /@Patch\(':kind'\)/);
   assert.match(editor, /requestSession/);
-  assert.match(editor, /workingByPath/);
-  assert.match(editor, /publishedByPath/);
+  assert.match(editor, /seo-templates\/settings/);
+  assert.match(editor, /seo-templates\/review/);
+  assert.match(editor, /detail\.working/);
+  assert.match(editor, /detail\.published/);
+  assert.match(editor, /publishedPublicationId/);
+  assert.match(editor, /review\.total/);
+  assert.match(editor, /affectedCount !== null/);
   assert.match(editor, /confirmNoindexCount/);
   assert.match(editor, /Социальные сети · Open Graph/);
   assert.match(editor, /ogTitleTemplate/);

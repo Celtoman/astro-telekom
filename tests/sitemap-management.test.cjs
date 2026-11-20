@@ -180,3 +180,47 @@ test('sitemap persistence is normalized and wired into the protected API module'
   assert.match(controllerSource, /@Get\('sites\/:siteId\/sitemap'\)/);
   assert.match(controllerSource, /@Put\('sites\/:siteId\/sitemap-exclusions'\)/);
 });
+
+test('Sitemap settings skip catalogue rendering and inventory pages retain exact exclusion and noindex', async () => {
+  const { SitemapService } = loadSitemapModules();
+  const routes = [{ kind:'HOME', path:'/' }, ...Array.from({ length:207 }, (_, index) => ({
+    kind:'CITY_HOME', path:`/city-${String(index+1).padStart(3,'0')}`,
+  }))];
+  const f = fixture({ routes, seoByPath: { '/city-052': { indexState: 'NOINDEX' } },
+    currentExclusions: [{ path:'/city-051', reason:'Редакционная причина' }],
+  });
+  let reads = 0;
+  const render = f.catalog.listBySiteId;
+  f.catalog.listBySiteId = async (...args) => { reads++; return render(...args); };
+  const service = new SitemapService(f.prisma, f.catalog, f.publications);
+  const settings = await service.getSettings('site-1');
+  assert.equal(settings.workingRevision, 8);
+  assert.equal(Object.hasOwn(settings, 'entries'), false);
+  assert.equal(reads, 0);
+  await assert.rejects(service.getInventory('site-1', { workingRevision:7, page:1 }), error => error.getStatus() === 409);
+  assert.equal(reads, 0);
+
+  const option = { workingRevision:8, group:'CITIES', page:2 };
+  const page = await service.getInventory('site-1', option);
+  assert.equal(page.total, 208);
+  assert.equal(page.entries.length, 50);
+  assert.equal(page.entries[0].path, '/city-051');
+  assert.equal(page.entries[0].reason, 'Редакционная причина');
+  assert.equal(page.entries[0].eligible, true);
+  assert.equal(page.entries[1].eligible, false);
+  assert.match(page.entries[1].reason, /noindex/);
+  assert.equal(Object.hasOwn(page, 'previews'), false);
+  assert.equal((await service.getInventory('site-1', { ...option, page:1, search:'Редакционная причина' })).total, 1);
+  assert.equal((await service.getInventory('site-1', { ...option, page:5 })).entries.length, 8);
+  const legacy = await service.getWorkspace('site-1');
+  const inventory = await service.getInventory('site-1', { workingRevision:8, page:1 });
+  assert.deepEqual(inventory.entries, legacy.entries);
+  assert.deepEqual(inventory.validation, legacy.validation);
+  assert.doesNotMatch(legacy.previews.cities, /city-05[12]/);
+  assert.equal(f.transactions.at(-1).isolationLevel, 'Serializable');
+
+  f.catalog.listBySiteId = async () => { throw new Error('Ошибка SEO соседнего URL'); };
+  const blocked = await service.getInventory('site-1', { workingRevision:8, page:1 });
+  assert.deepEqual(blocked.validation.errors, ['Ошибка SEO соседнего URL']);
+  assert.ok(blocked.entries.every(item => !item.eligible));
+});

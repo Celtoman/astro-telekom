@@ -30,12 +30,16 @@ test('sitemap workspace exposes diagnostics, XML preview and revisioned exclusio
   assert.match(component, /Текущий origin/);
   assert.match(component, /Последняя генерация/);
   assert.match(component, /XML-preview/);
+  assert.match(component, /sitemap\/settings/);
+  assert.match(component, /sitemap\/inventory\?workingRevision/);
+  assert.match(component, /showXml && inventory/);
+  assert.match(component, /inventory\.validation\.errors\.length/);
   assert.match(component, /Страницы/);
   assert.match(component, /Города/);
   assert.match(component, /Тарифы/);
   assert.match(component, /Tabs/);
   assert.match(component, /Причина/);
   assert.match(component, /Checkbox/);
-  assert.match(component, /workspace\.exclusions|data\?\.exclusions/, 'manual exclusions must survive while a route is temporarily noindex');
+  assert.match(component, /inventory\.exclusions|data\.exclusions/, 'manual exclusions must survive while a route is temporarily noindex');
   assert.doesNotMatch(component, /innerHTML|x-admin-token|Authorization|service token/i);
 });

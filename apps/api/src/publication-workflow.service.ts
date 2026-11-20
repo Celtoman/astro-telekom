@@ -421,7 +421,7 @@ export class PublicationWorkflowService {
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 
-  async getWorkingPreview(siteId: string) {
+  async getWorkingPreview(siteId: string, projection: 'FULL' | 'SEO' = 'FULL') {
     return this.prisma.$transaction(async (transaction) => {
       const site = await transaction.site.findUnique({ where: { id: siteId } });
       if (!site) throw new NotFoundException('Site not found');
@@ -430,7 +430,9 @@ export class PublicationWorkflowService {
         siteId: site.id,
         workingRevision: site.workingRevision,
         publishedRevision: site.publishedRevision,
-        catalog: this.jsonSnapshot(catalog) as JsonObject,
+        catalog: this.jsonSnapshot(projection === 'SEO'
+          ? { routes: catalog.routes, seoByPath: catalog.seoByPath, seoWarnings: catalog.seoWarnings }
+          : catalog) as JsonObject,
       };
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable, timeout: PUBLICATION_CATALOG_TRANSACTION_TIMEOUT_MS });
   }
@@ -551,8 +553,12 @@ export class PublicationWorkflowService {
   }
 
   async getPublishedCatalog(siteSlug: string): Promise<JsonObject> {
+    return (await this.getPublishedSnapshot(siteSlug)).catalog;
+  }
+
+  async getPublishedSnapshot(siteSlug: string): Promise<{ id: string; catalog: JsonObject }> {
     const serving = await servingPublication(this.prisma, siteSlug);
-    if (serving) return serving.catalog as JsonObject;
+    if (serving) return { id: serving.id, catalog: serving.catalog as JsonObject };
     const site = await this.prisma.site.findUnique({ where: { slug: siteSlug } });
     if (!site) throw new NotFoundException('Site not found');
     const publication = await this.prisma.sitePublication.findFirst({
@@ -560,7 +566,7 @@ export class PublicationWorkflowService {
       orderBy: { releaseSequence: 'desc' },
     });
     if (!publication) throw new NotFoundException('Published catalog not found');
-    return publication.catalog as JsonObject;
+    return { id: publication.id, catalog: publication.catalog as JsonObject };
   }
 
   async getPublishedCity(siteSlug: string, citySlug: string) {
