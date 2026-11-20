@@ -79,6 +79,23 @@ test('SEO length and duplicate diagnostics warn without blocking publication', (
   assert.ok(result.warnings.some((warning) => warning.code === 'DUPLICATE_DESCRIPTION' && warning.path === '/goroda-obsluzhivaniya'));
 });
 
+test('single-route SEO diagnostics preserve length and exact syntax errors from compiled templates', () => {
+  const { resolveSeoTemplates, SeoRouteCache } = seoModule();
+  const source = input();
+  source.routes = source.routes.slice(0, 1);
+  source.templates[0].titleTemplate = '{PROVIDER_NAME} ' + 'Длинный '.repeat(12);
+  const exact = resolveSeoTemplates(source);
+  assert.deepEqual(resolveSeoTemplates(source, new SeoRouteCache()), exact);
+  assert.deepEqual(exact.warnings.map(issue => issue.code), ['LONG_TITLE']);
+
+  source.templates[0].titleTemplate = 'Повреждённые скобки {{UNKNOWN_CODE}}';
+  const errorOf = cache => {
+    try { resolveSeoTemplates(source, cache); } catch (error) { return error.getResponse(); }
+    assert.fail('Malformed SEO text was accepted');
+  };
+  assert.deepEqual(errorOf(new SeoRouteCache()), errorOf());
+});
+
 test('Open Graph uses explicit templates and falls back independently to SEO and the site image', () => {
   const { resolveSeoTemplates, DEFAULT_SITE_IMAGE_PATH } = seoModule();
   assert.equal(fs.existsSync(path.join(__dirname, '..', 'apps/web/public', DEFAULT_SITE_IMAGE_PATH.slice(1))), true);

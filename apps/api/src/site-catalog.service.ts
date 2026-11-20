@@ -197,7 +197,8 @@ export class SiteCatalogService {
   }
 
   renderSource(source: CatalogSource, now = new Date(), resolution?: PublicationResolutionContext) {
-    const { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates } = materializeCityHomeSource(source);
+    const verifiedCityHomes = new WeakSet<object>();
+    const { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates } = materializeCityHomeSource(source, verifiedCityHomes);
     const homeTemplate = source.pageTemplates?.find(template => template.kind === 'HOME');
     const homeScreen = homeTemplate ? firstScreenFromTemplate(homeTemplate) : undefined;
     const homeHero = homeScreen?.data;
@@ -227,7 +228,7 @@ export class SiteCatalogService {
       routes:allRoutes,
       sitemap: { excludedPaths: sitemapExclusions.map((item) => item.path) },
       redirects: this.effectiveRedirects(allRoutes, redirects),
-      cities: cities.map((city: any) => this.cityResponse(city, site)),
+      cities: cities.map((city: any) => this.cityResponse(city, site, verifiedCityHomes)),
     }, {
       site: { ...publicDisplay, connectionPhone: site.connectionPhone, supportPhone: site.supportPhone, corporatePhone: readCorporatePhone(site.settings) },
       provider: { name: site.provider.name },
@@ -274,7 +275,7 @@ export class SiteCatalogService {
     return this.cityResponse(materialized.cities[0], site);
   }
 
-  cityResponse(city: any, site: any) {
+  cityResponse(city: any, site: any, verifiedCityHomes?: WeakSet<object>) {
     const inheritedContent = mergeContent(publicContent(site.provider.settings), publicContent(site.settings));
     const inheritedSeo: Record<string, unknown> = {};
     const { site: _site, region, pages, tariffs, ...cityData } = city;
@@ -294,7 +295,7 @@ export class SiteCatalogService {
       seo: inheritedSeo,
       region: { name: region.name, slug: region.slug },
       tariffFacts: cityTariffFacts(tariffs),
-      pages: pages.map((page: any) => this.pageResponse(page, inheritedContent, inheritedSeo, city.name)),
+      pages: pages.map((page: any) => this.pageResponse(page, inheritedContent, inheritedSeo, city.name, verifiedCityHomes)),
       tariffs: tariffs.map((tariff: any) => ({
         ...tariff,
         seo: inheritedSeo,
@@ -302,14 +303,18 @@ export class SiteCatalogService {
     };
   }
 
-  pageResponse(page: any, inheritedContent: Record<string, unknown>, inheritedSeo: Record<string, unknown>, cityName?: string) {
+  pageResponse(page: any, inheritedContent: Record<string, unknown>, inheritedSeo: Record<string, unknown>, cityName?: string, verifiedCityHomes?: WeakSet<object>) {
     if (page.type === 'CITY_SUPPORT') { validateSupportPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'FAQ' && page.cityId === null) { validateFaqPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'SPEED_TEST') { validateSpeedTestPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'OFFICIAL_SITE') { validateOfficialSitePage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'ACCOUNT') { validateAccountPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
-    if (page.type === 'HOME' && cityName) { page = { ...page, blocks: projectCityHomeBlocks(page.blocks || []) }; validateCityHomeBlocks(page.blocks, cityName, page.content?.homeCompositionVersion); }
-    else if (page.type === 'ADDRESS_CHECK' && page.content?.addressCheckCompositionVersion) validateAddressPageComposition(page.blocks.map(({ blockType, data }: any) => ({ blockType, data })), { version: page.content.addressCheckCompositionVersion });
+    if (page.type === 'HOME' && cityName) {
+      if (!verifiedCityHomes?.has(page)) {
+        page = { ...page, blocks: projectCityHomeBlocks(page.blocks || []) };
+        validateCityHomeBlocks(page.blocks, cityName, page.content?.homeCompositionVersion);
+      }
+    } else if (page.type === 'ADDRESS_CHECK' && page.content?.addressCheckCompositionVersion) validateAddressPageComposition(page.blocks.map(({ blockType, data }: any) => ({ blockType, data })), { version: page.content.addressCheckCompositionVersion });
     else validatePublishedBlocks(page.blocks, { pageType: cityName ? page.type : undefined });
     const { templateId: _templateId, ...publicPage } = page;
     return {

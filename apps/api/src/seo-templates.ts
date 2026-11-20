@@ -1,6 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
 import type { LegacyPublicRoute } from './public-route-policy';
-import { resolveVariableText, snapshotVariableInputs, type VariableContext } from './variable-registry';
+import { resolveVariableText, snapshotVariableInputs, VariableTextTemplates, type VariableContext } from './variable-registry';
 
 export type SeoTemplateKind = LegacyPublicRoute['id'];
 export type SeoIndexState = 'INDEX' | 'NOINDEX';
@@ -68,9 +68,9 @@ export function resolveSocialImage(value: string | null | undefined, path: strin
   return url.href;
 }
 
-function resolveField(template: string, context: VariableContext, path: string): string {
+function resolveField(template: string, context: VariableContext, path: string, compiled?: VariableTextTemplates): string {
   if (typeof template !== 'string' || !template.trim()) throw new BadRequestException(`Пустой обязательный SEO-шаблон: ${path}`);
-  const result = resolveVariableText(template, context, { path, field: 'TEXT' });
+  const result = compiled?.resolve(template, context, path) ?? resolveVariableText(template, context, { path, field: 'TEXT' });
   if (result.warnings.length > 0) {
     const warning = result.warnings[0];
     throw new BadRequestException(`SEO-переменная {${warning.code}} не имеет значения или недоступна в контексте: ${path}`);
@@ -84,13 +84,13 @@ function normalizedDuplicateKey(value: string): string {
   return value.trim().replace(/\s+/g, ' ').toLocaleLowerCase('ru');
 }
 
-function resolveSeoRoute(template: SeoTemplateDefinition, context: VariableContext, path: string): ResolvedSeoMetadata {
-  const title = resolveField(template.titleTemplate, context, `${path}.seo.title`);
-  const description = resolveField(template.descriptionTemplate, context, `${path}.seo.description`);
+function resolveSeoRoute(template: SeoTemplateDefinition, context: VariableContext, path: string, compiled?: VariableTextTemplates): ResolvedSeoMetadata {
+  const title = resolveField(template.titleTemplate, context, `${path}.seo.title`, compiled);
+  const description = resolveField(template.descriptionTemplate, context, `${path}.seo.description`, compiled);
   const ogTitle = template.ogTitleTemplate?.trim()
-    ? resolveField(template.ogTitleTemplate, context, `${path}.seo.ogTitle`) : title;
+    ? resolveField(template.ogTitleTemplate, context, `${path}.seo.ogTitle`, compiled) : title;
   const ogDescription = template.ogDescriptionTemplate?.trim()
-    ? resolveField(template.ogDescriptionTemplate, context, `${path}.seo.ogDescription`) : description;
+    ? resolveField(template.ogDescriptionTemplate, context, `${path}.seo.ogDescription`, compiled) : description;
   const ogImage = resolveSocialImage(template.ogImageUrl, `${path}.seo.ogImage`);
   return { title, description, indexState: template.indexState, ogTitle, ogDescription, ogImage };
 }
@@ -110,13 +110,15 @@ export class SeoRouteCache {
     resolved: ResolvedSeoMetadata;
   }>();
 
+  constructor(private readonly variableTemplates = new VariableTextTemplates()) {}
+
   resolve(template: SeoTemplateDefinition, context: VariableContext, path: string) {
     const templateInputs = this.templateInputs(template);
     const inputs = snapshotVariableInputs(templateInputs.codes, context);
     const previous = this.routes.get(path);
     if (inputs && previous?.template === templateInputs && equalValues(inputs, previous.inputs)) return previous.resolved;
 
-    const resolved = resolveSeoRoute(template, context, path);
+    const resolved = resolveSeoRoute(template, context, path, this.variableTemplates);
     if (inputs) this.routes.set(path, { template: templateInputs, inputs, resolved });
     return resolved;
   }
@@ -147,8 +149,7 @@ export function resolveSeoTemplates(input: SeoResolutionInput, routeCache?: SeoR
   }
   const byPath: Record<string, ResolvedSeoMetadata> = {};
   const warnings: SeoDiagnostic[] = [];
-  const titles = new Map<string, string>();
-  const descriptions = new Map<string, string>();
+  const duplicates = input.routes.length > 1 ? { titles: new Map<string, string>(), descriptions: new Map<string, string>() } : null;
   for (const route of input.routes) {
     const template = templates.get(route.id);
     if (!template) throw new BadRequestException(`Отсутствует обязательный SEO-шаблон ${route.id}`);
@@ -162,11 +163,13 @@ export function resolveSeoTemplates(input: SeoResolutionInput, routeCache?: SeoR
     byPath[route.path] = resolved;
     if (title.length > LENGTH_HINTS.title) warnings.push({ code: 'LONG_TITLE', path: route.path, length: title.length });
     if (description.length > LENGTH_HINTS.description) warnings.push({ code: 'LONG_DESCRIPTION', path: route.path, length: description.length });
-    for (const [value, seen, code] of [[title, titles, 'DUPLICATE_TITLE'], [description, descriptions, 'DUPLICATE_DESCRIPTION']] as const) {
-      const key = normalizedDuplicateKey(value);
-      const relatedPath = seen.get(key);
-      if (relatedPath) warnings.push({ code, path: route.path, relatedPath });
-      else seen.set(key, route.path);
+    if (duplicates) {
+      for (const [value, seen, code] of [[title, duplicates.titles, 'DUPLICATE_TITLE'], [description, duplicates.descriptions, 'DUPLICATE_DESCRIPTION']] as const) {
+        const key = normalizedDuplicateKey(value);
+        const relatedPath = seen.get(key);
+        if (relatedPath) warnings.push({ code, path: route.path, relatedPath });
+        else seen.set(key, route.path);
+      }
     }
   }
   if (Object.keys(byPath).length !== input.routes.length) throw new BadRequestException('SEO-маршруты содержат дублирующийся путь');

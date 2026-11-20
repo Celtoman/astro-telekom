@@ -104,7 +104,8 @@ export function validatePublicationSource(
   renderSource: (source: CatalogSource, now: Date, resolution: PublicationResolutionContext) => unknown,
 ): { report: PublicationValidationReport; catalog: unknown | null } {
   const now = input.now || new Date();
-  const resolution = { seo: new SeoRouteCache(), variableTemplates: new VariableTextTemplates() };
+  const variableTemplates = new VariableTextTemplates();
+  const resolution = { seo: new SeoRouteCache(variableTemplates), variableTemplates };
   const issues: PublicationValidationIssue[] = [];
   const issueKeys = new Set<string>();
   const add = (severity: PublicationValidationIssue['severity'], code: string, path: string, detail: string, relatedPath?: string,
@@ -132,7 +133,8 @@ export function validatePublicationSource(
     catch (error) { add('BLOCKING', 'ADDRESS_TEMPLATE', `/{city}/${ADDRESS_PAGE_SLUG}`, message(error), undefined, { template: 'CITY_ADDRESS_CHECK', ...contentErrorLocation(error) }); }
   }
   let cityTemplateReady = true;
-  try { source = materializeCityHomeSource(rawSource); }
+  const verifiedCityHomes = new WeakSet<object>();
+  try { source = materializeCityHomeSource(rawSource, verifiedCityHomes); }
   catch (error) {
     cityTemplateReady = false;
     add('BLOCKING', 'CITY_HOME_TEMPLATE', '/{city}', message(error), undefined, { template: 'CITY_HOME', ...contentErrorLocation(error) });
@@ -250,7 +252,7 @@ export function validatePublicationSource(
       if (homes.length !== 1) add('BLOCKING', 'CITY_HOME_COUNT', route.path, `У города «${city.name}» должна быть ровно одна HOME`);
       else {
         if (homes[0].slug !== '') add('BLOCKING', 'CITY_HOME_SLUG', route.path, 'Городская HOME должна иметь пустой slug');
-        if (cityTemplateReady) try { validateCityHomeBlocks(homes[0].blocks, city.name, homes[0].content?.homeCompositionVersion); } catch (error) { add('BLOCKING', 'CITY_HOME_BLOCKS', route.path, message(error), undefined, { template: 'CITY_HOME', ...contentErrorLocation(error) }); }
+        if (cityTemplateReady && !verifiedCityHomes.has(homes[0])) try { validateCityHomeBlocks(homes[0].blocks, city.name, homes[0].content?.homeCompositionVersion); } catch (error) { add('BLOCKING', 'CITY_HOME_BLOCKS', route.path, message(error), undefined, { template: 'CITY_HOME', ...contentErrorLocation(error) }); }
         if (homes[0].content?.homeCompositionVersion === CITY_HOME_VERSION && !(city.tariffs || []).some((value: any) => !['DRAFT', 'ARCHIVED'].includes(value.status))) {
           add('BLOCKING', 'CITY_TARIFFS_REQUIRED', route.path, `У города «${city.name}» нет опубликованных тарифов. Добавьте тариф или вручную снимите город с публикации.`, undefined, { template: 'CITY_HOME', block: 'tariff_grid' });
         }

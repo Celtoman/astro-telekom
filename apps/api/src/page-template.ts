@@ -42,7 +42,7 @@ export async function ensureCityHomeTemplate(
   return template;
 }
 
-export function materializeCityHomeSource<T extends CatalogSource>(source: T): T {
+export function materializeCityHomeSource<T extends CatalogSource>(source: T, verifiedCityHomes?: WeakSet<object>): T {
   source = materializeAddressPageSource(source);
   source = materializeSupportPageSource(source);
   if (!source.pageTemplates?.length) {
@@ -53,7 +53,8 @@ export function materializeCityHomeSource<T extends CatalogSource>(source: T): T
   }
   const templates = new Map(source.pageTemplates.map((template: any) => [template.id, template]));
   const homeTemplate = source.pageTemplates.find((template: any) => template.kind === 'CITY_HOME');
-  if (homeTemplate) cityHomeFromTemplate(homeTemplate);
+  const verifiedComposition = homeTemplate ? cityHomeFromTemplate(homeTemplate) : null;
+  let verifiedTemplateBlocks: any[] | undefined;
   return {
     ...source,
     cities: source.cities.map((city: any) => ({
@@ -64,8 +65,14 @@ export function materializeCityHomeSource<T extends CatalogSource>(source: T): T
         if (!template || template !== homeTemplate || template.status !== 'PUBLISHED') {
           throw new BadRequestException(`Городская HOME «${city.name}» не связана с опубликованным шаблоном`);
         }
+        const projected = verifiedTemplateBlocks ?? projectCityHomeBlocks<any>(template.blocks);
+        // The template check sorts by position. Only its exact ordered composition proves a projected page.
+        if (!verifiedTemplateBlocks && verifiedComposition && verifiedComposition.blocks.length === projected.length
+          && verifiedComposition.blocks.every((block, index) => block.blockType === projected[index].blockType && block.data === projected[index].data)) {
+          verifiedTemplateBlocks = projected;
+        }
         const legacyByPosition = new Map((page.blocks || []).map((block: any) => [block.position, block]));
-        const blocks = projectCityHomeBlocks<any>(template.blocks).map((block: any) => {
+        const blocks = projected.map((block: any) => {
           const legacy = legacyByPosition.get(block.position) as any;
           return {
             id: legacy?.id || block.id,
@@ -79,8 +86,10 @@ export function materializeCityHomeSource<T extends CatalogSource>(source: T): T
           };
         });
         const { templateId: _templateId, ...pageData } = page;
-        return { ...pageData, title: template.titleTemplate, content: template.content,
+        const projectedPage = { ...pageData, title: template.titleTemplate, content: template.content,
           seo: {}, blocks };
+        if (verifiedTemplateBlocks) verifiedCityHomes?.add(projectedPage);
+        return projectedPage;
       }),
     })),
   };

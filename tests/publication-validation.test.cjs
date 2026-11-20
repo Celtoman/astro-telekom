@@ -120,12 +120,12 @@ test('catalog rendering reuses SEO substitutions from validation and keeps cross
   tariffTemplate.descriptionTemplate = 'Длинное описание тарифа '.repeat(10);
   tariffTemplate.indexState = 'NOINDEX';
   const expected = validatePublicationSource(source, input, render);
-  const original = registry.resolveVariableText;
+  const original = registry.VariableTextTemplates.prototype.resolve;
   let rendering = false;
   let seoRenderCalls = 0;
-  registry.resolveVariableText = (value, context, field) => {
-    if (rendering && field.path.includes('.seo.')) seoRenderCalls++;
-    return original(value, context, field);
+  registry.VariableTextTemplates.prototype.resolve = function (value, context, path) {
+    if (rendering && path.includes('.seo.')) seoRenderCalls++;
+    return original.call(this, value, context, path);
   };
   try {
     const service = new SiteCatalogService({});
@@ -141,7 +141,7 @@ test('catalog rendering reuses SEO substitutions from validation and keeps cross
     assert.ok(actual.report.issues.some((issue) => issue.code === 'SEO_LONG_DESCRIPTION' && issue.path === '/moskva/giga'));
     assert.ok(actual.catalog.sitemap.excludedPaths.includes('/kazan/fast'));
   } finally {
-    registry.resolveVariableText = original;
+    registry.VariableTextTemplates.prototype.resolve = original;
   }
 });
 
@@ -178,4 +178,46 @@ test('validation retains separate SEO errors and validates even templates withou
   assert.deepEqual(unrenderable.report.issues.find((issue) => issue.code === 'CATALOG_RENDER'), {
     severity: 'BLOCKING', code: 'CATALOG_RENDER', path: '/', message: 'Неизвестное состояние индексации: ACCOUNT',
   });
+});
+
+test('CITY_HOME composition verified during template projection is reused in the same pass', () => {
+  const { cityHomeSource } = require('./helpers/city-home-source.cjs');
+  const validation = require('../apps/api/dist/block-validation.js');
+  const source = cityHomeSource();
+  const before = structuredClone(source);
+  const original = validation.validateCityHomeBlocks;
+  let calls = 0;
+  validation.validateCityHomeBlocks = (...args) => { calls++; return original(...args); };
+  try {
+    const { catalog, report } = validatePublicationSource(source, input, render);
+    assert.notEqual(report.outcome, 'BLOCKED');
+    assert.equal(catalog.cities.length, 3);
+    assert.deepEqual(source, before);
+    assert.equal(calls, 0);
+  } finally {
+    validation.validateCityHomeBlocks = original;
+  }
+});
+
+test('CITY_HOME retains definitive errors for unsorted rows and for a changed render input', () => {
+  const { cityHomeSource } = require('./helpers/city-home-source.cjs');
+  const source = cityHomeSource();
+  const unsorted = structuredClone(source);
+  const blocks = unsorted.pageTemplates[0].blocks;
+  [blocks[0], blocks[1]] = [blocks[1], blocks[0]];
+  const invalid = validatePublicationSource(unsorted, input, () => assert.fail('Must not render an invalid projection'));
+  assert.equal(invalid.catalog, null);
+  assert.equal(invalid.report.outcome, 'BLOCKED');
+  assert.deepEqual(invalid.report.issues.filter(issue => issue.code === 'CITY_HOME_BLOCKS').map(issue => ({
+    path: issue.path, template: issue.template, field: issue.field, reason: issue.reason,
+  })), source.cities.map(city => ({ path: `/${city.slug}`, template: 'CITY_HOME', field: 'blocks', reason: 'COMPOSITION' })));
+
+  const changed = validatePublicationSource(source, input, (value, now) => {
+    const next = structuredClone(value);
+    next.pageTemplates[0].blocks[0].data.title = '';
+    return render(next, now);
+  });
+  assert.equal(changed.catalog, null);
+  assert.equal(changed.report.outcome, 'BLOCKED');
+  assert.ok(changed.report.issues.some(issue => issue.code === 'CATALOG_RENDER'));
 });

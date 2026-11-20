@@ -64,6 +64,13 @@ test('catalog keeps legacy serialized tariff attributes but still rejects variab
   assert.throws(() => resolve(input, sources()), /Переменные запрещены.*online_cinemas/i);
   input.cities[0].tariffs[0].attributes.online_cinemas = '{city_name}';
   assert.throws(() => resolve(input, sources()), /Переменные запрещены.*online_cinemas/i);
+  input.cities[0].tariffs[0].attributes = {
+    features: [{ name: serialized }, { name: '{CITY_NAME}', alternate: '{YEAR}' }],
+    later: '{YEAR}',
+  };
+  assert.throws(() => resolve(input, sources()), {
+    message: 'Переменные запрещены вне редакционного поля или в URL: cities[0].tariffs[0].attributes.features[1].name',
+  });
 });
 
 test('catalog snapshot value is fixed after source changes', () => {

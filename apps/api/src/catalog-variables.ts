@@ -35,6 +35,32 @@ function object(value: unknown): JsonObject {
   return value && typeof value === 'object' && !Array.isArray(value) ? value as JsonObject : {};
 }
 
+function unexpectedVariableTokenPath(value: unknown): Array<string | number> | undefined {
+  if (typeof value === 'string') {
+    // Legacy tariff attributes can contain braces around serialized values.
+    if (value.includes('{') && /\{[A-Za-z][A-Za-z0-9_ ]*\}|\{[A-Z][^{}]*\}/.test(value)) return [];
+    return undefined;
+  }
+  if (Array.isArray(value)) {
+    for (let index = 0; index < value.length; index += 1) {
+      const path = unexpectedVariableTokenPath(value[index]);
+      if (path) {
+        path.push(index);
+        return path;
+      }
+    }
+  } else if (value && typeof value === 'object' && !(value instanceof Date)) {
+    for (const [key, item] of Object.entries(value)) {
+      if (key === 'variableWarnings' || key === 'variableUsages' || key === 'variableSources') continue;
+      const path = unexpectedVariableTokenPath(item);
+      if (path) {
+        path.push(key);
+        return path;
+      }
+    }
+  }
+}
+
 export function resolveCatalogVariables<T extends JsonObject>(catalog: T, sources: VariableContext, templates?: VariableTextTemplates): T & { variableWarnings: VariableWarning[]; variableUsages: VariableUsage[]; variableSources: { providerName: string | null; resolvedAt: string } } {
   const warnings: VariableWarning[] = [];
   const usages: VariableUsage[] = [];
@@ -159,24 +185,15 @@ export function resolveCatalogVariables<T extends JsonObject>(catalog: T, source
     validateGeneralHomeComposition(result.generalHome.blocks.map(({ blockType, data }: JsonObject) => ({ blockType, data })), result.generalHome.version);
   }
 
-  const assertNoSkippedTokens = (value: unknown, path: string): void => {
-    if (typeof value === 'string') {
-      // Match variable-shaped tokens, not arbitrary structured legacy values
-      // such as PHP-serialized a:4:{i:0;s:3:"ivi";...} tariff attributes.
-      if (/\{[A-Za-z][A-Za-z0-9_ ]*\}|\{[A-Z][^{}]*\}/.test(value)) {
-        throw new BadRequestException(`Переменные запрещены вне редакционного поля или в URL: ${path}`);
-      }
-      return;
+  const invalidTokenPath = unexpectedVariableTokenPath(result);
+  if (invalidTokenPath) {
+    let path = '';
+    for (const segment of invalidTokenPath.reverse()) {
+      if (typeof segment === 'number') path += `[${segment}]`;
+      else path = path ? `${path}.${segment}` : segment;
     }
-    if (Array.isArray(value)) {
-      value.forEach((item, index) => assertNoSkippedTokens(item, `${path}[${index}]`));
-    } else if (value && typeof value === 'object' && !(value instanceof Date)) {
-      for (const [key, item] of Object.entries(value)) {
-        if (!['variableWarnings', 'variableUsages', 'variableSources'].includes(key)) assertNoSkippedTokens(item, path ? `${path}.${key}` : key);
-      }
-    }
-  };
-  assertNoSkippedTokens(result, '');
+    throw new BadRequestException(`Переменные запрещены вне редакционного поля или в URL: ${path}`);
+  }
   if (result.homeHeroVersion === HOME_HERO_VERSION) validateFirstScreen('HOME', result.homeHero, false, HOME_HERO_VERSION);
   return result as T & { variableWarnings: VariableWarning[]; variableUsages: VariableUsage[]; variableSources: { providerName: string | null; resolvedAt: string } };
 }
