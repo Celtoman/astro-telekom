@@ -107,8 +107,10 @@ test('selected page refuses a changed revision or editorial base and retains err
   const prisma = { $transaction: fn => fn({ site: { findUnique: async () => site } }) }
   const catalog = new SiteCatalogService({})
   let captures = 0
-  catalog.captureSourceBySiteId = async () => {
+  const captureOptions = []
+  catalog.captureSourceBySiteId = async (_siteId, _transaction, options) => {
     captures++
+    captureOptions.push(options)
     return { ...source, publicationBaseId: 'baseline-a' }
   }
   catalog.listBySiteId = async () => catalog.renderSource(source)
@@ -119,6 +121,9 @@ test('selected page refuses a changed revision or editorial base and retains err
   const selected = await service.getWorkingPreviewPage(site.id, '/faq', 4, 'baseline-a')
   assert.equal(selected.path, '/faq')
   assert.equal(selected.publishedRevision, 3)
+  const home = await service.getWorkingPreviewPage(site.id, '/', 4, 'baseline-a')
+  assert.equal(home.path, '/')
+  assert.deepEqual(captureOptions, [{}, {}, { compactHomeTariffDescriptions: true }])
   source.cities[0].pages[0].slug = 'broken-other-city-home'
   const exactError = /должна иметь пустой slug/
   await assert.rejects(service.getWorkingPreview(site.id), exactError)

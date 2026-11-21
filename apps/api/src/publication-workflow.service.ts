@@ -476,14 +476,14 @@ export class PublicationWorkflowService {
   }
 
   async getWorkingPreviewPage(siteId: string, path: string, workingRevision: number, basePublicationId: string | null) {
-    const { site, catalog } = await this.readWorkingPreviewCatalog(siteId, workingRevision, basePublicationId);
+    const { site, catalog } = await this.readWorkingPreviewCatalog(siteId, path, workingRevision, basePublicationId);
     return {
       siteId, path, workingRevision, basePublicationId, publishedRevision: site.publishedRevision,
       catalog: this.jsonSnapshot(workingPreviewPage(catalog, path)) as JsonObject,
     };
   }
 
-  private async readWorkingPreviewCatalog(siteId: string, workingRevision: number, basePublicationId: string | null) {
+  private async readWorkingPreviewCatalog(siteId: string, path: string, workingRevision: number, basePublicationId: string | null) {
     const owned: { lease?: WorkingPreviewLease } = {};
     const staleBase = () => new ConflictException('Опубликованный редакционный снимок изменился. Обновите список страниц.');
     try {
@@ -496,7 +496,7 @@ export class PublicationWorkflowService {
           throw new ConflictException('Рабочая версия изменилась. Обновите список страниц.');
         }
         if (process.env.WORKING_PREVIEW_REUSE_ENABLED !== 'true') {
-          const source = await this.catalog.captureSourceBySiteId(site.id, tx, {});
+          const source = await this.catalog.captureSourceBySiteId(site.id, tx, path === '/' ? { compactHomeTariffDescriptions: true } : {});
           if ((source.publicationBaseId ?? null) !== basePublicationId) throw staleBase();
           return { state: 'build' as const, site, source, now: new Date() };
         }
