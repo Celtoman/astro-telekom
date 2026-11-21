@@ -138,6 +138,13 @@ test('general working preview uses the verified serving digest and pins incomple
   });
   const client = {
     $queryRaw: async query => {
+      if (query.text.includes('SELECT source.editorial, source.redirects')) {
+        assert.match(query.text, /JSON_TABLE\(validation\."sourceSnapshot"/);
+        assert.match(query.text, /strict \$\.cities\.type\(\)/);
+        assert.match(query.text, /strict \$\.globalPages\.type\(\)/);
+        assert.match(query.text, /strict \$\.editorial\.articles\.type\(\)/);
+        assert.doesNotMatch(query.text, /"sourceSnapshot" -> 'redirects'/);
+      }
       if (!query.text.includes('"SitePublicationProjection"')) {
         const publication = [historical, running].find(item => query.values.includes(item.validationId));
         assert.ok(publication);

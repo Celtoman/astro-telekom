@@ -10,6 +10,7 @@ import type { NewsRouteSource } from './news-projection';
 
 type EditorialClient = PrismaService | Prisma.TransactionClient;
 type EditorialSite = { id: string; slug: string };
+type EditorialSourceQuery = (validationId: string | Prisma.Sql) => Prisma.Sql;
 type PublishedArticle = Record<string, unknown> & { id: string };
 type PublishedCategory = { id: string; slug: string; revision: number; name: string };
 
@@ -79,14 +80,6 @@ function editorialProjectionQuery(site: EditorialSite, validationId: string | Pr
   `;
 }
 
-async function readProjection<T>(client: EditorialClient, site: EditorialSite, validationId: string, columns: Prisma.Sql,
-  missing?: (validationId: string) => Promise<T>) {
-  const [result] = await client.$queryRaw<T[]>(editorialProjectionQuery(site, validationId, columns));
-  if (result) return result;
-  if (missing) return missing(validationId);
-  throw missingSource();
-}
-
 const storedPreviewShell = Prisma.sql` || jsonb_build_object('catalogShell', (
   SELECT CASE WHEN jsonb_typeof(shell.cities) = 'array' AND jsonb_typeof(shell.routes) = 'array'
     THEN jsonb_build_object(
@@ -105,18 +98,26 @@ const storedPreviewShell = Prisma.sql` || jsonb_build_object('catalogShell', (
   FROM jsonb_to_record(p.catalog) shell(cities jsonb, routes jsonb)
 ))`;
 
-async function readEditorialView<T>(client: EditorialClient, site: EditorialSite, columns: Prisma.Sql, options: {
+async function readEditorialView<T>(client: EditorialClient, site: EditorialSite, selection: Prisma.Sql | EditorialSourceQuery, options: {
   shell?: boolean;
   compactLegacy?: boolean;
   missing?: (validationId: string) => Promise<T>;
 } = {}) {
+  const query = typeof selection === 'function' ? selection
+    : (validationId: string | Prisma.Sql) => editorialProjectionQuery(site, validationId, selection);
+  const readExact = async (validationId: string) => {
+    const [data] = await client.$queryRaw<T[]>(query(validationId));
+    if (data) return data;
+    if (options.missing) return options.missing(validationId);
+    throw missingSource();
+  };
   // The source link, catalog generation, and seal must come from the same SQL statement.
-  const validatedSource = editorialProjectionQuery(site, Prisma.sql`p."validationId"`, columns);
+  const validatedSource = query(Prisma.sql`p."validationId"`);
   const stored = await readStoredProjection<T | null>(client, site.slug, Prisma.sql`(
     SELECT to_jsonb(selected) ${options.shell ? storedPreviewShell : Prisma.empty}
     FROM (${validatedSource}) selected
     WHERE p."catalogGeneration" = projection."catalogGeneration"
-  )`, (_catalog, publication) => readProjection<T>(client, site, validatedPublication(publication, site).validationId, columns, options.missing));
+  )`, (_catalog, publication) => readExact(validatedPublication(publication, site).validationId));
   if (stored) {
     const identity = validatedPublication(stored.publication, site);
     const data = stored.data ?? await options.missing?.(identity.validationId);
@@ -125,7 +126,7 @@ async function readEditorialView<T>(client: EditorialClient, site: EditorialSite
   }
   const identity = options.compactLegacy ? await resolveEditorialWorkingPreviewPublication(client, site)
     : { ...await resolveEditorialPublication(client, site), verifiedCatalogDigest: null };
-  return { ...identity, data: await readProjection<T>(client, site, identity.validationId, columns, options.missing) };
+  return { ...identity, data: await readExact(identity.validationId) };
 }
 
 export async function editorialServingSettings(client: EditorialClient, site: EditorialSite,
@@ -214,9 +215,26 @@ export async function editorialServingRouteInventory(client: EditorialClient, si
 }
 
 export async function editorialServingWorkingPreviewBase(client: EditorialClient, site: EditorialSite) {
-  const columns = Prisma.sql`source.editorial, validation."sourceSnapshot" -> 'redirects' AS redirects`;
+  // Only the shape of the large city/page branches is needed for this read.
+  const query: EditorialSourceQuery = validationId => Prisma.sql`
+    SELECT source.editorial, source.redirects
+    FROM "SitePublicationValidation" validation
+    CROSS JOIN LATERAL JSON_TABLE(validation."sourceSnapshot", 'strict $ ? (@.type() == "object")' COLUMNS (
+      site jsonb FORMAT JSON PATH 'strict $.site' NULL ON EMPTY NULL ON ERROR,
+      "citiesType" text PATH 'strict $.cities.type()' NULL ON EMPTY NULL ON ERROR,
+      "globalPagesType" text PATH 'strict $.globalPages.type()' NULL ON EMPTY NULL ON ERROR,
+      "articlesType" text PATH 'strict $.editorial.articles.type()' NULL ON EMPTY NULL ON ERROR,
+      editorial jsonb FORMAT JSON PATH 'strict $.editorial' NULL ON EMPTY NULL ON ERROR,
+      redirects jsonb FORMAT JSON PATH 'strict $.redirects' NULL ON EMPTY NULL ON ERROR
+    )) AS source
+    WHERE validation.id = ${validationId}
+      AND source.site -> 'id' = to_jsonb(${site.id}::text)
+      AND source."citiesType" = 'array'
+      AND source."globalPagesType" = 'array'
+      AND COALESCE(source."articlesType", 'null') IN ('array', 'null')
+  `;
   const { publication, validationId, data, verifiedCatalogDigest } = await readEditorialView<Pick<CatalogSource, 'editorial' | 'redirects'>>(
-    client, site, columns, { compactLegacy: true, missing: id => fullEditorialSnapshot(client, site, id) },
+    client, site, query, { compactLegacy: true, missing: id => fullEditorialSnapshot(client, site, id) },
   );
   // Historical malformed redirects follow the original capture of this exact validation.
   const source = Array.isArray(data.redirects) ? data : await fullEditorialSnapshot(client, site, validationId);
