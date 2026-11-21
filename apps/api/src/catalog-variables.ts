@@ -1,5 +1,5 @@
 import {ContentValidationError} from './content-validation-error';
-import {supportRichField,supportTextRuns,supportSerializeRuns} from './support-rich-text';
+import {supportRichField,supportTextRuns,supportSerializeRuns,type SupportTextRunReader} from './support-rich-text';
 import { SPEED_TEST_PAGE_SCHEMA } from './speed-test-page-model';
 import { supportSchemaValue,supportRestoreImages } from './support-image-model';
 import { SUPPORT_PAGE_SCHEMA } from './support-page-model';
@@ -61,7 +61,7 @@ function unexpectedVariableTokenPath(value: unknown): Array<string | number> | u
   }
 }
 
-export function resolveCatalogVariables<T extends JsonObject>(catalog: T, sources: VariableContext, templates?: VariableTextTemplates): T & { variableWarnings: VariableWarning[]; variableUsages: VariableUsage[]; variableSources: { providerName: string | null; resolvedAt: string } } {
+export function resolveCatalogVariables<T extends JsonObject>(catalog: T, sources: VariableContext, templates?: VariableTextTemplates, readSupportRuns: SupportTextRunReader = supportTextRuns): T & { variableWarnings: VariableWarning[]; variableUsages: VariableUsage[]; variableSources: { providerName: string | null; resolvedAt: string } } {
   const warnings: VariableWarning[] = [];
   const usages: VariableUsage[] = [];
   const resolveText = (input: string, context: VariableContext, path: string) =>
@@ -100,7 +100,7 @@ export function resolveCatalogVariables<T extends JsonObject>(catalog: T, source
       if(rule.kind==='list')return raw.map((item:any,i:number)=>visit(item,rule.item,fullPath+'['+i+']',localPath+'.'+i));
       if(!rule.variables)return raw;
       const beforeWarnings=warnings.length;
-      const output=supportRichField(localPath)?supportSerializeRuns(supportTextRuns(raw).map(run=>({...run,text:resolveField(run.text,fullPath,context,owner) as string}))):resolveField(raw,fullPath,context,owner);
+      const output=supportRichField(localPath)?supportSerializeRuns(readSupportRuns(raw).map(run=>({...run,text:resolveField(run.text,fullPath,context,owner) as string}))):resolveField(raw,fullPath,context,owner);
       if(warnings.length>beforeWarnings){const error=new ContentValidationError(localPath,'VARIABLE_EMPTY','SUPPORT: для переменной в этом поле нет значения выбранного города.');error.block='support';throw error;}
       return output;
     };

@@ -36,6 +36,7 @@ import { newsRoutes, newsSeoForRoute, type NewsRouteSource } from './news-projec
 import { cityTariffFacts } from './city-tariff-facts';
 import { previewRouteOptions } from './preview-route-labels';
 import { resolveVariableText } from './variable-registry';
+import { createSupportTextRunReader, type SupportTextRunReader } from './support-rich-text';
 
 type CatalogClient = Prisma.TransactionClient | PrismaService;
 export type CatalogSource = {
@@ -204,6 +205,7 @@ export class SiteCatalogService {
 
   renderSource(source: CatalogSource, now = new Date(), resolution?: PublicationResolutionContext) {
     const verifiedCityHomes = new WeakSet<object>();
+    const readSupportRuns = createSupportTextRunReader();
     const { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates } = materializeCityHomeSource(source, verifiedCityHomes);
     const homeTemplate = source.pageTemplates?.find(template => template.kind === 'HOME');
     const homeScreen = homeTemplate ? firstScreenFromTemplate(homeTemplate) : undefined;
@@ -234,14 +236,14 @@ export class SiteCatalogService {
       routes:allRoutes,
       sitemap: { excludedPaths: sitemapExclusions.map((item) => item.path) },
       redirects: this.effectiveRedirects(allRoutes, redirects),
-      cities: cities.map((city: any) => this.cityResponse(city, site, verifiedCityHomes)),
+      cities: cities.map((city: any) => this.cityResponse(city, site, verifiedCityHomes, readSupportRuns)),
     }, {
       site: { ...publicDisplay, connectionPhone: site.connectionPhone, supportPhone: site.supportPhone, corporatePhone: readCorporatePhone(site.settings) },
       provider: { name: site.provider.name },
       now,
-    }, resolution?.variableTemplates);
+    }, resolution?.variableTemplates, readSupportRuns);
     for (const page of resolved.globalPages) { if (page.type === 'ACCOUNT') validateAccountPage(page.content); if (page.type === 'SPEED_TEST') validateSpeedTestPage(page.content); if (page.type === 'OFFICIAL_SITE') validateOfficialSitePage(page.content); }
-    for (const city of resolved.cities) for (const page of city.pages) if (page.type === 'CITY_SUPPORT') { validateSupportPage(page.content); assertSupportMedia(page.content,source.supportMedia); }
+    for (const city of resolved.cities) for (const page of city.pages) if (page.type === 'CITY_SUPPORT') { validateSupportPage(page.content, false, readSupportRuns); assertSupportMedia(page.content,source.supportMedia); }
     const seo = resolveSeoTemplates({
       routes,
       templates: seoTemplates,
@@ -281,7 +283,7 @@ export class SiteCatalogService {
     return this.cityResponse(materialized.cities[0], site);
   }
 
-  cityResponse(city: any, site: any, verifiedCityHomes?: WeakSet<object>) {
+  cityResponse(city: any, site: any, verifiedCityHomes?: WeakSet<object>, readSupportRuns?: SupportTextRunReader) {
     const inheritedContent = mergeContent(publicContent(site.provider.settings), publicContent(site.settings));
     const inheritedSeo: Record<string, unknown> = {};
     const { site: _site, region, pages, tariffs, ...cityData } = city;
@@ -301,7 +303,7 @@ export class SiteCatalogService {
       seo: inheritedSeo,
       region: { name: region.name, slug: region.slug },
       tariffFacts: cityTariffFacts(tariffs),
-      pages: pages.map((page: any) => this.pageResponse(page, inheritedContent, inheritedSeo, city.name, verifiedCityHomes)),
+      pages: pages.map((page: any) => this.pageResponse(page, inheritedContent, inheritedSeo, city.name, verifiedCityHomes, readSupportRuns)),
       tariffs: tariffs.map((tariff: any) => ({
         ...tariff,
         seo: inheritedSeo,
@@ -309,8 +311,8 @@ export class SiteCatalogService {
     };
   }
 
-  pageResponse(page: any, inheritedContent: Record<string, unknown>, inheritedSeo: Record<string, unknown>, cityName?: string, verifiedCityHomes?: WeakSet<object>) {
-    if (page.type === 'CITY_SUPPORT') { validateSupportPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
+  pageResponse(page: any, inheritedContent: Record<string, unknown>, inheritedSeo: Record<string, unknown>, cityName?: string, verifiedCityHomes?: WeakSet<object>, readSupportRuns?: SupportTextRunReader) {
+    if (page.type === 'CITY_SUPPORT') { validateSupportPage(page.content, false, readSupportRuns); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'FAQ' && page.cityId === null) { validateFaqPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'SPEED_TEST') { validateSpeedTestPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'OFFICIAL_SITE') { validateOfficialSitePage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }

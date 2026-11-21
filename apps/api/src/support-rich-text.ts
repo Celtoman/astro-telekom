@@ -7,6 +7,7 @@ export const SUPPORT_LINK_TARGETS = {
 } as const;
 export type SupportLinkTarget = keyof typeof SUPPORT_LINK_TARGETS;
 export interface SupportTextRun { text: string; bold?: boolean; target?: SupportLinkTarget }
+export type SupportTextRunReader = (value: string) => readonly SupportTextRun[];
 export const supportRichField = (path:string) => /(?:^|\.)(?:intro|first|second|body|numberIntro|numberNote|connectionBody|skipMenu|helpBody|cityIntro|explanation|appNote|entryText|dialogue|instruction|remoteIntro|consent|note|exampleNote|answer|step[1-7])$/.test(path);
 export const supportEscapeText = (text:string) => text.replace(/[\\*[\]()]/g,'\\$&');
 export function supportTextRuns(value:string,depth=0):SupportTextRun[] {
@@ -34,6 +35,17 @@ export function supportTextRuns(value:string,depth=0):SupportTextRun[] {
   flush();
   if(bold)throw new Error('Не закрыто жирное выделение.');
   return runs;
+}
+
+export function createSupportTextRunReader(): SupportTextRunReader {
+  const parsed = new Map<string, readonly SupportTextRun[]>();
+  return value => {
+    const existing = parsed.get(value);
+    if (existing) return existing;
+    const runs = supportTextRuns(value);
+    if (parsed.size < 512) parsed.set(value, runs);
+    return runs;
+  };
 }
 export const supportPlainText = (value:string) => supportTextRuns(value).map(run=>run.text).join('');
 export function supportSerializeRuns(runs:readonly SupportTextRun[]):string {

@@ -22,7 +22,8 @@ test('SUPPORT composition and destinations survive JSONB object-key reordering',
 });
 
 test('SUPPORT public page and saved preview preserve all cities, typed links and the complete phone source',()=>{
- const source=supportPageSource(),catalog=service.renderSource(source);
+ const source=supportPageSource(),capturedSource=structuredClone(source),catalog=service.renderSource(source);
+ assert.deepEqual(source,capturedSource);
  assert.equal(catalog.routes.filter(r=>r.kind==='CITY_SUPPORT').length,catalog.cities.length);
  for(const city of catalog.cities){
   const c=city.pages.find(p=>p.type==='CITY_SUPPORT').content;

@@ -3,6 +3,7 @@ export interface SupportImage { src:string; assetId:string; alt:string; caption:
 export const SUPPORT_IMAGE_PATHS = {introduction:'introduction.image',phone:'phones.image',callbackMenu:'callback.menu',callbackForm:'callback.form',chatEntry:'chat.entry',chatDialogue:'chat.image',social:'social.image',account:'account.image',app:'app.image',business:'business.image'} as const;
 export type SupportImageSlot = keyof typeof SUPPORT_IMAGE_PATHS;
 export const SUPPORT_IMAGE_SLOTS = Object.keys(SUPPORT_IMAGE_PATHS) as SupportImageSlot[];
+const supportImageFields = Object.values(SUPPORT_IMAGE_PATHS).map(path => path.split('.') as [string, string]);
 export const SUPPORT_CROP_SLOTS:readonly SupportImageSlot[]=['phone','callbackMenu','callbackForm','chatEntry','chatDialogue'];
 export const SUPPORT_FULL_CROP:SupportCrop={x:0,y:0,width:1,height:1};
 export function supportCropValid(c:unknown):c is SupportCrop {
@@ -17,14 +18,22 @@ export function supportSetValue(value:unknown,path:string,next:unknown):void {
   const parts=path.split('.'),key=parts.pop()!;
   const parent=parts.reduce<any>((n,k)=>n[k],value);parent[key]=next;
 }
-/** General text-schema validation never receives image transport/crop metadata. */
+/** Build a read-only schema view. Copy only the branches with image transport metadata. */
 export function supportSchemaValue<T>(content:T):T {
-  const c=structuredClone(content);
-  for(const path of Object.values(SUPPORT_IMAGE_PATHS)){
-    const image=supportValue(c,path);
-    if(image&&typeof image==='object'){const {assetId:_id,crop:_crop,...base}=image as SupportImage;supportSetValue(c,path,base);}
+  if (!content || typeof content !== 'object' || Array.isArray(content)) return content;
+  const source = content as Record<string, unknown>;
+  const projection = { ...source };
+  for (const [section, field] of supportImageFields) {
+    if (!Object.hasOwn(projection, section)) continue;
+    const value = projection[section];
+    if (!value || typeof value !== 'object' || !Object.hasOwn(value, field)) continue;
+    const fields = value as Record<string, unknown>;
+    const image = fields[field];
+    if (!image || typeof image !== 'object') continue;
+    const { assetId: _assetId, crop: _crop, ...schemaImage } = image as SupportImage;
+    projection[section] = { ...fields, [field]: schemaImage };
   }
-  return c;
+  return projection as T;
 }
 export function supportRestoreImages<T>(original:unknown,resolved:T):T {
   for(const path of Object.values(SUPPORT_IMAGE_PATHS)){

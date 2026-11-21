@@ -1,9 +1,9 @@
 import { SUPPORT_PAGE_VERSION, type SupportPageContent } from './support-page-model';
 import { SUPPORT_CROP_SLOTS, SUPPORT_IMAGE_PATHS, supportCropValid, supportValue, type SupportImage } from './support-image-model';
 import { SUPPORT_STATIC_IMAGES } from './support-static-images';
-import { supportRichField, supportTextRuns } from './support-rich-text';
+import { supportRichField, supportTextRuns, type SupportTextRunReader } from './support-rich-text';
 
-export function checkSupportPolicy(c:SupportPageContent, fail:(field:string,reason:string,message:string)=>never):void {
+export function checkSupportPolicy(c:SupportPageContent, fail:(field:string,reason:string,message:string)=>never, readRuns:SupportTextRunReader = supportTextRuns):void {
   if(c.version!==SUPPORT_PAGE_VERSION)fail('version','VERSION','Неизвестная версия страницы поддержки.');
   for(const [slot,path]of Object.entries(SUPPORT_IMAGE_PATHS)){
     const image=supportValue(c,path) as SupportImage;
@@ -20,7 +20,7 @@ export function checkSupportPolicy(c:SupportPageContent, fail:(field:string,reas
     }
   }
   const visit=(value:unknown,path='')=>{
-    if(typeof value==='string'&&supportRichField(path)){try{supportTextRuns(value);}catch(e){fail(path,'RICH_TEXT',e instanceof Error?e.message:'Некорректное форматирование.');}}
+    if(typeof value==='string'&&supportRichField(path)){try{readRuns(value);}catch(e){fail(path,'RICH_TEXT',e instanceof Error?e.message:'Некорректное форматирование.');}}
     else if(Array.isArray(value))value.forEach((v,i)=>visit(v,path+'.'+i));
     else if(value&&typeof value==='object')for(const[k,v]of Object.entries(value))visit(v,path?path+'.'+k:k);
   };
