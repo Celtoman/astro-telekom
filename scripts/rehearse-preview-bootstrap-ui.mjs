@@ -16,6 +16,7 @@ const publicationMs = Number(process.env.PREVIEW_FIXTURE_PUBLICATION_MS ?? 15_00
 assert.ok([wireMs, pageMs, publicationMs].every(ms => Number.isSafeInteger(ms) && ms >= 0 && ms <= 60_000));
 const fixture = await createPreviewBootstrapFixture({ wireMs, pageMs });
 fixture.state.publication = () => wait(publicationMs);
+let legacyApi = false;
 const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css',
   '.json': 'application/json', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.webp': 'image/webp',
   '.png': 'image/png', '.jpg': 'image/jpeg', '.avif': 'image/avif' };
@@ -30,6 +31,7 @@ const server = createServer(async (request, response) => {
       if (!Object.hasOwn(builds, arm)) return response.writeHead(400).end('Choose baseline or candidate');
       fixture.state.authorized = url.searchParams.get('expired') !== 'true';
       fixture.state.expireOnPublication = url.searchParams.get('expired') === 'publication';
+      legacyApi = url.searchParams.get('legacyApi') === 'true';
       response.writeHead(302, { 'Set-Cookie': [fixtureCookie + '; HttpOnly; SameSite=Strict; Path=/api/v1',
         'preview_fixture_arm=' + arm + '; HttpOnly; SameSite=Strict; Path=/'],
       Location: url.searchParams.get('menu') === 'true' ? '/' : '/preview?siteId=site-a&path=%2Fpolitika' });
@@ -37,7 +39,8 @@ const server = createServer(async (request, response) => {
     }
     if (path.startsWith('/api/v1/')) {
       const began = performance.now();
-      const reply = await fixture.request(path + url.search, request.headers.cookie ? { cookie: request.headers.cookie } : {});
+      const fixturePath = legacyApi && path === '/api/v1/admin/sites/preview-bootstrap' ? '/api/v1/no-bootstrap' : path;
+      const reply = await fixture.request(fixturePath + url.search, request.headers.cookie ? { cookie: request.headers.cookie } : {});
       response.writeHead(reply.statusCode, { 'Content-Type': types['.json'], 'Cache-Control': 'private, no-store',
         'Content-Length': Buffer.byteLength(reply.payload) });
       response.end(reply.payload);

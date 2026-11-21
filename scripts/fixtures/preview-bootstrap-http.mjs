@@ -67,7 +67,10 @@ export async function createPreviewBootstrapFixture({ wireMs = 0, pageMs = 0 } =
   publications.getState = async () => {
     trace.push('publication-state');
     await state.publication();
-    if (state.expireOnPublication) throw new UnauthorizedException();
+    if (state.expireOnPublication) {
+      state.authorized = false;
+      throw new UnauthorizedException();
+    }
     return { workingRevision: state.workingRevision, publishedRevision: 7, hasUnpublishedChanges: true };
   };
   class FixtureModule {}

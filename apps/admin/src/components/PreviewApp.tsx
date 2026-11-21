@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { CircleAlert, Monitor, RefreshCw, Smartphone, Tablet } from "lucide-react"
 import { AdminApiError, clearNavigationData, requestJson } from "../lib/admin-api.mjs"
+import { readPreviewWorkspace, type PreviewSite } from "../lib/preview-bootstrap"
 import type { PreviewRouteOption } from "../lib/preview-document.mjs"
 import { buildWorkingPreviewDocument } from "../lib/working-preview-document"
 import { previewContentIssue } from "../lib/preview-content-issue.mjs"
@@ -15,7 +16,6 @@ import { Input } from "./ui/input"
 import { Skeleton } from "./ui/skeleton"
 
 interface Administrator { id: string; email: string }
-interface Site { id: string; name: string; slug: string }
 interface PreviewRevision {
   siteId: string
   workingRevision: number
@@ -33,17 +33,11 @@ interface PreviewResponse extends PreviewRevision {
   path: string
   catalog: Record<string, any>
 }
-interface PreviewBootstrap {
-  user: Administrator
-  sites: Site[]
-  selectedSiteId: string | null
-  options: PreviewOptions | null
-}
 
 type ScreenState =
   | { status: "loading" }
   | { status: "error"; message: string }
-  | { status: "ready"; user: Administrator; sites: Site[] }
+  | { status: "ready"; user: Administrator; sites: PreviewSite[] }
 
 type Viewport = "desktop" | "tablet" | "mobile"
 
@@ -121,12 +115,9 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
     requests.add(abort)
     setState({ status: "loading" })
     const location = new URLSearchParams(window.location.search)
-    const query = new URLSearchParams()
     const siteId = preferredSiteId || location.get("siteId")
     const preferred = routeRef.current?.path ?? location.get("path")
-    if (siteId) query.set("siteId", siteId)
-    if (preferred) query.set("preferred", preferred)
-    void requestJson<PreviewBootstrap>(apiUrl, `/admin/sites/preview-bootstrap?${query}`, { signal: abort.signal })
+    void readPreviewWorkspace<PreviewOptions>(apiUrl, siteId, preferred, abort.signal)
       .then(result => {
         if (abort.signal.aborted) return
         const options = result.options?.siteId === result.selectedSiteId ? result.options : null

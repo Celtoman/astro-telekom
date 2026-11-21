@@ -36,7 +36,7 @@ Exact-SHA CI прошёл без failures/skips; внешний test-конту�
 
 **Локальная проверка 7 ноября 2026:** полный `pnpm check` по окончательному staged export `f9559a99d4782f126697eb0cc53802da85ca8f6b`: 1069 pass / 0 fail / 1 skip, 476658 ms. Пропущена Windows-проверка файловой symlink без соответствующей привилегии. Остальные проверки, включая реальные PostgreSQL/Redis/Astro/Caddy rehearsals, выполнены; красный результат не принят как baseline.
 
-`admin-publication-indicator.test.mjs` проверяет общий editorial scope новостей/категорий/settings/404 и отличие legacy-разделов. `admin-preview-ui.test.mjs` дополнен проверкой локальной привязки обеих новостных SVG-заглушек в sandbox preview. `admin-preview-bootstrap.test.mjs` проверяет фактическую HTTP-очередность через Nest/Fastify, 401 до чтения сайтов и 409 до рендера, старый fallback options и готовность выбранной страницы при удержанном запросе состояния публикации.
+`admin-publication-indicator.test.mjs` проверяет общий editorial scope новостей/категорий/settings/404 и отличие legacy-разделов. `admin-preview-ui.test.mjs` дополнен проверкой локальной привязки обеих новостных SVG-заглушек в sandbox preview. `admin-preview-bootstrap.test.mjs` проверяет фактическую HTTP-очередность через Nest/Fastify, 401 до чтения сайтов и 409 до рендера, отдельное чтение options и готовность выбранной страницы при удержанном состоянии публикации. В тесте отката новый клиент проходит прежнюю авторизованную цепочку только при 404, а модель истёкшей сессии даёт 401 и в следующей проверке входа.
 
 `ci-runtime.test.mjs` дополнен регрессией #559: serving baseline и ревизии CMS не считаются объявлением числа тестов; явные `Baseline: N/N`, `baseline тестов — N/N` и `pnpm test: N тестов` по-прежнему запрещены вне этого документа.
 

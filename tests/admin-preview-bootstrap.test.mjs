@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { setTimeout as wait } from 'node:timers/promises';
+import { readPreviewWorkspace } from '../apps/admin/src/lib/preview-bootstrap.ts';
 import { buildPreviewDocument } from '../apps/admin/src/lib/preview-document.mjs';
 import { createPreviewBootstrapFixture, fixtureCookie, fixturePath, fixtureUser } from '../scripts/fixtures/preview-bootstrap-http.mjs';
 
@@ -53,6 +54,50 @@ test('Preview rejects absent, expired and machine-only sessions before accessing
   assert.equal((await request(bootstrap, { cookie: fixtureCookie })).statusCode, 401);
   assert.equal((await request(page(initial.options), { cookie: fixtureCookie })).statusCode, 401);
   assert.deepEqual(trace, ['auth', 'auth']);
+});
+
+test('Expiry during publication-state invalidates the fixture session for the login check', async t => {
+  const fixture = await createPreviewBootstrapFixture();
+  t.after(fixture.close);
+  const { request, state } = fixture;
+  assert.equal((await request(bootstrap)).statusCode, 200);
+  state.expireOnPublication = true;
+  assert.equal((await request(root + '/site-a/publication-state')).statusCode, 401);
+  assert.equal((await request('/api/v1/auth/me')).statusCode, 401);
+  assert.equal((await request(bootstrap)).statusCode, 401);
+});
+
+test('New Preview opens with the previous API after rollback and only falls back for 404', async t => {
+  const fixture = await createPreviewBootstrapFixture();
+  t.after(fixture.close);
+  fixture.state.sites.push(fixture.otherSite);
+  const calls = [];
+  const fetchFromFixture = async input => {
+    const url = new URL(input);
+    calls.push(url.pathname);
+    const path = url.pathname === bootstrap ? '/api/v1/no-bootstrap' : url.pathname;
+    const reply = await fixture.request(path + url.search);
+    return new Response(reply.payload, { status: reply.statusCode });
+  };
+  const signal = new AbortController().signal;
+  const apiUrl = 'http://preview.example.invalid/api/v1';
+  const workspace = await readPreviewWorkspace(apiUrl, 'site-b', fixturePath, signal, fetchFromFixture);
+  assert.deepEqual(calls, [bootstrap, '/api/v1/auth/me', root]);
+  assert.deepEqual([workspace.user, workspace.selectedSiteId, workspace.options], [fixtureUser, 'site-b', null]);
+
+  const options = (await fixture.request(root + '/site-b/preview-options?preferred=%2Fpolitika')).json();
+  const selected = await fixture.request(page(options));
+  assert.equal(selected.statusCode, 200);
+  assert.equal(selected.json().path, fixturePath);
+
+  const noSelection = await readPreviewWorkspace(apiUrl, null, null, signal, fetchFromFixture);
+  assert.equal(noSelection.selectedSiteId, null);
+  for (const status of [401, 503]) {
+    await assert.rejects(readPreviewWorkspace(apiUrl, 'site-b', null, signal, async input => {
+      assert.equal(new URL(input).pathname, bootstrap);
+      return new Response(null, { status });
+    }), { status });
+  }
 });
 
 test('Preview does not render after a working revision or active base changes', async t => {
