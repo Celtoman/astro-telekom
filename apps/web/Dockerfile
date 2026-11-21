@@ -10,12 +10,14 @@ COPY packages/database/package.json ./packages/database/package.json
 COPY scripts/pnpm-install-retry.sh ./scripts/pnpm-install-retry.sh
 RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
     sh scripts/pnpm-install-retry.sh --filter @provider/web --frozen-lockfile --trust-lockfile
+
+FROM web-deps AS web-sources
 COPY . .
 
-FROM web-deps AS publisher
+FROM web-sources AS publisher
 CMD ["sh", "apps/web/scripts/publish-static.sh"]
 
-FROM web-deps AS build
+FROM web-sources AS build
 ARG PUBLIC_API_URL
 ARG SITE_DATA_API_URL
 ARG PUBLIC_SITE_URL
@@ -36,6 +38,11 @@ FROM caddy:2.11.4-alpine AS coolify-server
 COPY deploy/coolify-web.Caddyfile /etc/caddy/Caddyfile
 
 FROM web-deps AS publication-runtime
+COPY .npmrc ./.npmrc
+COPY apps/web ./apps/web
+COPY apps/api/src ./apps/api/src
+COPY scripts ./scripts
+COPY deploy/coolify-web.Caddyfile ./deploy/coolify-web.Caddyfile
 COPY --from=coolify-server /usr/bin/caddy /usr/bin/caddy
 EXPOSE 80
 CMD ["node", "apps/web/scripts/publication/runtime.mjs"]

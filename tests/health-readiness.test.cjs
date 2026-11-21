@@ -108,7 +108,19 @@ test('deployment Compose applies migrations and preserves a reproducible Coolify
   assert.equal((coolifyCompose.match(/basicauth\.users=\$\{TEST_BASIC_AUTH_USERS:\?[^}]+\}/g) || []).length, 2);
   assert.doesNotMatch(coolifyCompose, /basicauth\.users=(?!\$\{TEST_BASIC_AUTH_USERS)/);
   assert.match(webDockerfile, /sh scripts\/pnpm-install-retry\.sh --filter @provider\/web --frozen-lockfile --trust-lockfile/);
-  assert.match(webDockerfile, /FROM web-deps AS publisher/);
+  assert.match(webDockerfile, /FROM web-deps AS web-sources\r?\nCOPY \. \./);
+  assert.match(webDockerfile, /FROM web-sources AS publisher/);
+  assert.match(webDockerfile, /FROM web-sources AS build/);
+  const publicationRuntime = webDockerfile.match(/^FROM web-deps AS publication-runtime\r?\n([\s\S]*?)^FROM /m)?.[1];
+  assert.ok(publicationRuntime, 'publication runtime must build directly from the dependency stage');
+  assert.deepEqual(publicationRuntime.match(/^COPY .+$/gm), [
+    'COPY .npmrc ./.npmrc',
+    'COPY apps/web ./apps/web',
+    'COPY apps/api/src ./apps/api/src',
+    'COPY scripts ./scripts',
+    'COPY deploy/coolify-web.Caddyfile ./deploy/coolify-web.Caddyfile',
+    'COPY --from=coolify-server /usr/bin/caddy /usr/bin/caddy',
+  ]);
   assert.match(workerDockerfile, /sh scripts\/pnpm-install-retry\.sh --filter @provider\/worker --prod --frozen-lockfile --trust-lockfile/);
   assert.doesNotMatch(workerDockerfile, /pnpm install --frozen-lockfile/);
   assert.match(publishScript, /pnpm --filter @provider\/web run build[\s\S]*ln -s[\s\S]*mv -fT/);
