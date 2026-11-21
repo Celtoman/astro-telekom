@@ -224,3 +224,39 @@ test('Sitemap settings skip catalogue rendering and inventory pages retain exact
   assert.deepEqual(blocked.validation.errors, ['Ошибка SEO соседнего URL']);
   assert.ok(blocked.entries.every(item => !item.eligible));
 });
+
+test('Sitemap uses the sealed source for the exact inventory with projections enabled', async t => {
+  const { SitemapService } = loadSitemapModules();
+  const env = { REBUILD_PROVIDER: 'static', SERVING_CATALOG_PROJECTIONS_ENABLED: 'true' };
+  const previous = Object.fromEntries(Object.keys(env).map(key => [key, process.env[key]]));
+  t.after(() => {
+    for (const [key, value] of Object.entries(previous)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  });
+  Object.assign(process.env, env);
+
+  const f = fixture({ seoByPath: { '/kazan': { indexState: 'NOINDEX' } } });
+  const catalog = await f.catalog.listBySiteId();
+  const source = {};
+  const capture = t.mock.fn(async () => source);
+  const render = t.mock.fn(() => catalog);
+  f.catalog.captureSourceBySiteId = capture;
+  f.catalog.renderSource = render;
+  const readLegacy = t.mock.method(f.catalog, 'listBySiteId');
+  const service = new SitemapService(f.prisma, f.catalog, f.publications);
+  const query = { workingRevision: 8, page: 1 };
+
+  const actual = await service.getInventory('site-1', query);
+  assert.deepEqual(capture.mock.calls.map(call => call.arguments), [['site-1', f.prisma, {}]]);
+  assert.deepEqual(render.mock.calls.map(call => call.arguments), [[source]]);
+  assert.equal(readLegacy.mock.callCount(), 0);
+  assert.equal(actual.entries.find(entry => entry.path === '/kazan').eligible, false);
+
+  await service.getWorkspace('site-1');
+  process.env.SERVING_CATALOG_PROJECTIONS_ENABLED = 'false';
+  assert.deepEqual(await service.getInventory('site-1', query), actual);
+  assert.equal(readLegacy.mock.callCount(), 2);
+  assert.equal(capture.mock.callCount(), 1);
+});
