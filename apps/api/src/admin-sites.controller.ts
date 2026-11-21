@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { BadRequestException, ConflictException, Body, Controller, Get, Header, Param, Patch, Post, Query, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { Prisma } from '../generated';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
@@ -6,6 +6,8 @@ import { PublicationWorkflowService } from './publication-workflow.service';
 import { SiteValuesService } from './site-values.service';
 import { validateFirstScreen } from './first-screen';
 import { homeHeroDefaults, HOME_HERO_VERSION, HOME_HERO_IMPLEMENTATION, plainRedTitle } from './home-hero-model';
+import type { AuthUser } from './auth.service';
+import { readWorkingPreviewQuery } from './admin-route-pagination';
 
 type PublishStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
 
@@ -35,6 +37,26 @@ export class AdminSitesController {
   list(@Query('summary') summary?: string) {
     if (summary === 'true') return this.prisma.site.findMany({ orderBy: { name: 'asc' }, select: { id: true, name: true, slug: true, status: true, workingRevision: true, publishedRevision: true } });
     return this.prisma.site.findMany({ orderBy: { name: 'asc' }, include: { provider: true, regions: true, cities: { select: { id: true, name: true, slug: true, status: true } } } });
+  }
+
+  @Get('preview-bootstrap')
+  @Header('Cache-Control', 'private, no-store')
+  async previewBootstrap(@Req() request: { user?: AuthUser }, @Query('siteId') siteId?: string, @Query('preferred') preferred?: string) {
+    const user = request.user;
+    if (!user) throw new UnauthorizedException();
+    const sites = await this.list('true');
+    const site = sites.find(candidate => candidate.id === siteId) ?? (sites.length === 1 ? sites[0] : null);
+    const selectedSiteId = site?.id ?? null;
+    if (!site) return { user, sites, selectedSiteId, options: null };
+
+    try {
+      const options = await this.publications.getWorkingPreviewOptions(site.id, readWorkingPreviewQuery(undefined, undefined, preferred));
+      return { user, sites, selectedSiteId, options };
+    } catch (error) {
+      if (error instanceof UnauthorizedException) throw error;
+      // Let the existing options read report its own error without hiding the site picker.
+      return { user, sites, selectedSiteId, options: null };
+    }
   }
 
   @Get('values')

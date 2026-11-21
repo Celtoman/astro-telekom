@@ -17,3 +17,11 @@ export function readAdminRoutePage(value?: string): number {
   }
   return page;
 }
+
+export function readWorkingPreviewQuery(page?: string, search?: string, preferred?: string) {
+  if (search !== undefined && (typeof search !== 'string' || search.length > 250)
+    || preferred !== undefined && (typeof preferred !== 'string' || preferred.length > 600)) {
+    throw new BadRequestException('Некорректный поиск страницы предпросмотра');
+  }
+  return { page: readAdminRoutePage(page), search, preferred };
+}

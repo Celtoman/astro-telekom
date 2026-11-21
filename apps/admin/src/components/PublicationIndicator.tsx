@@ -13,7 +13,7 @@ import { Button, buttonVariants } from "./ui/button"
 
 interface SiteSummary { id: string; name: string }
 
-export function PublicationIndicator({ apiUrl, editorial=false }: { apiUrl: string; editorial?:boolean }) {
+export function PublicationIndicator({ apiUrl, editorial=false, initialSites }: { apiUrl: string; editorial?:boolean; initialSites?: SiteSummary[] }) {
   const [siteError, setSiteError] = useState<string | null>(null)
   const [site, setSite] = useState<SiteSummary | null>(null)
   const [open, setOpen] = useState(false)
@@ -23,9 +23,10 @@ export function PublicationIndicator({ apiUrl, editorial=false }: { apiUrl: stri
     return () => document.removeEventListener("admin:workspace-navigated", close)
   }, [])
   const snapshot = usePublicationState(apiUrl, site?.id)
-  const loadSite = useCallback(async () => {
+  const loadSite = useCallback(async (sitesFromWorkspace?: SiteSummary[]) => {
     try {
-      const sites = editorial ? [await requestJson<SiteSummary>(apiUrl, "/admin/sites/editorial-context")] : await requestJson<SiteSummary[]>(apiUrl, "/admin/sites?summary=true")
+      const sites = editorial ? [await requestJson<SiteSummary>(apiUrl, "/admin/sites/editorial-context")]
+        : sitesFromWorkspace ?? await requestJson<SiteSummary[]>(apiUrl, "/admin/sites?summary=true")
       const selected = resolvePublicationSite(sites)
       setSiteError(selected ? null : sites.length === 0 ? "Сайт не найден." : "Нельзя однозначно выбрать сайт.")
       setSite(selected)
@@ -35,7 +36,7 @@ export function PublicationIndicator({ apiUrl, editorial=false }: { apiUrl: stri
     }
   }, [apiUrl, editorial])
 
-  useEffect(() => { void loadSite() }, [loadSite])
+  useEffect(() => { void loadSite(initialSites) }, [initialSites, loadSite])
   const publication = snapshot.publication
   const reason = siteError ?? snapshot.error
   const loading = !reason && snapshot.status === "loading"

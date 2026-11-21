@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { CircleAlert, Monitor, RefreshCw, Smartphone, Tablet } from "lucide-react"
-import { AdminApiError, requestJson, requestSession } from "../lib/admin-api.mjs"
+import { AdminApiError, clearNavigationData, requestJson } from "../lib/admin-api.mjs"
 import type { PreviewRouteOption } from "../lib/preview-document.mjs"
 import { buildWorkingPreviewDocument } from "../lib/working-preview-document"
 import { previewContentIssue } from "../lib/preview-content-issue.mjs"
@@ -33,6 +33,12 @@ interface PreviewResponse extends PreviewRevision {
   path: string
   catalog: Record<string, any>
 }
+interface PreviewBootstrap {
+  user: Administrator
+  sites: Site[]
+  selectedSiteId: string | null
+  options: PreviewOptions | null
+}
 
 type ScreenState =
   | { status: "loading" }
@@ -63,6 +69,9 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
   const [previewError, setPreviewError] = useState<string | null>(null)
   const [previewIssue, setPreviewIssue] = useState<ReturnType<typeof previewContentIssue>>(null)
   const [refreshKey, setRefreshKey] = useState(0)
+  const pendingRequests = useRef(new Set<AbortController>())
+  const sessionExpired = useRef(false)
+  const initialOptionsSite = useRef<string | null>(null)
   const selectedPath = selectedRoute?.path ?? ""
   const options = loadedOptions?.refresh === refreshKey && loadedOptions.data.siteId === selectedSiteId ? loadedOptions.data : null
   const workingRevision = options?.workingRevision
@@ -76,30 +85,68 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
     setSelectedRoute(option)
   }, [])
 
+  const expireSession = useCallback(() => {
+    if (sessionExpired.current) return
+    sessionExpired.current = true
+    for (const request of pendingRequests.current) request.abort()
+    pendingRequests.current.clear()
+    setOptions(null)
+    setPreview(null)
+    setState({ status: "loading" })
+    clearNavigationData(true)
+    window.location.replace("/login")
+  }, [])
+
+  useEffect(() => {
+    const requests = pendingRequests.current
+    window.addEventListener("admin:session-expired", expireSession)
+    return () => {
+      window.removeEventListener("admin:session-expired", expireSession)
+      for (const request of requests) request.abort()
+      requests.clear()
+    }
+  }, [expireSession])
+
   const handleError = useCallback((caught: unknown, fallback: string) => {
     if (caught instanceof AdminApiError && caught.status === 401) {
-      window.location.replace("/login")
+      expireSession()
       return null
     }
     return caught instanceof Error ? caught.message : fallback
-  }, [])
+  }, [expireSession])
 
-  const loadWorkspace = useCallback(async () => {
+  const loadWorkspace = useCallback((preferredSiteId?: string) => {
+    const requests = pendingRequests.current
+    const abort = new AbortController()
+    requests.add(abort)
     setState({ status: "loading" })
-    try {
-      const [session, sites] = await Promise.all([
-        requestSession<{ user: Administrator }>(apiUrl),
-        requestJson<Site[]>(apiUrl, "/admin/sites?summary=true"),
-      ])
-      setState({ status: "ready", user: session.user, sites })
-      setSelectedSiteId((current) => sites.some((site) => site.id === current) ? current : sites.find(site => site.id === new URLSearchParams(window.location.search).get("siteId"))?.id ?? (sites.length === 1 ? sites[0].id : ""))
-    } catch (caught: unknown) {
-      const message = handleError(caught, "API недоступен")
-      if (message) setState({ status: "error", message })
-    }
-  }, [apiUrl, handleError])
+    const location = new URLSearchParams(window.location.search)
+    const query = new URLSearchParams()
+    const siteId = preferredSiteId || location.get("siteId")
+    const preferred = routeRef.current?.path ?? location.get("path")
+    if (siteId) query.set("siteId", siteId)
+    if (preferred) query.set("preferred", preferred)
+    void requestJson<PreviewBootstrap>(apiUrl, `/admin/sites/preview-bootstrap?${query}`, { signal: abort.signal })
+      .then(result => {
+        if (abort.signal.aborted) return
+        const options = result.options?.siteId === result.selectedSiteId ? result.options : null
+        initialOptionsSite.current = options?.siteId ?? null
+        setRefreshKey(0)
+        setOptions(options ? { data: options, refresh: 0 } : null)
+        chooseRoute(options?.selected ?? null)
+        setSelectedSiteId(result.selectedSiteId ?? "")
+        setState({ status: "ready", user: result.user, sites: result.sites })
+      })
+      .catch((caught: unknown) => {
+        if (abort.signal.aborted) return
+        const message = handleError(caught, "API недоступен")
+        if (message) setState({ status: "error", message })
+      })
+      .finally(() => { requests.delete(abort) })
+    return () => { abort.abort(); requests.delete(abort) }
+  }, [apiUrl, chooseRoute, handleError])
 
-  useEffect(() => { void loadWorkspace() }, [loadWorkspace])
+  useEffect(() => loadWorkspace(), [loadWorkspace])
 
   useEffect(() => {
     if (state.status !== "ready" || !selectedSiteId) {
@@ -108,8 +155,13 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
       setOptionsError(null)
       return
     }
-    let active = true
+    if (initialOptionsSite.current === selectedSiteId) {
+      initialOptionsSite.current = null
+      return
+    }
+    const requests = pendingRequests.current
     const abort = new AbortController()
+    requests.add(abort)
     const selected = routeRef.current
     const preferred = selected?.path ?? new URLSearchParams(window.location.search).get("path")
     const query = new URLSearchParams({ page: String(routeQuery.page), search: routeQuery.search })
@@ -118,16 +170,16 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
     setOptionsError(null)
     void requestJson<PreviewOptions>(apiUrl, `/admin/sites/${encodeURIComponent(selectedSiteId)}/preview-options?${query}`, { signal: abort.signal })
       .then(result => {
-        if (!active) return
+        if (abort.signal.aborted) return
         setOptions({ data: result, refresh: refreshKey })
         if (routeRef.current === selected) chooseRoute(result.selected)
       })
       .catch((caught: unknown) => {
-        if (!active) return
+        if (abort.signal.aborted) return
         setOptionsError(handleError(caught, "Список страниц не загружен"))
       })
-      .finally(() => { if (active) setLoadingOptions(false) })
-    return () => { active = false; abort.abort() }
+      .finally(() => { requests.delete(abort); if (!abort.signal.aborted) setLoadingOptions(false) })
+    return () => { abort.abort(); requests.delete(abort) }
   }, [apiUrl, chooseRoute, handleError, refreshKey, routeQuery, selectedSiteId, state.status])
 
   useEffect(() => {
@@ -138,8 +190,9 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
       setPreviewIssue(null)
       return
     }
-    let active = true
+    const requests = pendingRequests.current
     const abort = new AbortController()
+    requests.add(abort)
     const query = new URLSearchParams({ path: selectedPath, workingRevision: String(workingRevision) })
     if (basePublicationId) query.set("basePublicationId", basePublicationId)
     setLoadingPreview(true)
@@ -147,6 +200,7 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
     setPreviewIssue(null)
     void requestJson<PreviewResponse>(apiUrl, `/admin/sites/${encodeURIComponent(selectedSiteId)}/preview-page?${query}`, { signal: abort.signal })
       .then(async (result) => {
+        if (abort.signal.aborted) return
         const mediaAssets: Record<string, string> = {}
         await Promise.all(Object.entries(result.catalog.supportMedia ?? {}).map(async ([key, raw]) => {
           const last = (raw as Array<{ src: string; sha256: string }>).at(-1)
@@ -163,16 +217,16 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
             reader.readAsDataURL(blob)
           })
         }))
-        if (active) setPreview({ data: result, assets: mediaAssets, refresh: refreshKey })
+        if (!abort.signal.aborted) setPreview({ data: result, assets: mediaAssets, refresh: refreshKey })
       })
       .catch((caught: unknown) => {
-        if (!active) return
+        if (abort.signal.aborted) return
         setPreview(null)
         const message = handleError(caught, "Предпросмотр не загружен")
         if (message) { setPreviewError(message); setPreviewIssue(previewContentIssue(caught, selectedSiteId)) }
       })
-      .finally(() => { if (active) setLoadingPreview(false) })
-    return () => { active = false; abort.abort() }
+      .finally(() => { requests.delete(abort); if (!abort.signal.aborted) setLoadingPreview(false) })
+    return () => { abort.abort(); requests.delete(abort) }
   }, [apiUrl, basePublicationId, handleError, refreshKey, selectedPath, selectedSiteId, workingRevision])
 
   const documentResult = useMemo(() => {
@@ -186,7 +240,7 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
   }, [preview, selectedPath, selectedSiteId])
 
   if (state.status === "loading") return <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-96 w-full" /></main>
-  if (state.status === "error") return <main className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Предпросмотр недоступен</CardTitle><CardDescription>Не удалось загрузить рабочий экран.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{state.message}</AlertDescription></Alert><Button onClick={() => void loadWorkspace()}>Повторить</Button></CardContent></Card></main>
+  if (state.status === "error") return <main className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Предпросмотр недоступен</CardTitle><CardDescription>Не удалось загрузить рабочий экран.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{state.message}</AlertDescription></Alert><Button onClick={() => { loadWorkspace(selectedSiteId) }}>Повторить</Button></CardContent></Card></main>
 
   const selectedSite = state.sites.find((site) => site.id === selectedSiteId)
   const frame = viewports[viewport]
@@ -198,7 +252,7 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
   const canGoForward = Boolean(options && !loadingOptions && options.page * options.pageSize < options.total)
 
   return (
-    <AdminShell apiUrl={apiUrl} user={state.user} active="preview">
+    <AdminShell apiUrl={apiUrl} user={state.user} active="preview" initialSites={state.sites}>
       <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-6 p-6 lg:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div><h1 className="font-heading text-2xl font-semibold">Предпросмотр рабочих страниц</h1><p className="mt-1 text-sm text-muted-foreground">Личный предпросмотр текущей рабочей версии. Он не создает публикацию и не меняет публичный сайт.</p></div>

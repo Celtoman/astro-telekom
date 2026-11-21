@@ -25,21 +25,23 @@ interface Administrator {
   id: string
   email: string
 }
+type InitialSiteSummary = { id: string; name: string }
 
-export function AdminShell({ apiUrl, user, active, children }: {
+export function AdminShell({ apiUrl, user, active, children, initialSites }: {
   apiUrl: string
   user: Administrator
   active: AdminSection
   children: ReactNode
+  initialSites?: InitialSiteSummary[]
 }) {
   const sessionReady = useContext(AdminWorkspaceContext)
   useEffect(() => { sessionReady?.(user) }, [sessionReady, user.id, user.email])
   if (sessionReady) return <>{children}</>
-  return <AdminShellLayout apiUrl={apiUrl} user={user} active={active}>{children}</AdminShellLayout>
+  return <AdminShellLayout apiUrl={apiUrl} user={user} active={active} initialSites={initialSites}>{children}</AdminShellLayout>
 }
 
-export function AdminShellLayout({ apiUrl, user, active, children }: {
-  apiUrl: string; user: Administrator | null; active: AdminSection; children: ReactNode
+export function AdminShellLayout({ apiUrl, user, active, children, initialSites }: {
+  apiUrl: string; user: Administrator | null; active: AdminSection; children: ReactNode; initialSites?: InitialSiteSummary[]
 }) {
   const activeGroup = activeNavigationGroup(adminNavigation, active)
   const [sidebarExpanded, setSidebarExpanded] = useState(true)
@@ -148,7 +150,7 @@ export function AdminShellLayout({ apiUrl, user, active, children }: {
               <div className="min-w-0"><p className="text-sm font-medium">Администратор</p><p className="truncate text-xs text-muted-foreground">{user?.email ?? "Проверяем доступ…"}</p></div>
             </div>
             <div className="order-3 flex w-full flex-wrap items-center gap-2 sm:order-none sm:w-auto">
-              {user ? <PublicationIndicator key={`${user.id}:${publicationScope(active)}`} apiUrl={apiUrl} editorial={publicationScope(active)==='editorial'} /> : null}
+              {user ? <PublicationIndicator key={`${user.id}:${publicationScope(active)}`} apiUrl={apiUrl} editorial={publicationScope(active)==='editorial'} initialSites={initialSites} /> : null}
               <Button asChild variant={['news','news-categories','pages-news','pages-not-found'].includes(active)?'outline':'default'} className="min-h-11"><a href={active === "publication" ? "#publication-launch" : "/publication"}><CloudUpload data-icon="inline-start" />{['news','news-categories','pages-news','pages-not-found'].includes(active)?'Публикация других разделов':'Опубликовать изменения'}</a></Button>
             </div>
             <Button variant="outline" onClick={() => void logout()}><LogOut data-icon="inline-start" /><span className="hidden sm:inline">Выйти</span><span className="sr-only sm:hidden">Выйти</span></Button>

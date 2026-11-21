@@ -3,7 +3,7 @@ import { AdminTokenGuard } from './admin-token.guard';
 import { PublicationWorkflowService } from './publication-workflow.service';
 import { RebuildQueueService } from './rebuild-queue.service';
 import { CreateSitePublicationDto } from './publication-workflow.dto';
-import { readAdminRoutePage, readAdminWorkingRevision } from './admin-route-pagination';
+import { readAdminWorkingRevision, readWorkingPreviewQuery } from './admin-route-pagination';
 
 interface AdminRequest {
   user?: { id: string };
@@ -80,11 +80,7 @@ export class PublicationWorkflowController {
   @Get('admin/sites/:siteId/preview-options')
   previewOptions(@Param('siteId') siteId: string, @Query('page') page?: string,
     @Query('search') search?: string, @Query('preferred') preferred?: string) {
-    if (search !== undefined && (typeof search !== 'string' || search.length > 250)
-      || preferred !== undefined && (typeof preferred !== 'string' || preferred.length > 600)) {
-      throw new BadRequestException('Некорректный поиск страницы предпросмотра');
-    }
-    return this.publications.getWorkingPreviewOptions(siteId, { page: readAdminRoutePage(page), search, preferred });
+    return this.publications.getWorkingPreviewOptions(siteId, readWorkingPreviewQuery(page, search, preferred));
   }
 
   @Get('admin/sites/:siteId/preview-page')
