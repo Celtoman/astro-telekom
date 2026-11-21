@@ -73,7 +73,8 @@ export async function startPublicationRuntime(environment = process.env) {
   const verifier = environment.COOLIFY_API_URL && environment.COOLIFY_API_TOKEN && environment.COOLIFY_RESOURCE_UUID
     ? createCodeDeploymentVerifier({ apiUrl: environment.COOLIFY_API_URL, token: environment.COOLIFY_API_TOKEN, resourceId: environment.COOLIFY_RESOURCE_UUID }) : undefined;
   const controller = new PublicationController({ publicationRoot: root, builder, activation, verifyCodeRelease: verifier });
-  const automaticCode = new AutomaticCodeRelease({ controller, verifier, expectedCommit: environment.SOURCE_COMMIT });
+  const automaticCode = new AutomaticCodeRelease({ controller, verifier, expectedCommit: environment.SOURCE_COMMIT,
+    onStatus: status => console.log(JSON.stringify({ event: 'publication.code.reconciliation', ...status })) });
   controller.automaticCode = automaticCode;
   const child = spawn('caddy', ['run', ...(initial.resume ? ['--resume'] : ['--config', initial.path])], {
     stdio: ['ignore', 'inherit', 'inherit'], env: { PATH: environment.PATH, XDG_CONFIG_HOME: join(root, 'state'), XDG_DATA_HOME: join(root, 'data') },

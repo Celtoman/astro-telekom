@@ -2,8 +2,9 @@ import { ActivationUncertainError } from './caddy-activation.mjs';
 
 // Technical reconciliation after a deployment; never creates a CMS snapshot or starts a deployment.
 export class AutomaticCodeRelease {
-  constructor({ controller, verifier, expectedCommit }) {
+  constructor({ controller, verifier, expectedCommit, onStatus = () => {} }) {
     this.controller = controller; this.verifier = verifier; this.expectedCommit = expectedCommit;
+    this.onStatus = onStatus;
     this.state = 'WAITING_DEPLOYMENT';
   }
   async run({ insideSerial = false } = {}) {
@@ -30,8 +31,26 @@ export class AutomaticCodeRelease {
   }
   start() {
     let stopped = false, timer;
+    let lastFailure;
+    const notify = status => {
+      try { this.onStatus(status); } catch { /* Diagnostics must not stop reconciliation. */ }
+    };
     const reconcile = async () => {
-      try { await this.run(); } catch { /* Provider/activation uncertainty is retried with the same durable identity. */ }
+      let reason;
+      try { await this.run(); }
+      catch (error) {
+        reason = error?.cause?.code === 'PUBLICATION_BUILD_SPACE'
+          ? 'INSUFFICIENT_BUILD_SPACE' : 'RECONCILIATION_FAILED';
+      }
+      if (stopped) return;
+      if (this.state === 'READY') {
+        if (lastFailure) notify({ state: 'READY' });
+        return;
+      }
+      if (reason && (lastFailure?.state !== this.state || lastFailure?.reason !== reason)) {
+        lastFailure = { state: this.state, reason };
+        notify(lastFailure);
+      }
       if (!stopped && this.state !== 'READY') timer = setTimeout(reconcile, 10_000);
     };
     void reconcile();

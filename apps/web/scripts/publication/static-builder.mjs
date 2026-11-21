@@ -22,6 +22,7 @@ export async function requireBuildSpace(root, probe = statfs) {
   // 5 GiB operating reserve plus 3 GiB for source/output/sealing scratch.
   if (usage.bavail * usage.bsize < 8 * 1024 ** 3) {
     const error = new Error('Insufficient disk space for a new publication build; serving version is preserved');
+    error.code = 'PUBLICATION_BUILD_SPACE';
     error.httpStatus = 503; throw error;
   }
 }

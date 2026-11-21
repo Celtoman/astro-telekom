@@ -11,7 +11,7 @@ test('disk admission rejects a new build before touching private build files', a
   const { requireBuildSpace } = await import('../apps/web/scripts/publication/static-builder.mjs');
   const minimum = 8 * 1024 ** 3;
   await assert.rejects(requireBuildSpace('.', async () => ({ bavail: minimum - 1, bsize: 1 })), error =>
-    error.httpStatus === 503 && /disk space/i.test(error.message));
+    error.code === 'PUBLICATION_BUILD_SPACE' && error.httpStatus === 503 && /disk space/i.test(error.message));
   await assert.doesNotReject(requireBuildSpace('.', async () => ({ bavail: minimum, bsize: 1 })));
   await assert.rejects(requireBuildSpace('.', async () => { throw new Error('filesystem unavailable'); }), /filesystem unavailable/);
 });
