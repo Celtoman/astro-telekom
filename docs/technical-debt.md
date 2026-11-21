@@ -16,6 +16,7 @@
 | #632 | [#632](https://github.com/Celtoman/astro-telekom/issues/632) ✅ | Повторное построение справочника и форматтеров |
 | #633 | [#633](https://github.com/Celtoman/astro-telekom/issues/633) 🟢 | Ревью задерживает соседние API-запросы |
 | #634 | [#634](https://github.com/Celtoman/astro-telekom/issues/634) 🟢 | Подготовка выпуска под блокировкой строки Site |
+| #638 | [#638](https://github.com/Celtoman/astro-telekom/issues/638) ✅ | Повтор вычислений переменных и SEO при полной проверке и сборке каталога |
 | #645 | [#645](https://github.com/Celtoman/astro-telekom/issues/645) 🟢 | Плановый backup БД и медиа завершился без подтверждения восстановления |
 
 ## Проверка SPEED_TEST, 14 ноября 2026
@@ -356,7 +357,7 @@
 | TD-252 | [#572](https://github.com/Celtoman/astro-telekom/issues/572) ✅ | Сверены живые документы, ссылки и учёт статусов без изменения кода и страниц |
 
 | TD-254 | [#597](https://github.com/Celtoman/astro-telekom/issues/597) ✅ | Унифицировать BLK-0016 на всех страницах и добавить реализованные маршруты |
-| TD-255 | [#612](https://github.com/Celtoman/astro-telekom/issues/612) 🟢 | Группа паспортов OFFICIAL_SITE возвращает объект вместо строкового ID |
+| TD-255 | [#612](https://github.com/Celtoman/astro-telekom/issues/612) ✅ | Группа паспортов OFFICIAL_SITE возвращала объект вместо строкового ID |
 | TD-256 | [#613](https://github.com/Celtoman/astro-telekom/issues/613) ✅ | SUPPORT: сохранить порядок элементов и якоря независимо от порядка ключей JSONB |
 | TD-257 | [#614](https://github.com/Celtoman/astro-telekom/issues/614) ✅ | SUPPORT CMS: не включать dirty-state при инициализации rich-text |
 | TD-258 | [#615](https://github.com/Celtoman/astro-telekom/issues/615) 🟢 | SUPPORT: согласовать редакционное исправление пробела внутри слова в исходнике |
@@ -364,7 +365,8 @@
 | TD-260 | [#617](https://github.com/Celtoman/astro-telekom/issues/617) ✅ | SUPPORT: вернуть десктопную композицию карточек сообществ |
 | TD-261 | [#618](https://github.com/Celtoman/astro-telekom/issues/618) ✅ | SUPPORT: сверить мобильный первый экран |
 | TD-262 | [#619](https://github.com/Celtoman/astro-telekom/issues/619) 🟢 | SUPPORT: сверить типографику и высоту отдельного введения на ПК |
-| TD-263 | [#652](https://github.com/Celtoman/astro-telekom/issues/652) 🟢 | Начальное содержимое редакторов FAQ и cookie ошибочно блокирует навигацию |
+| TD-263 | [#652](https://github.com/Celtoman/astro-telekom/issues/652) ✅ | Начальное содержимое редакторов FAQ и cookie ошибочно блокировало навигацию |
+| TD-264 | [#653](https://github.com/Celtoman/astro-telekom/issues/653) 🟢 | Редакторы настроек новостей и 404 читают полный обслуживаемый исходник |
 
 - [#625](https://github.com/Celtoman/astro-telekom/issues/625) — OPEN, P1: защищённый тестовый web-контур возвращает HTTP 503 на прежнем GHCR-выпуске.
 
