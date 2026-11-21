@@ -21,7 +21,13 @@ const apply=()=>docker(['exec','-i',container,'psql','-U','postgres','-d','provi
 const json=x=>JSON.parse(JSON.stringify(x));let db,owned=false,success=false;
 try{
  checked(docker(['run','--rm','-d','--name',container,'-p','127.0.0.1::5432','-e','POSTGRES_PASSWORD=postgres','-e','POSTGRES_DB=provider','postgres:18.6-alpine']));owned=true;
- for(let n=0;;n++){if(docker(['exec',container,'pg_isready','-U','postgres','-d','provider'],{timeout:5000}).status===0)break;assert.ok(n<60);await new Promise(r=>setTimeout(r,200));}
+ for (let attempt = 0; ; attempt++) {
+  // The temporary initialization server only accepts socket connections.
+  const probe = docker(['exec', container, 'pg_isready', '-h', '127.0.0.1', '-U', 'postgres', '-d', 'provider'], {timeout: 5000});
+  if (probe.status === 0) break;
+  assert.ok(attempt < 60, 'PostgreSQL did not become ready over TCP');
+  await new Promise(resolve => setTimeout(resolve, 200));
+ }
  const port=checked(docker(['port',container,'5432/tcp'])).match(/:(\d+)\s*$/)[1];
  process.env.DATABASE_URL='postgresql://postgres:postgres@127.0.0.1:'+port+'/provider';
  process.env.EDITORIAL_MEDIA_ROOT=process.cwd()+'/.codex-tmp/support-db/media';

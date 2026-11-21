@@ -12,7 +12,7 @@
 
 Регрессия renderer рекурсивно переставляет ключи объектов и требует неизменного HTML, порядка карточек и соответствия подписей чипов назначениям. Порядок массивов сохраняется. Это проверяет границу JSONB storage → renderer.
 
-`support-data.test.cjs` сверяет начальный payload миграции с принятым содержанием и запускает `scripts/rehearse-support-page.mjs`: проверяются миграции PostgreSQL, seed/backfill/idempotence, provider isolation, авторские FAQ, optimistic save и rollback коллизий. `scripts/rehearse-support-http.mjs` проверяет реальный multipart upload, crop, private bytes/dimensions/hashes, media capture, сохранение, stale409 и отказ чужому сайту. Предыдущие датированные результаты ниже сохраняются как история отдельных выпусков.
+`support-data.test.cjs` сверяет начальный payload миграции с принятым содержанием и запускает `scripts/rehearse-support-page.mjs`. Репетиция ждёт TCP-готовность основного процесса PostgreSQL и проверяет миграции, seed/backfill/idempotence, provider isolation, авторские FAQ, optimistic save и rollback коллизий. `scripts/rehearse-support-http.mjs` проверяет реальный multipart upload, crop, private bytes/dimensions/hashes, media capture, сохранение, stale409 и отказ чужому сайту. Предыдущие датированные результаты ниже сохраняются как история отдельных выпусков.
 
 14 ноября2026, SPEED_TEST #601: полный `pnpm check --test-concurrency=2` —1141test/1140pass/0fail/1Windows-symlinkskip, exit0; exact-SHA Linux CI43613999383 —1141pass/0fail/0skip. Защищённый test-выпуск/CODE/CMS33/33 и вёрстка четырёх ширин подтверждены; live-замер внешнего iframe не принят из-за TLS connection reset в сети проверки (#605). [Протокол](research/2026-11-14-speedtest-code-and-test.md).
 
