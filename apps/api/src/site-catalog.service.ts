@@ -26,11 +26,11 @@ import { readSitePublicDisplay } from './site-public-display';
 import { CITY_HOME_VERSION } from './city-home-model';
 import type { EditorialSource } from './editorial-publication-model';
 import { editorialServingRouteInventory, editorialServingSource, editorialServingWorkingPreviewBase } from './editorial-serving-source';
-import { readWorkingPreviewHomeTariffs } from './working-preview-home-tariffs';
+import { readWorkingCatalogTariffs } from './working-catalog-tariffs';
 
 type WorkingPreviewCapture = {
   base?: Awaited<ReturnType<typeof editorialServingWorkingPreviewBase>> | null;
-  compactHomeTariffDescriptions?: boolean;
+  compactTariffDescriptions?: { preserveCitySlug?: string };
 };
 import { newsRoutes, newsSeoForRoute, type NewsRouteSource } from './news-projection';
 import { cityTariffFacts } from './city-tariff-facts';
@@ -142,7 +142,8 @@ export class SiteCatalogService {
     });
     if (!site) throw new NotFoundException('Site not found');
 
-    const homeTariffs = preview?.compactHomeTariffDescriptions === true ? await readWorkingPreviewHomeTariffs(client, site.id) : null;
+    const compactTariffs = preview?.compactTariffDescriptions
+      ? await readWorkingCatalogTariffs(client, site.id, preview.compactTariffDescriptions.preserveCitySlug) : null;
     const [cityRows, globalPages, redirects, sitemapExclusions, seoTemplates, pageTemplates] = await Promise.all([
       client.city.findMany({
         where: { siteId: site.id, status: 'PUBLISHED' },
@@ -150,7 +151,7 @@ export class SiteCatalogService {
         include: {
           region: { select: { name: true, slug: true } },
           pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true, archivedAt: null }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } } },
-          ...(homeTariffs === null ? { tariffs: { where: { status: 'PUBLISHED', availability: 'ACTIVE' }, orderBy: { createdAt: 'asc' } } } as const : {}),
+          ...(compactTariffs === null ? { tariffs: { where: { status: 'PUBLISHED', availability: 'ACTIVE' }, orderBy: { createdAt: 'asc' } } } as const : {}),
         },
       }),
       client.page.findMany({
@@ -177,7 +178,7 @@ export class SiteCatalogService {
         include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
       }),
     ]);
-    const cities = homeTariffs === null ? cityRows : cityRows.map(city => ({ ...city, tariffs: homeTariffs.get(city.id) ?? [] }));
+    const cities = compactTariffs === null ? cityRows : cityRows.map(city => ({ ...city, tariffs: compactTariffs.get(city.id) ?? [] }));
 
     // No draft editorial rows enter legacy capture. Before editorial activation
     // this leaves historical/bootstrap sources unchanged; afterwards live source

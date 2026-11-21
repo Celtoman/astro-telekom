@@ -249,7 +249,7 @@ test('Sitemap uses the sealed source for the exact inventory with projections en
   const query = { workingRevision: 8, page: 1 };
 
   const actual = await service.getInventory('site-1', query);
-  assert.deepEqual(capture.mock.calls.map(call => call.arguments), [['site-1', f.prisma, {}]]);
+  assert.deepEqual(capture.mock.calls.map(call => call.arguments), [['site-1', f.prisma, { compactTariffDescriptions: {} }]]);
   assert.deepEqual(render.mock.calls.map(call => call.arguments), [[source]]);
   assert.equal(readLegacy.mock.callCount(), 0);
   assert.equal(actual.entries.find(entry => entry.path === '/kazan').eligible, false);

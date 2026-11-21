@@ -76,7 +76,7 @@ export class SitemapService {
       const useSealedBase = expectedWorkingRevision !== undefined && process.env.REBUILD_PROVIDER === 'static'
         && process.env.SERVING_CATALOG_PROJECTIONS_ENABLED === 'true';
       const currentCatalog = useSealedBase
-        ? this.catalog.renderSource(await this.catalog.captureSourceBySiteId(siteId, client, {}))
+        ? this.catalog.renderSource(await this.catalog.captureSourceBySiteId(siteId, client, { compactTariffDescriptions: {} }))
         : await this.catalog.listBySiteId(siteId, client);
       routes = currentCatalog.routes as PublicRoute[];
       noindexPaths = new Set(Object.entries(currentCatalog.seoByPath || {}).filter(([, meta]) => meta.indexState === 'NOINDEX').map(([path]) => path));

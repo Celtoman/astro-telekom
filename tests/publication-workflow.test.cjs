@@ -184,7 +184,7 @@ test('explicit SEO preview captures one SQL revision and runs the strict rendere
       assert.ok(inTransaction);
       assert.equal(siteId, site.id);
       assert.equal(client, tx);
-      assert.deepEqual(preview, {});
+      assert.deepEqual(preview, { compactTariffDescriptions: {} });
       stages.push('capture');
       return source;
     },

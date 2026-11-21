@@ -434,7 +434,7 @@ export class PublicationWorkflowService {
         const site = await transaction.site.findUnique({ where: { id: siteId },
           select: { id: true, workingRevision: true, publishedRevision: true } });
         if (!site) throw new NotFoundException('Site not found');
-        const source = await this.catalog.captureSourceBySiteId(site.id, transaction, {});
+        const source = await this.catalog.captureSourceBySiteId(site.id, transaction, { compactTariffDescriptions: {} });
         return { site, source, now: new Date() };
       }, options);
       const { routes, seoByPath, seoWarnings } = this.catalog.renderSource(source, now);
@@ -496,7 +496,9 @@ export class PublicationWorkflowService {
           throw new ConflictException('Рабочая версия изменилась. Обновите список страниц.');
         }
         if (process.env.WORKING_PREVIEW_REUSE_ENABLED !== 'true') {
-          const source = await this.catalog.captureSourceBySiteId(site.id, tx, path === '/' ? { compactHomeTariffDescriptions: true } : {});
+          const citySlug = /^\/([a-z0-9]+(?:-[a-z0-9]+)*)$/.exec(path)?.[1];
+          const compactTariffDescriptions = path === '/' ? {} : citySlug ? { preserveCitySlug: citySlug } : undefined;
+          const source = await this.catalog.captureSourceBySiteId(site.id, tx, compactTariffDescriptions ? { compactTariffDescriptions } : {});
           if ((source.publicationBaseId ?? null) !== basePublicationId) throw staleBase();
           return { state: 'build' as const, site, source, now: new Date() };
         }

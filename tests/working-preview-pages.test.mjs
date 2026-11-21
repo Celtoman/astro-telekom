@@ -123,7 +123,17 @@ test('selected page refuses a changed revision or editorial base and retains err
   assert.equal(selected.publishedRevision, 3)
   const home = await service.getWorkingPreviewPage(site.id, '/', 4, 'baseline-a')
   assert.equal(home.path, '/')
-  assert.deepEqual(captureOptions, [{}, {}, { compactHomeTariffDescriptions: true }])
+  const city = await service.getWorkingPreviewPage(site.id, '/kazan', 4, 'baseline-a')
+  assert.equal(city.catalog.cities.find(item => item.slug === 'kazan').tariffs.length, source.cities[0].tariffs.length)
+  const tariff = await service.getWorkingPreviewPage(site.id, '/kazan/giga-300-tv', 4, 'baseline-a')
+  assert.equal(tariff.path, '/kazan/giga-300-tv')
+  assert.deepEqual(captureOptions, [
+    { compactTariffDescriptions: { preserveCitySlug: 'faq' } },
+    { compactTariffDescriptions: { preserveCitySlug: 'faq' } },
+    { compactTariffDescriptions: {} },
+    { compactTariffDescriptions: { preserveCitySlug: 'kazan' } },
+    {},
+  ])
   source.cities[0].pages[0].slug = 'broken-other-city-home'
   const exactError = /должна иметь пустой slug/
   await assert.rejects(service.getWorkingPreview(site.id), exactError)
