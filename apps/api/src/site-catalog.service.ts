@@ -35,7 +35,7 @@ type WorkingPreviewCapture = {
 import { newsRoutes, newsSeoForRoute, type NewsRouteSource } from './news-projection';
 import { cityTariffFacts } from './city-tariff-facts';
 import { previewRouteOptions } from './preview-route-labels';
-import { resolveVariableText } from './variable-registry';
+import { resolveVariableText, VariableTextTemplates } from './variable-registry';
 import { createSupportTextRunReader, type SupportTextRunReader } from './support-rich-text';
 
 type CatalogClient = Prisma.TransactionClient | PrismaService;
@@ -217,6 +217,7 @@ export class SiteCatalogService {
     if (homeScreen) validateFirstScreen('HOME', homeHero, false, homeScreen.passportVersion);
     const resolvedGlobalPages = globalPages.map((page: any) => this.pageResponse(page, mergeContent(publicContent(site.provider.settings), publicContent(site.settings)), {}));
     const { routes, editorialRoutes, allRoutes } = this.catalogRoutes(cities, resolvedGlobalPages, source.pageTemplates, source.editorial);
+    const variableTemplates = resolution?.variableTemplates ?? new VariableTextTemplates();
     const resolved = resolveCatalogVariables({
       ...(generalHome ? { generalHome } : {}),
       ...(homeHero ? { homeHero, homeHeroVersion: homeScreen!.passportVersion, homeHeroBlockId: homeTemplate.blocks.find((block: any) => block.blockType === 'home.hero').id } : {}),
@@ -241,7 +242,7 @@ export class SiteCatalogService {
       site: { ...publicDisplay, connectionPhone: site.connectionPhone, supportPhone: site.supportPhone, corporatePhone: readCorporatePhone(site.settings) },
       provider: { name: site.provider.name },
       now,
-    }, resolution?.variableTemplates, readSupportRuns);
+    }, variableTemplates, readSupportRuns);
     for (const page of resolved.globalPages) { if (page.type === 'ACCOUNT') validateAccountPage(page.content); if (page.type === 'SPEED_TEST') validateSpeedTestPage(page.content); if (page.type === 'OFFICIAL_SITE') validateOfficialSitePage(page.content); }
     for (const city of resolved.cities) for (const page of city.pages) if (page.type === 'CITY_SUPPORT') { validateSupportPage(page.content, false, readSupportRuns); assertSupportMedia(page.content,source.supportMedia); }
     const seo = resolveSeoTemplates({
@@ -251,7 +252,7 @@ export class SiteCatalogService {
       site: { connectionPhone: site.connectionPhone, supportPhone: site.supportPhone },
       provider: { name: site.provider.name },
       now,
-    }, resolution?.seo);
+    }, resolution?.seo, variableTemplates);
     const noindexPaths = Object.entries(seo.byPath).filter(([, meta]) => meta.indexState === 'NOINDEX').map(([path]) => path);
     return {
       ...resolved,

@@ -140,7 +140,11 @@ export class SeoRouteCache {
   }
 }
 
-export function resolveSeoTemplates(input: SeoResolutionInput, routeCache?: SeoRouteCache): { byPath: Record<string, ResolvedSeoMetadata>; warnings: SeoDiagnostic[] } {
+export function resolveSeoTemplates(
+  input: SeoResolutionInput,
+  routeCache?: SeoRouteCache,
+  variableTemplates?: VariableTextTemplates,
+): { byPath: Record<string, ResolvedSeoMetadata>; warnings: SeoDiagnostic[] } {
   const templates = new Map<SeoTemplateKind, SeoTemplateDefinition>();
   for (const template of input.templates) {
     if (templates.has(template.kind)) throw new BadRequestException(`Дублируется SEO-шаблон ${template.kind}`);
@@ -166,7 +170,7 @@ export function resolveSeoTemplates(input: SeoResolutionInput, routeCache?: SeoR
     const tariff = route.tariffSlug ? city?.tariffs?.find((item) => item.slug === route.tariffSlug) : undefined;
     if (route.tariffSlug && !tariff) throw new BadRequestException(`Для SEO-маршрута ${route.path} не найден тариф`);
     const context: VariableContext = { site: input.site, provider: input.provider, city, tariff, now: input.now };
-    const resolved = routeCache?.resolve(template, context, route.path) ?? resolveSeoRoute(template, context, route.path);
+    const resolved = routeCache?.resolve(template, context, route.path) ?? resolveSeoRoute(template, context, route.path, variableTemplates);
     const { title, description } = resolved;
     byPath[route.path] = resolved;
     if (title.length > LENGTH_HINTS.title) warnings.push({ code: 'LONG_TITLE', path: route.path, length: title.length });

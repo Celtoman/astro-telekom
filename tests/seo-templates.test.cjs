@@ -121,19 +121,23 @@ test('repeated SEO city lookup keeps the first matching city and tariff on every
 
 test('single-route SEO diagnostics preserve length and exact syntax errors from compiled templates', () => {
   const { resolveSeoTemplates, SeoRouteCache } = seoModule();
+  const { VariableTextTemplates } = require('../apps/api/dist/variable-registry.js');
+  const compiled = new VariableTextTemplates();
   const source = input();
   source.routes = source.routes.slice(0, 1);
   source.templates[0].titleTemplate = '{PROVIDER_NAME} ' + 'Длинный '.repeat(12);
   const exact = resolveSeoTemplates(source);
   assert.deepEqual(resolveSeoTemplates(source, new SeoRouteCache()), exact);
+  assert.deepEqual(resolveSeoTemplates(source, undefined, compiled), exact);
   assert.deepEqual(exact.warnings.map(issue => issue.code), ['LONG_TITLE']);
 
   source.templates[0].titleTemplate = 'Повреждённые скобки {{UNKNOWN_CODE}}';
-  const errorOf = cache => {
-    try { resolveSeoTemplates(source, cache); } catch (error) { return error.getResponse(); }
+  const errorOf = (cache, templates) => {
+    try { resolveSeoTemplates(source, cache, templates); } catch (error) { return error.getResponse(); }
     assert.fail('Malformed SEO text was accepted');
   };
   assert.deepEqual(errorOf(new SeoRouteCache()), errorOf());
+  assert.deepEqual(errorOf(undefined, compiled), errorOf());
 });
 
 test('Open Graph uses explicit templates and falls back independently to SEO and the site image', () => {

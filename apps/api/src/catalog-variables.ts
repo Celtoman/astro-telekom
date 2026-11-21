@@ -31,6 +31,8 @@ export interface VariableUsage {
 
 type UsageOwner = Omit<VariableUsage, 'code' | 'path' | 'template'>;
 
+const CITY_BLOCK_SCHEMAS = { ...CITY_HOME_SCHEMAS, ...ADDRESS_PAGE_SCHEMAS };
+
 function object(value: unknown): JsonObject {
   return value && typeof value === 'object' && !Array.isArray(value) ? value as JsonObject : {};
 }
@@ -115,9 +117,8 @@ export function resolveCatalogVariables<T extends JsonObject>(catalog: T, source
       const blockPath = `${path}.blocks[${index}]`;
       const owner: UsageOwner = { entityType: 'BLOCK', entityId: String(block.id), pageType: page.type, blockType: block.blockType, cityId, editorHref: null };
       if (Object.hasOwn(ADDRESS_PAGE_SCHEMAS, block.blockType)) { owner.entityType = 'PAGE_TEMPLATE_BLOCK'; owner.editorHref = `/templates/home?kind=CITY_ADDRESS_CHECK&block=${block.blockType}`; }
-      const schemas = { ...CITY_HOME_SCHEMAS, ...ADDRESS_PAGE_SCHEMAS };
-      if (Object.hasOwn(schemas, block.blockType)) {
-        const rule: GeneralHomeFieldRule = schemas[block.blockType as keyof typeof schemas];
+      if (Object.hasOwn(CITY_BLOCK_SCHEMAS, block.blockType)) {
+        const rule: GeneralHomeFieldRule = CITY_BLOCK_SCHEMAS[block.blockType as keyof typeof CITY_BLOCK_SCHEMAS];
         if (['city.faq', 'address.faq'].includes(block.blockType) && rule.kind === 'object' && rule.fields.items.kind === 'list') {
           const itemRule = rule.fields.items.item;
           const items = block.data.items.flatMap((item: any, itemIndex: number) => {
