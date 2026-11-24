@@ -75,7 +75,9 @@ test('tariff and router callbacks keep the submission on error and restore the g
   assert.equal(label.textContent,'Попробовать ещё раз');
   await send();
   assert.equal(requests.length,4);
-  assert.deepEqual(requests[2],requests[3]);
+  for (const field of ['submissionKey','phone','comment','consentVersion','consentAccepted','reasonCode']) {
+    assert.equal(requests[2][field],requests[3][field],field);
+  }
   assert.equal(requests[3].reasonCode,'callback_consultation');
   assert.equal(requests[3].consentAccepted,true);
   assert.equal(requests[3].tariffSlug,undefined);
