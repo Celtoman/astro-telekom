@@ -42,7 +42,6 @@ const display = publicDisplayForCatalog(site);
 </script>
 <style>
   .callback-card { height: min(544px, calc(var(--dialog-viewport-height, 100dvh) - 48px)); }
-  .callback-card:has([data-callback-phone-error]:not([hidden])) { height: min(572px, calc(var(--dialog-viewport-height, 100dvh) - 48px)); }
   .callback-card:has([data-callback-error]:not([hidden])) { height: min(600px, calc(var(--dialog-viewport-height, 100dvh) - 48px)); }
   .callback-card:has([data-callback-support]:not([hidden])) { height: min(356px, calc(var(--dialog-viewport-height, 100dvh) - 48px)); }
   .callback-card:has([data-callback-success]:not([hidden])) { height: min(204px, calc(var(--dialog-viewport-height, 100dvh) - 48px)); }
@@ -66,7 +65,6 @@ const display = publicDisplayForCatalog(site);
   .callback-bot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
   @media (max-width: 620px) {
     .callback-card { height: min(566px, calc(var(--dialog-viewport-height, 100dvh) - 24px)); }
-    .callback-card:has([data-callback-phone-error]:not([hidden])) { height: min(594px, calc(var(--dialog-viewport-height, 100dvh) - 24px)); }
     .callback-card:has([data-callback-error]:not([hidden])) { height: min(622px, calc(var(--dialog-viewport-height, 100dvh) - 24px)); }
     .callback-card:has([data-callback-support]:not([hidden])) { height: min(368px, calc(var(--dialog-viewport-height, 100dvh) - 24px)); }
     .callback-card:has([data-callback-success]:not([hidden])) { height: min(216px, calc(var(--dialog-viewport-height, 100dvh) - 24px)); }
