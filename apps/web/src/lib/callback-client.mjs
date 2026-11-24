@@ -10,14 +10,18 @@ export function initializeCallbackDialog() {
   const submit = form.querySelector('[type=submit]'), label = form.querySelector('[data-callback-submit-label]');
   const error = form.querySelector('[data-callback-error]'), phoneError = form.querySelector('[data-callback-phone-error]');
   const spinner = form.querySelector('[data-callback-spinner]'), audience = dialog.querySelector('[data-callback-audience]');
-  const context = form.querySelector('[data-callback-tariff-context]');
-  let sending = false, key = null, opener = null, mode = 'new', done = false, selectedTariff = null, submittedSignature = null;
+  const context = form.querySelector('[data-callback-context]'), intro = form.querySelector('[data-callback-intro]');
+  const successCopy = dialog.querySelector('[data-callback-success-copy]');
+  const defaultIntro = intro.textContent, defaultPlaceholder = question.placeholder, defaultSuccessCopy = successCopy.textContent;
+  let sending = false, key = null, opener = null, mode = 'new', done = false;
+  let selectedTariff = null, selectedRouter = '', submittedSignature = null;
   const update = () => { submit.disabled = sending || !consent.checked || !normalizeRussianPhone(phone.value); };
   const switchMode = (next) => {
     mode = next;
     for (const button of audience.querySelectorAll('button')) button.setAttribute('aria-pressed', String(button.dataset.callbackMode === next));
     form.hidden = next === 'existing'; dialog.querySelector('[data-callback-support]').hidden = next !== 'existing';
-    dialog.querySelector('#callback-title').textContent = next === 'existing' ? 'Техническая поддержка' : 'Заказать звонок';
+    dialog.querySelector('#callback-title').textContent = next === 'existing'
+      ? 'Техническая поддержка' : selectedRouter ? 'Консультация по роутеру' : 'Заказать звонок';
     const icon = dialog.querySelector('[data-callback-icon]'); icon.dataset.mode = next;
     icon.querySelector('img').src = next === 'existing' ? dialog.dataset.supportIcon : dialog.dataset.callIcon;
   };
@@ -28,21 +32,33 @@ export function initializeCallbackDialog() {
     if (sending) return;
     const menu = target.closest('dialog'); opener = menu ? document.querySelector('[data-menu-trigger]') : target;
     menu?.close();
-    if (done) {
-      done = false; form.reset(); key = null; error.hidden = phoneError.hidden = true;
-      phone.setAttribute('aria-invalid', 'false'); label.textContent = 'Заказать звонок'; spinner.hidden = true;
-      audience.hidden = false; dialog.querySelector('[data-callback-success]').hidden = true; switchMode('new'); update();
+    const router = target.dataset.callbackRouterName || '';
+    if (done || router !== selectedRouter) {
+      error.hidden = true;
+      label.textContent = router ? 'Оставить заявку' : 'Заказать звонок';
     }
-    selectedTariff = target.dataset.callbackTariffSlug ? { slug: target.dataset.callbackTariffSlug, name: target.dataset.callbackTariffName || target.dataset.callbackTariffSlug, citySlug: target.dataset.callbackCitySlug || dialog.dataset.citySlug, cityName: target.dataset.callbackCityName || target.dataset.callbackCitySlug || '' } : null;
+    if (done) {
+      done = false; form.reset(); key = null; phoneError.hidden = true;
+      phone.setAttribute('aria-invalid', 'false'); spinner.hidden = true;
+      dialog.querySelector('[data-callback-success]').hidden = true;
+    }
+    selectedRouter = router;
+    selectedTariff = !router && target.dataset.callbackTariffSlug ? { slug: target.dataset.callbackTariffSlug, name: target.dataset.callbackTariffName || target.dataset.callbackTariffSlug, citySlug: target.dataset.callbackCitySlug || dialog.dataset.citySlug, cityName: target.dataset.callbackCityName || target.dataset.callbackCitySlug || '' } : null;
+    audience.hidden = Boolean(router);
+    intro.textContent = router ? 'Оставьте телефон. Специалист перезвонит, чтобы обсудить с вами роутер и условия покупки.' : defaultIntro;
+    question.placeholder = router ? 'Например: как получить роутер?' : defaultPlaceholder;
+    successCopy.textContent = router ? 'Специалист перезвонит и уточнит условия покупки роутера.' : defaultSuccessCopy;
     if (context) {
-      context.hidden = !selectedTariff;
-      context.textContent = selectedTariff ? `Выбранный тариф: ${selectedTariff.name}. Город: ${selectedTariff.cityName}.` : '';
+      context.hidden = !router && !selectedTariff;
+      context.textContent = router ? `Выбранный роутер: ${router}` :
+        selectedTariff ? `Выбранный тариф: ${selectedTariff.name}. Город: ${selectedTariff.cityName}.` : '';
     }
     switchMode('new');
+    update();
     dialog.showModal();
-    if (mode === 'new') phone.focus(); else audience.querySelector('[aria-pressed=true]').focus();
+    phone.focus();
   });
-  for (const button of audience.querySelectorAll('button')) button.addEventListener('click', () => { if (!sending) switchMode(button.dataset.callbackMode); });
+  for (const button of audience.querySelectorAll('button')) button.addEventListener('click', () => { if (!sending && !selectedRouter) switchMode(button.dataset.callbackMode); });
   phone.addEventListener('input', () => { phone.value = formatRussianPhone(phone.value); const invalid = hasInvalidRussianMobilePrefix(phone.value); phoneError.hidden = !invalid; phone.setAttribute('aria-invalid', String(invalid)); update(); });
   phone.addEventListener('blur', () => { if (phone.value && !normalizeRussianPhone(phone.value)) { phoneError.hidden = false; phone.setAttribute('aria-invalid', 'true'); } });
   consent.addEventListener('change', update);

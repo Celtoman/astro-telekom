@@ -20,8 +20,8 @@ const display = publicDisplayForCatalog(site);
     </div>
     <form data-callback-form class="callback-form" data-consent-version="lead-form-v1-2026-09-22" novalidate>
       <div class="flow-body">
-        <p class="callback-tariff-context" data-callback-tariff-context hidden></p>
-        <p class="flow-small">Оставьте номер телефона. Специалист перезвонит в течение {callbackMinutesLabel(display.callbackWithinMinutes, 'genitive')} и ответит на вопросы о подключении.</p>
+        <p class="callback-context" data-callback-context hidden></p>
+        <p class="flow-small" data-callback-intro>Оставьте номер телефона. Специалист перезвонит в течение {callbackMinutesLabel(display.callbackWithinMinutes, 'genitive')} и ответит на вопросы о подключении.</p>
         <div class="flow-field"><label for="callback-phone">Телефон *</label><input id="callback-phone" type="tel" name="phone" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" maxlength="18" required aria-describedby="callback-phone-error" /><p id="callback-phone-error" class="flow-error" data-callback-phone-error role="alert" hidden>Введите мобильный номер в формате +7 (9XX) XXX-XX-XX</p></div>
         <div class="flow-field"><label for="callback-question">Ваш вопрос (необязательно)</label><textarea id="callback-question" name="comment" rows="2" maxlength="2000" placeholder="Например: можно ли подключить интернет и ТВ?"></textarea></div>
         <div class="callback-bot" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off" aria-label="Ваш сайт" /></div>
@@ -33,7 +33,7 @@ const display = publicDisplayForCatalog(site);
       </div>
     </form>
     <div class="flow-body" data-callback-support hidden><p class="flow-small">По вопросам вашего подключения, управления услугами и технических неполадок позвоните в поддержку Дом.ру по номеру ниже.</p><p class="flow-small callback-support-label">Телефон техподдержки</p><a class="callback-support-phone" href={`tel:${site.supportPhone.replace(/[^+\d]/g, '')}`}>{site.supportPhone}</a></div>
-    <div data-callback-success hidden><p class="flow-small">Специалист позвонит на указанный номер и ответит на вопросы</p><button type="button" class="flow-button flow-button-secondary" data-modal-close>Закрыть</button></div>
+    <div data-callback-success hidden><p class="flow-small" data-callback-success-copy>Специалист позвонит на указанный номер и ответит на вопросы</p><button type="button" class="flow-button flow-button-secondary" data-modal-close>Закрыть</button></div>
   </div>
 </dialog>
 <script>
@@ -52,13 +52,14 @@ const display = publicDisplayForCatalog(site);
   .callback-icon[data-mode=existing] { background: #eef8ff; }
   .callback-icon[data-mode=success] { background: #e8f7ef; }
   .callback-audience { display: flex; flex-shrink: 0; gap: 4px; min-height: 56px; padding: 4px; border: 1px solid #dcecf7; border-radius: 14px; background: #eef8ff; }
+  .callback-audience[hidden] { display: none; }
   .callback-audience button { flex: 1; min-width: 0; min-height: 48px; padding: 4px; border: 1px solid transparent; border-radius: 10px; background: none; font: inherit; font-size: 13px; line-height: 18px; color: #526071; cursor: pointer; }
   .callback-audience button[aria-pressed=true] { background: #fff; border-color: #dcecf7; color: #18202a; font-weight: 600; }
   .callback-form { display: flex; flex-direction: column; flex: 1; gap: 16px; min-height: 0; }
   .callback-form .flow-body { flex: 1; }
   .callback-form .flow-body > * { flex-shrink: 0; }
-  .callback-tariff-context { margin: 0; padding: 12px; border-radius: 10px; background: #eef8ff; color: #18202a; font-size: 14px; line-height: 20px; overflow-wrap: anywhere; }
-  .callback-card:has([data-callback-tariff-context]:not([hidden])) { height: min(660px, calc(var(--dialog-viewport-height, 100dvh) - 24px)); }
+  .callback-context { margin: 0; padding: 12px; border-radius: 10px; background: #eef8ff; color: #18202a; font-size: 14px; line-height: 20px; overflow-wrap: anywhere; }
+  .callback-card:has([data-callback-context]:not([hidden])):has([data-callback-audience]:not([hidden])) { height: min(660px, calc(var(--dialog-viewport-height, 100dvh) - 24px)); }
   .callback-form .flow-consent p { font-size: 12px; line-height: 18px; }
   .callback-support-phone { font-size: 28px; line-height: 36px; text-decoration: none; }
   [data-callback-success] { display: grid; gap: 16px; }

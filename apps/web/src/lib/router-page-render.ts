@@ -12,8 +12,16 @@ function routerImage(options: RouterRenderOptions, name: string, width: number, 
     (priority ? ' fetchpriority="high"' : ' loading="lazy" decoding="async"') + '>';
 }
 
-function action(href: string, label: string, extra = '') {
-  return '<a href="#' + href + '" class="home-action"' + extra + '>' + html(label) + '</a>';
+function action(href: string, label: string) {
+  return '<a href="#' + href + '" class="home-action">' + html(label) + '</a>';
+}
+
+function routerCallbackButton(name: string, interactive: boolean) {
+  const trigger = interactive
+    ? ' data-callback-trigger data-callback-router-name="' + html(name) + '" aria-haspopup="dialog" aria-controls="site-callback"'
+    : ' disabled';
+  return '<button type="button" class="home-action"' + trigger +
+    ' aria-label="Оставить заявку на роутер ' + html(name) + '">Оставить заявку</button>';
 }
 
 function anchorLink(href: string, label: string) {
@@ -35,7 +43,7 @@ export function renderRouterIntro(content: RouterPageContent, options: RouterRen
       facts.map(([label, value]) => '<div><dt>' + label + '</dt><dd>' + value + '</dd></div>').join('') +
       '</dl><div class="router-card-pricing"><strong>' + formatRouterPrice.format(model.price) + ' ₽</strong><p>Рассрочка от ' +
       formatRouterPrice.format(model.installment) + ' ₽/мес. × ' + routerInstallmentMonths + ' мес.</p></div>' +
-      action('router-consultation', 'Выбрать модель', ' data-router-select="' + model.id + '" aria-label="Выбрать модель ' + html(model.name) + '"') + '</div></article>';
+      routerCallbackButton(model.name, options.interactive !== false) + '</div></article>';
   });
   return '<section class="home-block router-hero" aria-labelledby="router-title"><div class="router-hero-copy">' +
     '<p class="router-eyebrow">' + html(hero.eyebrow) + '</p><h1 id="router-title">' + html(hero.h1) + '</h1><p>' + html(hero.intro) + '</p>' +
@@ -94,13 +102,6 @@ function renderMesh(mesh: RouterPageContent['mesh'], options: RouterRenderOption
 
 export function renderRouterBody(content: RouterPageContent, options: RouterRenderOptions = {}) {
   return renderRouterComparison(content.comparison) + renderMesh(content.mesh, options);
-}
-
-export function renderRouterSelection() {
-  return '<div class="router-selection" data-router-selection hidden aria-live="polite">' +
-    routerModelsV1.map(model => '<p data-router-selected="' + model.id + '" hidden><strong>Вы выбрали ' + html(model.name) +
-      '</strong><span>' + formatRouterPrice.format(model.price) + ' ₽</span></p>').join('') +
-    anchorLink('router-catalog', 'Изменить модель') + '</div>';
 }
 
 export function routerConsultation(content: RouterPageContent) {

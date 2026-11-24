@@ -23,17 +23,4 @@ export function initializeRouterPage() {
       comparison.scrollIntoView({ block: 'start' });
     });
   }
-
-  const selection = root.querySelector<HTMLElement>('[data-router-selection]');
-  const consultation = root.querySelector<HTMLElement>('#router-consultation');
-  if (!selection || !consultation) return;
-  const models = selection.querySelectorAll<HTMLElement>('[data-router-selected]');
-  for (const link of root.querySelectorAll<HTMLAnchorElement>('a[data-router-select]')) {
-    link.addEventListener('click', event => {
-      if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
-      for (const model of models) model.hidden = model.dataset.routerSelected !== link.dataset.routerSelect;
-      selection.hidden = false;
-      consultation.focus({ preventScroll: true });
-    });
-  }
 }

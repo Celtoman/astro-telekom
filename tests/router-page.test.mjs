@@ -41,11 +41,16 @@ test('router Astro artifact and CMS preview share the approved catalogue and tab
     assert.match(html, /id="router-extra" hidden/);
     assert.match(html, /Подтвердим условия до оформления заявки\./);
     assert.equal((html.match(/<th scope="row">/g) ?? []).length, 16);
+    assert.equal((html.match(/aria-label="Оставить заявку на роутер [^"]+">Оставить заявку<\/button>/g) ?? []).length, 3);
     assert.doesNotMatch(html, /Оплата и получение|кредит через банк/);
   }
   assert.match(runtime, /<link rel="canonical" href="http:\/\/localhost:4321\/wifi-router"/);
   assert.match(runtime, /data-page-slug="wifi-router"/);
   assert.match(runtime, /data-page-scope="GLOBAL"/);
   assert.match(runtime, /data-home-callback-form/);
+  const routerTriggers = [...runtime.matchAll(/data-callback-router-name="([^"]+)"/g)].map((match) => match[1]);
+  assert.deepEqual(routerTriggers, ['Wave AX1500', 'Wave Plus AX3000', 'Wave Mesh Plus AX3000']);
+  assert.match(runtime, /data-callback-dialog/);
+  assert.doesNotMatch(preview, /data-callback-router-name/);
   assert.doesNotMatch(preview, /data-home-callback-form/);
 });

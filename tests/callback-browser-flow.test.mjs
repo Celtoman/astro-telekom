@@ -15,12 +15,18 @@ class Node extends EventTarget {
   close() { this.open = false; this.dispatchEvent(new Event('close')); }
 }
 const node = () => new Node();
-test('callback error keeps the submission, retry is idempotent, and reopening success resets CTA and consent', async t => {
+test('tariff and router callbacks keep the submission on error and restore the generic dialog on reopen', async t => {
   const previous = Object.fromEntries(['document','Element','location','fetch'].map(key=>[key,Object.getOwnPropertyDescriptor(globalThis,key)]));
   t.after(()=>{for(const [key,descriptor] of Object.entries(previous)){if(descriptor)Object.defineProperty(globalThis,key,descriptor);else delete globalThis[key];}});
   const document=node(),dialog=node(),form=node(),phone=node(),question=node(),consent=node(),submit=node(),label=node(),error=node(),phoneError=node(),spinner=node(),audience=node(),title=node(),icon=node(),iconImage=node(),success=node(),successButton=node(),support=node(),trigger=node();
   trigger.trigger=true; trigger.dataset={callbackTariffSlug:'internet-500',callbackTariffName:'Интернет 500',callbackCitySlug:'kazan',callbackCityName:'Казань'};
-  const context=node();form.nodes.set('[data-callback-tariff-context]',context);
+  const context=node(),intro=node(),successCopy=node();
+  intro.textContent='Оставьте номер телефона.';
+  successCopy.textContent='Специалист позвонит на указанный номер и ответит на вопросы';
+  question.placeholder='Например: можно ли подключить интернет и ТВ?';
+  form.nodes.set('[data-callback-context]',context);
+  form.nodes.set('[data-callback-intro]',intro);
+  dialog.nodes.set('[data-callback-success-copy]',successCopy);
   const newButton=node(),existingButton=node();newButton.dataset.callbackMode='new';existingButton.dataset.callbackMode='existing';
   audience.querySelectorAll=()=>[newButton,existingButton];
   document.referrer='';document.nodes.set('[data-callback-dialog]',dialog);document.nodes.set('[data-callback-trigger]',trigger);
@@ -31,7 +37,11 @@ test('callback error keeps the submission, retry is idempotent, and reopening su
   for(const [selector,value] of [['[type=submit]',submit],['[data-callback-submit-label]',label],['[data-callback-error]',error],['[data-callback-phone-error]',phoneError],['[data-callback-spinner]',spinner]])form.nodes.set(selector,value);
   icon.nodes.set('img',iconImage);error.hidden=phoneError.hidden=spinner.hidden=success.hidden=support.hidden=true;
   const requests=[];
-  Object.assign(globalThis,{document,Element:Node,location:{href:'https://local-fixture.invalid/'},fetch:async (_url,options)=>{requests.push(JSON.parse(options.body));return{ok:requests.length>1,json:async()=>requests.length===1?{message:'Временный сбой'}:{id:'saved-consultation'}};}});
+  Object.assign(globalThis,{document,Element:Node,location:{href:'https://local-fixture.invalid/'},fetch:async (_url,options)=>{
+    requests.push(JSON.parse(options.body));
+    const ok = requests.length % 2 === 0;
+    return { ok, json: async () => ok ? {id:'saved-consultation'} : {message:'Временный сбой'} };
+  }});
   initializeCallbackDialog();
   const open=()=>{const event=new Event('click',{cancelable:true});Object.defineProperty(event,'target',{value:trigger});document.dispatchEvent(event);};
   const send=async()=>{form.dispatchEvent(new Event('submit',{cancelable:true}));await new Promise(resolve=>setImmediate(resolve));};
@@ -42,4 +52,45 @@ test('callback error keeps the submission, retry is idempotent, and reopening su
   await send();assert.equal(error.hidden,false);assert.equal(document.activeElement,error);assert.equal(label.textContent,'Попробовать ещё раз');assert.equal(consent.checked,true);assert.equal(phone.disabled,false);
   await send();assert.equal(requests.length,2);assert.equal(requests[0].submissionKey,requests[1].submissionKey);assert.equal(requests[0].phone,requests[1].phone);assert.equal(requests[0].citySlug,'kazan');assert.equal(requests[0].tariffSlug,'internet-500');assert.equal(requests[0].configuration,undefined);assert.equal(requests[0].reasonCode,'callback_consultation');assert.equal(requests[0].consentAccepted,true);assert.equal(requests[0].addressCheckId,undefined);assert.equal(success.hidden,false);
   dialog.close();trigger.dataset={};open();assert.equal(context.hidden,true);assert.equal(context.textContent,'');assert.equal(label.textContent,'Заказать звонок');assert.equal(phone.value,'');assert.equal(consent.checked,false);assert.equal(submit.disabled,true);assert.equal(success.hidden,true);assert.equal(form.hidden,false);assert.equal(title.textContent,'Заказать звонок');
+
+  dialog.close();
+  trigger.dataset={callbackRouterName:'Wave Mesh Plus AX3000'};
+  open();
+  assert.equal(document.activeElement,phone);
+  assert.equal(title.textContent,'Консультация по роутеру');
+  assert.equal(audience.hidden,true);
+  assert.equal(context.hidden,false);
+  assert.match(context.textContent,/Wave Mesh Plus AX3000/);
+  assert.equal(label.textContent,'Оставить заявку');
+  assert.match(intro.textContent,/условия покупки/);
+  assert.match(question.placeholder,/роутер/);
+  existingButton.dispatchEvent(new Event('click'));
+  assert.equal(form.hidden,false);
+  phone.value='+7 (999) 123-45-67';
+  phone.dispatchEvent(new Event('input'));
+  assert.equal(submit.disabled,true);
+  consent.checked=true;
+  consent.dispatchEvent(new Event('change'));
+  await send();
+  assert.equal(label.textContent,'Попробовать ещё раз');
+  await send();
+  assert.equal(requests.length,4);
+  assert.deepEqual(requests[2],requests[3]);
+  assert.equal(requests[3].reasonCode,'callback_consultation');
+  assert.equal(requests[3].consentAccepted,true);
+  assert.equal(requests[3].tariffSlug,undefined);
+  assert.equal(requests[3].citySlug,undefined);
+  assert.doesNotMatch(JSON.stringify(requests[3]),/Wave Mesh Plus AX3000/);
+  assert.equal(success.hidden,false);
+  assert.match(successCopy.textContent,/условия покупки роутера/);
+  dialog.close();
+  assert.equal(document.activeElement,trigger);
+  trigger.dataset={};
+  open();
+  assert.equal(audience.hidden,false);
+  assert.equal(context.hidden,true);
+  assert.equal(title.textContent,'Заказать звонок');
+  assert.equal(intro.textContent,'Оставьте номер телефона.');
+  assert.equal(question.placeholder,'Например: можно ли подключить интернет и ТВ?');
+  assert.doesNotMatch(successCopy.textContent,/роутера/);
 });
