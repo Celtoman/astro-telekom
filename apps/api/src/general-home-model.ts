@@ -16,7 +16,7 @@ export const GENERAL_HOME_BLOCK_ORDER = Object.freeze(['home.hero', ...GENERAL_H
 export type GeneralHomeBlockType = (typeof GENERAL_HOME_BLOCK_TYPES)[number];
 
 export type GeneralHomeFieldRule =
-  | { readonly kind: 'text' | 'asset' | 'https'; readonly limit: number; readonly variables: boolean }
+  | { readonly kind: 'text' | 'asset' | 'https'; readonly limit: number; readonly variables: boolean; readonly allowEmpty?: boolean }
   | { readonly kind: 'object'; readonly fields: Readonly<Record<string, GeneralHomeFieldRule>> }
   | { readonly kind: 'list'; readonly item: GeneralHomeFieldRule; readonly min: number; readonly max: number };
 

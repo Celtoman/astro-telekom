@@ -7,6 +7,7 @@ export const workspaceRoutes = {
   "/news/edit": { screen: "news-editor", active: "news", title: "Редактор новости · Дом.ру Платформа" },
   "/templates/official-site": { screen: "official-site", active: "templates", title: "Официальный сайт · Админка" },
   "/templates/faq": { screen: "faq", active: "templates", title: "Вопросы и ответы · Админка" },
+  "/templates/routers": { screen: "routers", active: "templates", title: "Роутеры · Админка" },
   "/templates/speed-test": { screen: "speed-test", active: "templates", title: "Проверка скорости интернета · Админка" },
   "/templates/support": { screen: "support", active: "templates", title: "Техническая поддержка · Админка" },
   "/templates/account": { screen: "account", active: "templates", title: "Личный кабинет · Админка" },

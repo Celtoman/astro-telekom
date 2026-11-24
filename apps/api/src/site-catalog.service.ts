@@ -1,3 +1,4 @@
+import { validateRouterPage } from './router-page';
 import { validateSpeedTestPage } from './speed-test-page';
 import { captureSupportMedia, assertSupportMedia, type SupportMediaRegistry } from './support-media-registry';
 import { validateSupportPage } from './support-page';
@@ -244,7 +245,7 @@ export class SiteCatalogService {
       provider: { name: site.provider.name },
       now,
     }, variableTemplates, readSupportRuns);
-    for (const page of resolved.globalPages) { if (page.type === 'ACCOUNT') validateAccountPage(page.content); if (page.type === 'SPEED_TEST') validateSpeedTestPage(page.content); if (page.type === 'OFFICIAL_SITE') validateOfficialSitePage(page.content); }
+    for (const page of resolved.globalPages) { if (page.type === 'ACCOUNT') validateAccountPage(page.content); if (page.type === 'SPEED_TEST') validateSpeedTestPage(page.content); if (page.type === 'EQUIPMENT_ROUTER') validateRouterPage(page.content); if (page.type === 'OFFICIAL_SITE') validateOfficialSitePage(page.content); }
     for (const city of resolved.cities) for (const page of city.pages) if (page.type === 'CITY_SUPPORT') { validateSupportPage(page.content, false, readSupportRuns); assertSupportMedia(page.content,source.supportMedia); }
     const seo = resolveSeoTemplates({
       routes,
@@ -316,6 +317,7 @@ export class SiteCatalogService {
   pageResponse(page: any, inheritedContent: Record<string, unknown>, inheritedSeo: Record<string, unknown>, cityName?: string, verifiedCityHomes?: WeakSet<object>, readSupportRuns?: SupportTextRunReader) {
     if (page.type === 'CITY_SUPPORT') { validateSupportPage(page.content, false, readSupportRuns); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'FAQ' && page.cityId === null) { validateFaqPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
+    if (page.type === 'EQUIPMENT_ROUTER') { validateRouterPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'SPEED_TEST') { validateSpeedTestPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'OFFICIAL_SITE') { validateOfficialSitePage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'ACCOUNT') { validateAccountPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }

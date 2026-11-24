@@ -1,3 +1,4 @@
+import { routerEditableField } from '../../../api/src/router-page-model.ts';
 import { supportEditableField } from '../../../api/src/support-page-model.ts'
 import { speedTestEditableField } from '../../../api/src/speed-test-page-model.ts'
 import { officialSiteEditableField } from '../../../api/src/official-site-page-model.ts'
@@ -11,6 +12,7 @@ import { accountEditableField } from '../../../api/src/account-page-model.ts'
 export function previewContentIssue(caught, siteId) {
   const value = caught?.payload ?? caught
   if(value?.block==='support'&&supportEditableField(value.field))return publicationIssuePresentation({template:'CITY_SUPPORT',field:value.field},siteId)
+  if (value?.block === 'router' && routerEditableField(value.field)) return publicationIssuePresentation({ template: 'EQUIPMENT_ROUTER', field: value.field }, siteId)
   if (value?.block === 'speed-test' && speedTestEditableField(value.field)) return publicationIssuePresentation({ template: 'SPEED_TEST', field: value.field }, siteId)
   if (value?.block === 'official-site' && officialSiteEditableField(value.field)) return publicationIssuePresentation({template:'OFFICIAL_SITE',field:value.field},siteId)
   if (value?.block === 'account' && accountEditableField(value.field)) return publicationIssuePresentation({ template: 'ACCOUNT', field: value.field }, siteId)

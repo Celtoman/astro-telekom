@@ -3,10 +3,10 @@ import type { GeneralHomeDataByType } from '../../../../api/src/general-home-mod
 import { renderConnectionHelp } from '../../lib/general-home-render';
 import { publicAsset } from '../../data/public-asset';
 import HomeBlockStyles from './HomeBlockStyles.astro';
-interface Props { content: GeneralHomeDataByType['home.connection_help']; phone: string; phoneHref: string; apiUrl: string; siteSlug: string; callbackWithinMinutes?: number }
-const { content, phone, phoneHref, apiUrl, siteSlug, callbackWithinMinutes } = Astro.props;
+interface Props { content: GeneralHomeDataByType['home.connection_help']; phone: string; phoneHref: string; apiUrl: string; siteSlug: string; callbackWithinMinutes?: number; callbackNote?: string }
+const { content, phone, phoneHref, apiUrl, siteSlug, callbackWithinMinutes, callbackNote } = Astro.props;
 ---
-<Fragment set:html={renderConnectionHelp(content, { asset: publicAsset, phone, phoneHref, apiUrl, siteSlug, callbackWithinMinutes })} />
+<Fragment set:html={renderConnectionHelp(content, { asset: publicAsset, phone, phoneHref, apiUrl, siteSlug, callbackWithinMinutes, callbackNote })} />
 <HomeBlockStyles />
 <script>
   import { initializeConnectionHelp } from '../../lib/general-home-help.mjs';

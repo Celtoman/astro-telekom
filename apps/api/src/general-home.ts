@@ -76,7 +76,7 @@ function validateField(raw: unknown, rule: GeneralHomeFieldRule, block: string, 
   validateContentText(raw, path, rule.limit);
   if (/[\u000b\u000c\u000e-\u001f\u007f]/.test(raw)) fail(block, path, 'UNSAFE_TEXT', 'Служебные символы запрещены.');
   checkVariables(raw, rule.variables, block, path, scopes);
-  if (!raw.trim()) { missing.push(path); return; }
+  if (!raw.trim()) { if (!rule.allowEmpty) missing.push(path); return; }
   if (rule.kind !== 'text') checkUrl(raw, rule.kind, block, path);
 }
 

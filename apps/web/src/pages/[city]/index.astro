@@ -8,6 +8,9 @@ import AccountPage from '../../components/account/AccountPage.astro';
 import type { AccountPageContent } from '../../../../api/src/account-page-model';
 import SpeedTestPage from '../../components/speed-test/SpeedTestPage.astro';
 import type { SpeedTestPageContent } from '../../../../api/src/speed-test-page-model';
+import RouterPage from '../../components/routers/RouterPage.astro';
+import { ROUTER_PAGE_TYPE, type RouterPageContent } from '../../../../api/src/router-page-model';
+import { routerAssetsV1 } from '../../data/router-catalog-v1';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BlockRenderer from '../../components/BlockRenderer.astro';
 import CityHomeFirstScreen from '../../components/CityHomeFirstScreen.astro';
@@ -15,7 +18,7 @@ import CityHomeComposition from '../../components/city-home/CityHomeComposition.
 import { cityHomeImageOrigins } from '../../data/general-home';
 import { loadSiteData, pageMeta, seoMeta, publicSiteSlug, type CityView, type SiteView, type PageView } from '../../data/site';
 
-interface Props { city?: CityView; site: SiteView; account?: PageView; official?: PageView; speedTest?: PageView; faq?: PageView }
+interface Props { city?: CityView; site: SiteView; account?: PageView; official?: PageView; speedTest?: PageView; router?: PageView; faq?: PageView }
 
 export async function getStaticPaths() {
   const { cities, site, globalPages } = await loadSiteData();
@@ -26,26 +29,28 @@ export async function getStaticPaths() {
   if(official) paths.push({params:{city:official.slug},props:{official,site}});
   const speedTest = globalPages.find(page => page.type === 'SPEED_TEST');
   if (speedTest) paths.push({ params: { city: speedTest.slug }, props: { speedTest, site } });
+  const router = globalPages.find(page => page.type === ROUTER_PAGE_TYPE);
+  if (router) paths.push({ params: { city: router.slug }, props: { router, site } });
   const faq = globalPages.find(page => page.type === 'FAQ');
   if (faq) paths.push({ params: { city: faq.slug }, props: { faq, site } });
   return paths;
 }
 
-const { city, site, account, official, speedTest, faq } = Astro.props as Props;
+const { city, site, account, official, speedTest, router, faq } = Astro.props as Props;
 if (speedTest) Astro.csp.insertDirective('frame-src https://openspeedtest.com');
 const homePage = city?.pages.find((page) => page.type === 'HOME' && page.slug === '');
-if (!faq && !official && !account && !speedTest && !homePage) throw new Error(`Не опубликована HOME города «${city?.name}»`);
-const meta = seoMeta(await loadSiteData(), faq ? "/faq" : speedTest ? `/${speedTest.slug}` : official ? `/${official.slug}` : account ? `/${account.slug}` : `/${city!.slug}`, pageMeta(faq?.title || speedTest?.title || official?.title || account?.title || `Домашний интернет в ${city?.nameIn}`, speedTest ? 'Проверка скорости интернета и рекомендации по замеру.' : account ? 'Вход и инструкции личного кабинета Дом.ру.' : `Тарифы домашнего интернета, телевидения и подключения в ${city?.nameIn}.`));
+if (!faq && !official && !account && !speedTest && !router && !homePage) throw new Error(`Не опубликована HOME города «${city?.name}»`);
+const meta = seoMeta(await loadSiteData(), faq ? "/faq" : router ? `/${router.slug}` : speedTest ? `/${speedTest.slug}` : official ? `/${official.slug}` : account ? `/${account.slug}` : `/${city!.slug}`, pageMeta(faq?.title || router?.title || speedTest?.title || official?.title || account?.title || `Домашний интернет в ${city?.nameIn}`, router ? 'Сравните характеристики и стоимость роутеров Дом.ру для домашнего интернета.' : speedTest ? 'Проверка скорости интернета и рекомендации по замеру.' : account ? 'Вход и инструкции личного кабинета Дом.ру.' : `Тарифы домашнего интернета, телевидения и подключения в ${city?.nameIn}.`));
 const faqContent = faq?.content as unknown as FaqPageContent | undefined;
 const heroBlock = homePage?.blocks?.find((block) => block.blockType === 'hero');
-if (!faq && !official && !account && !speedTest && !heroBlock) throw new Error(`HOME города «${city?.name}» не содержит hero канонического шаблона`);
+if (!faq && !official && !account && !speedTest && !router && !heroBlock) throw new Error(`HOME города «${city?.name}» не содержит hero канонического шаблона`);
 const contentBlocks = homePage?.blocks?.filter((block) => block.blockType !== 'hero') || [];
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
 const imageOrigins = cityHomeImageOrigins(homePage?.blocks ?? []);
 ---
 
-<BaseLayout structuredData={faqContent ? faqStructuredData(faqContent, Astro.site!) : undefined} title={meta.title} description={meta.description} ogTitle={meta.ogTitle} ogDescription={meta.ogDescription} ogImage={meta.ogImage} firstScreenImage={official ? (official.content as unknown as OfficialSitePageContent).images.hero.src : account ? (account.content as unknown as AccountPageContent).images.heroLogin.src : heroBlock?.data.image} {imageOrigins} indexable={meta.indexState !== 'NOINDEX'} city={city} pages={city?.pages} {site}>
-  {faqContent ? <FaqPage content={faqContent} {site} /> : speedTest ? <SpeedTestPage content={speedTest.content as unknown as SpeedTestPageContent} {site} {apiUrl} /> : official ? <OfficialSitePage content={official.content as unknown as OfficialSitePageContent} {site} {apiUrl}/> : account ? <AccountPage content={account.content as unknown as AccountPageContent} {site} {apiUrl} /> : city && homePage && heroBlock ? <>
+<BaseLayout structuredData={faqContent ? faqStructuredData(faqContent, Astro.site!) : undefined} title={meta.title} description={meta.description} ogTitle={meta.ogTitle} ogDescription={meta.ogDescription} ogImage={meta.ogImage} firstScreenImage={router ? routerAssetsV1 + '/hero.webp' : official ? (official.content as unknown as OfficialSitePageContent).images.hero.src : account ? (account.content as unknown as AccountPageContent).images.heroLogin.src : heroBlock?.data.image} {imageOrigins} indexable={meta.indexState !== 'NOINDEX'} city={city} pages={city?.pages} {site}>
+  {faqContent ? <FaqPage content={faqContent} {site} /> : router ? <RouterPage content={router.content as unknown as RouterPageContent} {site} {apiUrl} /> : speedTest ? <SpeedTestPage content={speedTest.content as unknown as SpeedTestPageContent} {site} {apiUrl} /> : official ? <OfficialSitePage content={official.content as unknown as OfficialSitePageContent} {site} {apiUrl}/> : account ? <AccountPage content={account.content as unknown as AccountPageContent} {site} {apiUrl} /> : city && homePage && heroBlock ? <>
   {homePage.content?.homeCompositionVersion === '3.0.0' ? <CityHomeComposition page={homePage} {city} {site} {apiUrl} cities={(await loadSiteData()).cities} /> : <>
   <CityHomeFirstScreen block={heroBlock} {city} {site} tariffs={city.tariffs} {apiUrl} siteSlug={publicSiteSlug} pageSlug={homePage.slug} />
   <BlockRenderer

@@ -50,7 +50,7 @@ function field(value: unknown, rule: GeneralHomeFieldRule, block: string, path: 
     if (!Array.isArray(value) || value.length < rule.min || value.length > rule.max) fail(block, path, 'Неполный список.');
     for (let index = 0; index < value.length; index++) field(value[index], rule.item, block, `${path}.${index}`);
   } else {
-    if (typeof value !== 'string' || !value.trim() || value.length > rule.limit || /[<>{}\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(value)) fail(block, path, 'Неполный или необработанный контент.');
+    if (typeof value !== 'string' || (!rule.allowEmpty && !value.trim()) || value.length > rule.limit || /[<>{}\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(value)) fail(block, path, 'Неполный или необработанный контент.');
     if (rule.kind !== 'text') { try { safeHomeUrl(value, rule.kind === 'asset'); } catch { fail(block, path, 'Небезопасный URL.'); } }
   }
 }

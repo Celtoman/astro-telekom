@@ -50,6 +50,12 @@ const sources = [
   ['speedtest', 'components/general-home/AddressOnly.astro'],
   ['speedtest', 'components/general-home/HomeAddressFormStyles.astro'],
   ['global', 'components/speed-test/SpeedTestStyles.astro'],
+  ['routers', 'components/general-home/HomeBlockStyles.astro'],
+  ['routers', 'components/general-home/HomeFaq.astro'],
+  ['routers', 'components/general-home/HomeConnectionHelp.astro'],
+  ['routers', 'components/general-home/AddressOnly.astro'],
+  ['routers', 'components/general-home/HomeAddressFormStyles.astro'],
+  ['global', 'components/routers/RouterStyles.astro'],
 ].map(([name, path]) => [name, fileURLToPath(new URL(`../apps/web/src/${path}`, import.meta.url))]);
 const assetPaths = ['home-hero.png', 'domru-logo.png', 'map-pin.svg', 'chevron-down.svg', 'search.svg', 'headphones.svg', 'phone.svg', 'menu.svg', 'tag.svg', 'wifi.svg', 'tv.svg', 'tag-blue.svg', 'wifi-blue.svg', 'hero-speed.svg', 'hero-speed-blue.svg', 'tv-blue.svg', 'hero-television.svg', 'hero-television-blue.svg', 'shield-check.svg', 'check.svg']
   .map(name => `/images/figma/${name}`).concat(['/images/figma/hero1d-desktop-imglocationicon.svg', ...['desktop', 'tablet', 'mobile'].flatMap(device => [0, 1, 2].map(index => `/images/figma/hero1d-${device}-imgicon${index || ''}.svg`))]);
@@ -65,6 +71,8 @@ assetPaths.push('/images/figma/faq-question-minus.svg');
 assetPaths.push('/images/legal/caret-down.svg', '/images/legal/caret-up.svg');
 assetPaths.push('/images/cities-directory/search.svg', '/images/cities-directory/clear.svg');
 assetPaths.push(...readdirSync(new URL('../apps/web/public/images/speed-test/v1/', import.meta.url)).filter(name => /^[a-z0-9-]+\.svg$/.test(name)).map(name => `/images/speed-test/v1/${name}`));
+
+assetPaths.push(...readdirSync(new URL('../apps/web/public/images/routers/v1/', import.meta.url)).filter(name => /^[a-z0-9-]+\.(?:svg|webp)$/.test(name)).map(name => '/images/routers/v1/' + name));
 
 // Only trusted repository CSS is embedded. Catalog data never reaches this loader.
 // Native CSS nesting isolates Astro's local selectors from other preview components.

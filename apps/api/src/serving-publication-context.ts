@@ -1,3 +1,4 @@
+import { ROUTER_PAGE_SLUG } from './router-page-model';
 import { BadRequestException, CallHandler, ExecutionContext, NestInterceptor, NotFoundException, ServiceUnavailableException } from '@nestjs/common';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { createHmac, timingSafeEqual } from 'node:crypto';
@@ -177,12 +178,13 @@ function cityProjectionJoin(citySlug: string) {
 type FrozenPage = { id: string; slug: string; [key: string]: unknown };
 type FrozenCity = { id: string; name: string; slug: string; region: { name: string; slug: string }; pages: FrozenPage[]; tariffs: Array<Record<string, unknown>> };
 type FrozenSources = { site: { slug: string }; cities: FrozenCity[]; globalPages?: FrozenPage[] };
-type GlobalSourceType = 'ACCOUNT' | 'OFFICIAL_SITE' | 'SPEED_TEST';
+type GlobalSourceType = 'ACCOUNT' | 'OFFICIAL_SITE' | 'SPEED_TEST' | 'EQUIPMENT_ROUTER';
 
-function globalPageType(pageSlug?: string): GlobalSourceType | null {
+export function globalPageType(pageSlug?: string): GlobalSourceType | null {
   if (pageSlug === 'lichnyy-kabinet-dom-ru') return 'ACCOUNT';
   if (pageSlug === 'official-site-domru') return 'OFFICIAL_SITE';
   if (pageSlug === 'proverit-skorost-interneta') return 'SPEED_TEST';
+  if (pageSlug === ROUTER_PAGE_SLUG) return 'EQUIPMENT_ROUTER';
   return null;
 }
 

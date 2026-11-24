@@ -11,11 +11,15 @@ const { AdminSpeedTestController } = require('../apps/api/dist/admin-speed-test.
 const { SiteCatalogService } = require('../apps/api/dist/site-catalog.service.js');
 const { PublicationWorkflowService } = require('../apps/api/dist/publication-workflow.service.js');
 const migration = readFileSync(new URL('../prisma/migrations/0074_speed_test_page/migration.sql', import.meta.url), 'utf8');
+const oldGlobalScope = /ALTER TABLE "Page" ADD CONSTRAINT "Page_global_scope_check" CHECK \([\s\S]*?\n\);/;
 const historicalContent = JSON.parse(migration.match(/\$speed_test\$([\s\S]*?)\$speed_test\$::jsonb/)[1]);
 const container = `astro-speed-test-${randomUUID().slice(0, 8)}`;
 const docker = (args, options = {}) => spawnSync('docker', args, { encoding: 'utf8', timeout: 120000, windowsHide: true, ...options });
 const checked = result => { assert.equal(result.status, 0, result.stderr || result.stdout || result.error?.message); return result.stdout.trim(); };
-const apply = () => docker(['exec', '-i', container, 'psql', '-U', 'postgres', '-d', 'provider', '-v', 'ON_ERROR_STOP=1'], { input: migration });
+let currentGlobalScope;
+const apply = () => docker(['exec', '-i', container, 'psql', '-U', 'postgres', '-d', 'provider', '-v', 'ON_ERROR_STOP=1'], {
+  input: migration.replace(oldGlobalScope, 'ALTER TABLE "Page" ADD CONSTRAINT "Page_global_scope_check" ' + currentGlobalScope + ';'),
+});
 const json = value => JSON.parse(JSON.stringify(value));
 let db, owned = false;
 try {
@@ -29,6 +33,7 @@ try {
   const port = checked(docker(['port', container, '5432/tcp'])).match(/:(\d+)\s*$/)[1];
   process.env.DATABASE_URL = `postgresql://postgres:postgres@127.0.0.1:${port}/provider`;
   checked(spawnSync('pnpm', ['--filter', '@provider/database', 'migrate:deploy'], { shell: process.platform === 'win32', env: process.env, encoding: 'utf8', timeout: 120000, windowsHide: true }));
+  currentGlobalScope = checked(docker(['exec', container, 'psql', '-U', 'postgres', '-d', 'provider', '-Atc', 'SELECT pg_get_constraintdef(oid) FROM pg_constraint WHERE conname = \'Page_global_scope_check\' AND conrelid = \'"Page"\'::regclass']));
   const seed = () => checked(spawnSync(process.execPath, ['apps/api/dist/seed.js'], { env: { ...process.env, ADMIN_EMAIL: 'speed-test-rehearsal@example.test', ADMIN_PASSWORD: 'synthetic-speed-test-rehearsal-password' }, encoding: 'utf8', timeout: 30000, windowsHide: true }));
   seed();
   db = new PrismaService(); await db.onModuleInit();

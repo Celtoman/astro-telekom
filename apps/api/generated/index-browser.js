@@ -715,6 +715,7 @@ exports.SeoTemplateKind = exports.$Enums.SeoTemplateKind = {
   FAQ: 'FAQ',
   CITY_SUPPORT: 'CITY_SUPPORT',
   SPEED_TEST: 'SPEED_TEST',
+  EQUIPMENT_ROUTER: 'EQUIPMENT_ROUTER',
   OFFICIAL_SITE: 'OFFICIAL_SITE',
   ACCOUNT: 'ACCOUNT',
   HOME: 'HOME',
@@ -792,6 +793,7 @@ exports.CityOfficeState = exports.$Enums.CityOfficeState = {
 exports.PageType = exports.$Enums.PageType = {
   CITY_SUPPORT: 'CITY_SUPPORT',
   SPEED_TEST: 'SPEED_TEST',
+  EQUIPMENT_ROUTER: 'EQUIPMENT_ROUTER',
   OFFICIAL_SITE: 'OFFICIAL_SITE',
   ACCOUNT: 'ACCOUNT',
   HOME: 'HOME',

@@ -1,0 +1,116 @@
+<style is:global>
+  body:has(.router-page) { padding-bottom: 0; }
+  .general-home-page > main:has(.router-page) { padding: 0; }
+  .router-page { display: flex; flex-direction: column; gap: 48px; width: min(1360px, calc(100% - 80px)); margin: 24px auto 48px; color: #18202a; font-family: 'Geist Variable', sans-serif; }
+  .router-page [hidden] { display: none !important; }
+  .router-page :is(a, button, [tabindex]):focus-visible { outline: 3px solid #1769aa; outline-offset: 3px; }
+  .router-page :is(h1, h2, h3, p) { overflow-wrap: anywhere; }
+  .router-page :is(#router-catalog, #router-comparison, #router-mesh, #router-consultation) { scroll-margin-top: 20px; }
+  .router-hero { display: grid; grid-template-columns: 45% minmax(0, 1fr); align-items: center; gap: 48px; padding-block: 16px; }
+  .router-hero-copy, .router-section { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+  .router-hero h1 { margin: -12px 0 0; font-size: clamp(32px, 3.35vw, 48px); font-weight: 800; line-height: 1.05; letter-spacing: -.05em; white-space: pre-line; }
+  .router-hero p.router-eyebrow { color: #d1221d; text-transform: uppercase; font-size: 13px; font-weight: 700; line-height: 18px; letter-spacing: .8px; }
+  .router-hero > img { display: block; width: 100%; height: auto; border-radius: 24px; }
+  .router-actions, .router-heading-row { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .router-heading-row { justify-content: space-between; }
+  .router-heading-row > div > p { margin-top: 8px; }
+  .router-anchor { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 8px; min-height: 48px; padding-inline: 8px; border-radius: 10px; color: #18202a; font-size: 14px; font-weight: 600; text-decoration: none; }
+  .router-anchor:hover { background: #eef8ff; color: #1769aa; }
+  .router-anchor:active { background: #dcecf7; }
+  .router-anchor > span { font-size: 18px; line-height: 1; }
+  .router-benefits { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .router-benefit { display: grid; grid-template-columns: min(38%, 252px) minmax(0, 1fr); align-items: center; min-height: 168px; overflow: hidden; border-radius: 24px; background: #eef8ff; }
+  .router-benefit > img { display: block; width: 100%; height: 100%; min-height: 168px; object-fit: cover; }
+  .router-benefit > div { display: grid; gap: 8px; padding: 24px; }
+  .router-catalog-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .router-card { display: flex; flex-direction: column; gap: 16px; min-width: 0; padding: 24px; border: 1px solid #dcecf7; border-radius: 24px; background: #eef8ff; }
+  .router-card > img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 14px; }
+  .router-card-copy { display: flex; flex: 1; flex-direction: column; gap: 16px; min-width: 0; }
+  .router-card-heading { display: grid; gap: 4px; }
+  .router-card h3 { font-size: 24px; line-height: 29px; }
+  .router-card p.router-card-qualifier { color: #175d94; font-weight: 600; }
+  .router-card dl { display: grid; gap: 8px; padding-block: 12px; border-block: 1px solid #dcecf7; font-size: 14px; }
+  .router-card dl > div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .router-card dt { color: #526071; }
+  .router-card dd { color: #18202a; font-weight: 600; }
+  .router-card-pricing { margin-top: auto; }
+  .router-card-pricing strong { font-size: 24px; line-height: 29px; }
+  .router-card-pricing p { font-size: 14px !important; }
+  .router-comparison { gap: 12px; }
+  .router-comparison-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 14px; }
+  .router-comparison-actions > span { padding: 6px 10px; border-radius: 10px; background: #eef8ff; color: #526071; }
+  .router-secondary { min-height: 44px; padding: 8px 12px; border: 1px solid #c7e4f8; border-radius: 10px; background: #fff; color: #175d94; cursor: pointer; font: inherit; font-size: 14px; font-weight: 600; }
+  .router-secondary:hover { background: #eef8ff; }
+  .router-secondary:active { background: #dcecf7; }
+  .router-collapse { align-self: end; }
+  .router-comparison .router-mobile-hint { display: none; font-size: 14px; }
+  .router-table-viewport { max-width: 100%; overflow-x: auto; border: 1px solid #dcecf7; border-radius: 14px; }
+  .router-table-viewport table { width: 100%; table-layout: fixed; border-spacing: 0; color: #18202a; text-align: left; font-size: 14px; line-height: 20px; }
+  .router-table-viewport :is(th, td) { height: 56px; padding: 12px; border-bottom: 1px solid #dcecf7; border-right: 1px solid #dcecf7; background: #fff; overflow-wrap: anywhere; }
+  .router-table-viewport tr > :last-child { border-right: 0; }
+  .router-table-viewport tbody:last-child tr:last-child > *, .router-table-viewport table:has(tbody[hidden]) tbody:nth-child(2) tr:last-child > * { border-bottom: 0; }
+  .router-table-viewport tr > :first-child { width: 20.6%; }
+  .router-table-viewport thead th, .router-table-viewport tbody tr:nth-child(odd) > * { background: #eaf7ff; }
+  .router-mesh-main { display: grid; grid-template: auto auto / minmax(0, 43%) minmax(0, 1fr); gap: 24px; align-items: start; }
+  .router-mesh-heading { grid-area: 1 / 1; display: grid; gap: 12px; }
+  .router-mesh-heading > h2 { white-space: pre-line; }
+  .router-mesh-benefits { grid-area: 2 / 1; display: grid; gap: 12px; }
+  .router-mesh-benefits article { display: flex; align-items: start; gap: 12px; padding: 12px; border-radius: 14px; background: #eef8ff; }
+  .router-mesh-benefits article p { font-size: 14px; line-height: 20px; }
+  .router-mesh-benefits .home-action { justify-self: start; min-width: 208px; }
+  .router-mesh-icon { display: grid; place-items: center; flex: 0 0 40px; height: 40px; border-radius: 14px; background: #ffeae9; }
+  .router-mesh-art { grid-area: 1 / 2 / span 2; position: relative; min-width: 0; margin: 48px 0 0; }
+  .router-mesh-art > img { display: block; width: 100%; height: auto; }
+  .router-mesh-art figcaption { position: absolute; right: 0; bottom: 3%; display: flex; align-items: start; gap: 8px; max-width: min(288px, 62%); padding: 8px 12px; border: 1px solid #dcecf7; border-radius: 14px; background: #fff; color: #526071; font-size: 14px; line-height: 20px; }
+  .router-mesh-art figcaption img { flex: 0 0 20px; }
+  .router-mesh-specs { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); margin: 0; padding: 12px 4px; border: 1px solid #dcecf7; border-radius: 14px; background: #eef8ff; list-style: none; }
+  .router-mesh-specs li { display: flex; align-items: flex-start; gap: 8px; padding: 4px 12px; font-size: 14px; line-height: 20px; overflow-wrap: anywhere; }
+  .router-mesh-specs li + li { border-left: 1px solid #dcecf7; }
+  .router-mesh-specs img { flex: 0 0 24px; }
+  .router-selection { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 16px; padding: 8px 16px; margin-bottom: 16px; border: 1px solid #dcecf7; border-radius: 14px; background: #eef8ff; }
+  .router-selection p { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 0; }
+  @media (max-width: 1100px) {
+    .router-page { width: min(720px, calc(100% - 48px)); gap: 32px; margin-block: 16px 32px; }
+    .router-hero { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+    .router-hero h1 { max-width: 520px; white-space: normal; }
+    .router-hero-copy { gap: 20px; }
+    .router-benefit { display: flex; flex-direction: column; align-items: stretch; }
+    .router-benefit > img { height: auto; min-height: 0; aspect-ratio: 2 / 1; }
+    .router-benefit > div { padding: 16px; }
+    .router-catalog-grid { grid-template-columns: minmax(0, 1fr); }
+    .router-card { display: grid; grid-template-columns: min(33%, 220px) minmax(0, 1fr); align-items: center; }
+    .router-mesh-main { grid-template: auto / minmax(0, 1fr); gap: 16px; }
+    .router-mesh-heading, .router-mesh-benefits, .router-mesh-art { grid-area: auto; }
+    .router-mesh-art { grid-row: 2; width: min(540px, 100%); justify-self: center; margin-top: 0; padding-bottom: 12px; }
+    .router-mesh-art figcaption { bottom: 0; }
+    .router-mesh-specs { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px 0; }
+    .router-mesh-specs li + li { border: 0; }
+  }
+  @media (max-width: 620px) {
+    .router-page { width: calc(100% - 32px); gap: 32px; }
+    .router-hero { padding: 0; }
+    .router-hero-copy, .router-section { gap: 16px; }
+    .router-hero h1 { margin-top: -8px; font-size: 30px; line-height: 1.08; }
+    .router-actions { display: grid; gap: 4px; }
+    .router-actions .router-anchor { justify-self: start; padding-left: 0; }
+    .router-benefits { grid-template-columns: minmax(0, 1fr); }
+    .router-benefit, .router-card, .router-hero > img { border-radius: 18px; }
+    .router-card { grid-template-columns: minmax(0, 1fr); padding: 16px; }
+    .router-card h3 { font-size: 20px; line-height: 25px; }
+    .router-catalog-grid { gap: 12px; }
+    .router-heading-row { gap: 4px; }
+    .router-heading-row .router-anchor { padding-left: 0; }
+    .router-comparison .router-mobile-hint { display: block; }
+    .router-table-viewport table { min-width: 580px; font-size: 12px; line-height: 16px; }
+    .router-table-viewport :is(th, td) { height: 44px; padding: 8px; }
+    .router-table-viewport tr > :first-child { position: sticky; left: 0; width: 104px; box-shadow: 2px 0 3px #18202a12; }
+    .router-mesh-art { padding-bottom: 0; }
+    .router-mesh-art figcaption { position: static; max-width: none; font-size: 12px; line-height: 16px; }
+    .router-mesh-specs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 0; }
+    .router-mesh-specs li { font-size: 13px; }
+  }
+  @media (max-width: 360px) {
+    .router-hero h1 { font-size: 26px; }
+    .router-page { width: calc(100% - 24px); }
+  }
+</style>

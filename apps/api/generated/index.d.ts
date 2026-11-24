@@ -215,6 +215,7 @@ export type PublishStatus = (typeof PublishStatus)[keyof typeof PublishStatus]
 export const PageType: {
   CITY_SUPPORT: 'CITY_SUPPORT',
   SPEED_TEST: 'SPEED_TEST',
+  EQUIPMENT_ROUTER: 'EQUIPMENT_ROUTER',
   OFFICIAL_SITE: 'OFFICIAL_SITE',
   ACCOUNT: 'ACCOUNT',
   HOME: 'HOME',
@@ -238,6 +239,7 @@ export const SeoTemplateKind: {
   FAQ: 'FAQ',
   CITY_SUPPORT: 'CITY_SUPPORT',
   SPEED_TEST: 'SPEED_TEST',
+  EQUIPMENT_ROUTER: 'EQUIPMENT_ROUTER',
   OFFICIAL_SITE: 'OFFICIAL_SITE',
   ACCOUNT: 'ACCOUNT',
   HOME: 'HOME',

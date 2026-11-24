@@ -13,7 +13,7 @@ import { Field, FieldDescription, FieldLabel } from "./ui/field"
 import { Input } from "./ui/input"
 import { Skeleton } from "./ui/skeleton"
 
-type Kind = "FAQ" | "CITY_SUPPORT" | "SPEED_TEST" | "OFFICIAL_SITE" | "ACCOUNT" | "HOME" | "COVERAGE" | "CITIES" | "PRIVACY" | "PERSONAL_DATA_CONSENT" | "COOKIE_POLICY" | "CITY_HOME" | "CITY_TARIFF_DETAIL" | "CITY_ADDRESS_CHECK"
+type Kind = "EQUIPMENT_ROUTER" | "FAQ" | "CITY_SUPPORT" | "SPEED_TEST" | "OFFICIAL_SITE" | "ACCOUNT" | "HOME" | "COVERAGE" | "CITIES" | "PRIVACY" | "PERSONAL_DATA_CONSENT" | "COOKIE_POLICY" | "CITY_HOME" | "CITY_TARIFF_DETAIL" | "CITY_ADDRESS_CHECK"
 type IndexState = "INDEX" | "NOINDEX"
 type TextField = "titleTemplate" | "descriptionTemplate" | "ogTitleTemplate" | "ogDescriptionTemplate"
 interface Administrator { id: string; email: string }
@@ -35,6 +35,7 @@ const labels: Record<Kind, string> = {
   CITY_SUPPORT:'Техническая поддержка городов',
   FAQ: "Вопросы и ответы",
   SPEED_TEST: "Проверка скорости интернета",
+  EQUIPMENT_ROUTER: "Роутеры",
   OFFICIAL_SITE: "Официальный сайт",
   ACCOUNT: "Личный кабинет",
   HOME: "Главная сайта", COVERAGE: "Карта покрытия", CITIES: "Города обслуживания",

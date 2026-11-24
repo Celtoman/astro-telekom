@@ -10,6 +10,13 @@ import { servingPublication } from './serving-publication-context';
 @Controller('admin/sites/:siteId/speed-test')
 @UseGuards(AdminTokenGuard)
 export class AdminSpeedTestController {
+  protected readonly page: {
+    type: 'SPEED_TEST' | 'EQUIPMENT_ROUTER';
+    slug: string;
+    editor: string;
+    validate: (raw: unknown, draft: boolean) => string[];
+  } = { type: 'SPEED_TEST', slug: SPEED_TEST_PAGE_SLUG, editor: 'speed-test', validate: validateSpeedTestPage };
+
   constructor(private readonly prisma: PrismaService, private readonly publications: PublicationWorkflowService) {}
 
   @Get()
@@ -17,9 +24,9 @@ export class AdminSpeedTestController {
     const working = await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       const site = await tx.site.findUnique({ where: { id: siteId }, select: { slug: true, workingRevision: true, publishedRevision: true, connectionPhone: true, supportPhone: true } });
       if (!site) throw new NotFoundException('Сайт не найден');
-      const page = await tx.page.findFirst({ where: { siteId, cityId: null, type: 'SPEED_TEST', slug: SPEED_TEST_PAGE_SLUG } });
-      if (!page) throw new NotFoundException('Рабочая страница проверки скорости ещё не подготовлена');
-      return { site, page, missingFields: validateSpeedTestPage(page.content, true) };
+      const page = await tx.page.findFirst({ where: { siteId, cityId: null, type: this.page.type, slug: this.page.slug } });
+      if (!page) throw new NotFoundException('Рабочая страница ещё не подготовлена');
+      return { site, page, missingFields: this.page.validate(page.content, true) };
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
     let serving: Awaited<ReturnType<typeof servingPublication>> = null;
     let publishedAvailable = true;
@@ -33,7 +40,7 @@ export class AdminSpeedTestController {
         AND ${serving ? Prisma.sql`s.id=${serving.id}` : Prisma.sql`s.status='SUCCEEDED'`}
       ORDER BY s."releaseSequence" DESC LIMIT 1`) : [];
     const pages = rows[0]?.content;
-    const published = Array.isArray(pages) ? pages.find(p => p.type === 'SPEED_TEST')?.content ?? null : null;
+    const published = Array.isArray(pages) ? pages.find(p => p.type === this.page.type)?.content ?? null : null;
     return { content: working.page.content, pageId: working.page.id, status: working.page.status,
       workingRevision: working.site.workingRevision,
       publishedRevision: publishedAvailable ? serving?.siteRevision ?? rows[0]?.revision ?? working.site.publishedRevision : null,
@@ -44,17 +51,17 @@ export class AdminSpeedTestController {
   @Patch()
   async save(@Param('siteId') siteId: string, @Body() body: { expectedWorkingRevision: number; content: unknown }, @Req() request?: { user?: { id: string } }) {
     if (!body || Object.keys(body).some(k => !['expectedWorkingRevision', 'content'].includes(k)) || !Number.isSafeInteger(body.expectedWorkingRevision) || body.expectedWorkingRevision < 0) throw new BadRequestException('Передайте content и актуальную рабочую ревизию');
-    const missingFields = validateSpeedTestPage(body.content, true);
+    const missingFields = this.page.validate(body.content, true);
     try {
       return await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
         const site = await tx.site.findUnique({ where: { id: siteId }, select: { workingRevision: true } });
         if (!site) throw new NotFoundException('Сайт не найден');
         if (site.workingRevision !== body.expectedWorkingRevision) throw new ConflictException('Рабочая ревизия изменилась. Обновите данные перед сохранением. Введённое сохранено в форме.');
-        const before = await tx.page.findFirst({ where: { siteId, type: 'SPEED_TEST', cityId: null, slug: SPEED_TEST_PAGE_SLUG } });
-        if (!before) throw new NotFoundException('Страница проверки скорости не найдена');
+        const before = await tx.page.findFirst({ where: { siteId, type: this.page.type, cityId: null, slug: this.page.slug } });
+        if (!before) throw new NotFoundException('Рабочая страница не найдена');
         const after = await tx.page.update({ where: { id: before.id }, data: { content: body.content as Prisma.InputJsonObject } });
         const revision = await this.publications.recordWorkingRevision(tx, { siteId, entityType: 'PAGE', entityId: before.id, action: 'UPDATE',
-          previousSnapshot: before as unknown as Record<string, unknown>, snapshot: after as unknown as Record<string, unknown>, changedFields: ['content'], actorId: request?.user?.id, source: 'admin:speed-test' });
+          previousSnapshot: before as unknown as Record<string, unknown>, snapshot: after as unknown as Record<string, unknown>, changedFields: ['content'], actorId: request?.user?.id, source: 'admin:' + this.page.editor });
         return { content: after.content, page: after, pageId: after.id, status: after.status, missingFields, workingRevision: revision.siteRevision };
       }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
     } catch (error) {

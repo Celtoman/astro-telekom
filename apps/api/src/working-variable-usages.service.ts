@@ -1,3 +1,4 @@
+import { ROUTER_PAGE_SCHEMA } from './router-page-model';
 import { SPEED_TEST_PAGE_SCHEMA } from './speed-test-page-model';
 import { SUPPORT_PAGE_SCHEMA } from './support-page-model';
 import { OFFICIAL_SITE_PAGE_SCHEMA } from './official-site-page-model';
@@ -75,6 +76,7 @@ export class WorkingVariableUsagesService {
         const path = `workingPages[${index}]`;
         const owner = { entityType: 'PAGE' as const, entityId: page.id, pageType: page.type, cityId: page.cityId ?? undefined, lifecycleStatus: page.status, editorHref: null };
         recordText(page.title, `${path}.title`, owner, usages);
+        if (page.type === 'EQUIPMENT_ROUTER') { recordStructured(page.content, ROUTER_PAGE_SCHEMA, `${path}.content`, { ...owner, editorHref: '/templates/routers' }, usages); continue; }
         if (page.type === 'SPEED_TEST') { recordStructured(page.content, SPEED_TEST_PAGE_SCHEMA, `${path}.content`, { ...owner, editorHref: '/templates/speed-test' }, usages); continue; }
         if (page.type === 'OFFICIAL_SITE') { recordStructured(page.content, OFFICIAL_SITE_PAGE_SCHEMA, `${path}.content`, { ...owner, editorHref: '/templates/official-site' }, usages); }
         if (page.type === 'ACCOUNT') {

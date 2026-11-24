@@ -1,5 +1,6 @@
 import { ADDRESS_PAGE_SLUG } from './address-page-model';
 import { SUPPORT_PAGE_SLUG } from './support-page-model';
+import { ROUTER_PAGE_SLUG, ROUTER_PAGE_TYPE } from './router-page-model';
 import type { NewsRoute } from './news-projection';
 
 export const RELEASE_ONE_GLOBAL_PAGES = [
@@ -11,16 +12,16 @@ export const RELEASE_ONE_GLOBAL_PAGES = [
 ] as const;
 
 export type ReleaseOneGlobalPageType = typeof RELEASE_ONE_GLOBAL_PAGES[number]['type'];
-export const OPTIONAL_GLOBAL_PAGES = [{ type: 'FAQ', slug: 'faq' }, { type: 'ACCOUNT', slug: 'lichnyy-kabinet-dom-ru' }, { type: 'OFFICIAL_SITE', slug: 'official-site-domru' }, { type: 'SPEED_TEST', slug: 'proverit-skorost-interneta' }] as const;
+export const OPTIONAL_GLOBAL_PAGES = [{ type: 'FAQ', slug: 'faq' }, { type: 'ACCOUNT', slug: 'lichnyy-kabinet-dom-ru' }, { type: 'OFFICIAL_SITE', slug: 'official-site-domru' }, { type: 'SPEED_TEST', slug: 'proverit-skorost-interneta' }, { type: ROUTER_PAGE_TYPE, slug: ROUTER_PAGE_SLUG }] as const;
 export const SUPPORTED_GLOBAL_PAGES = [...RELEASE_ONE_GLOBAL_PAGES, ...OPTIONAL_GLOBAL_PAGES] as const;
 
 export type LegacyPublicRoute = {
-  id: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | 'CITY_SUPPORT' | ReleaseOneGlobalPageType | 'ACCOUNT' | 'OFFICIAL_SITE' | 'SPEED_TEST' | 'FAQ';
+  id: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | 'CITY_SUPPORT' | ReleaseOneGlobalPageType | 'ACCOUNT' | 'OFFICIAL_SITE' | 'SPEED_TEST' | 'EQUIPMENT_ROUTER' | 'FAQ';
   kind: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | 'CITY_SUPPORT' | 'GLOBAL_PAGE';
   path: string;
   citySlug?: string;
   tariffSlug?: string;
-  pageType?: ReleaseOneGlobalPageType | 'ACCOUNT' | 'OFFICIAL_SITE' | 'SPEED_TEST' | 'FAQ';
+  pageType?: ReleaseOneGlobalPageType | 'ACCOUNT' | 'OFFICIAL_SITE' | 'SPEED_TEST' | 'EQUIPMENT_ROUTER' | 'FAQ';
 };
 export type PublicRoute = LegacyPublicRoute | (NewsRoute & {citySlug?:never;tariffSlug?:never;pageType?:never});
 export function isLegacyPublicRoute(route:PublicRoute):route is LegacyPublicRoute {return route.kind!=='NEWS_LIST'&&route.kind!=='NEWS_ARTICLE'&&route.kind!=='NEWS_CATEGORY'}

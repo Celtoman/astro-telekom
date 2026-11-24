@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { createRequire } from 'node:module';
+import { readFileSync } from 'node:fs';
 const require = createRequire(import.meta.url);
 const { PrismaService } = require('../apps/api/dist/prisma.service.js');
 const { SiteCatalogService } = require('../apps/api/dist/site-catalog.service.js');
@@ -62,7 +63,7 @@ try {
   source = await catalogService.captureSourceBySiteId(site.id);
   const validation = validatePublicationSource(source, { appVersion: 'seed-rehearsal', siteRevision: site.workingRevision }, (candidate, now) => catalogService.renderSource(candidate, now));
   assert.notEqual(validation.report.outcome, 'BLOCKED', JSON.stringify(validation.report.issues));
-  assert.equal(validation.catalog.routes.length, 13, 'root, five required globals plus ACCOUNT, OFFICIAL_SITE and SPEED_TEST, city HOME, ADDRESS, SUPPORT and one synthetic published tariff; other unpriced demo tariffs remain drafts');
+  assert.equal(validation.catalog.routes.length, 14, 'root, five required globals plus ACCOUNT, OFFICIAL_SITE, SPEED_TEST and EQUIPMENT_ROUTER, city HOME, ADDRESS, SUPPORT and one synthetic published tariff; other unpriced demo tariffs remain drafts');
   assert.deepEqual(validation.catalog.routes.filter(route => route.id === 'SPEED_TEST'), [{ id: 'SPEED_TEST', kind: 'GLOBAL_PAGE', path: `/${SPEED_TEST_PAGE_SLUG}`, pageType: 'SPEED_TEST' }]);
   const speedTestPages = source.globalPages.filter(page => page.type === 'SPEED_TEST');
   assert.equal(speedTestPages.length, 1, 'seed initializes one site-global SPEED_TEST source');
@@ -72,7 +73,12 @@ try {
   assert.equal(speedTestPages[0].status, 'PUBLISHED');
   assert.deepEqual(speedTestPages[0].content, speedTestPageDefaults());
   assert.deepEqual(validation.catalog.globalPages.find(page => page.type === 'SPEED_TEST').content, speedTestPageDefaults());
-  assert.equal(source.seoTemplates.length, 13);
+  const routerPage = source.globalPages.find(page => page.type === 'EQUIPMENT_ROUTER');
+  assert.equal(routerPage?.cityId, null);
+  assert.equal(routerPage?.slug, 'wifi-router');
+  assert.equal(routerPage?.content.catalog.subtitle, '');
+  assert.ok(validation.catalog.seoByPath['/wifi-router']);
+  assert.equal(source.seoTemplates.length, 14);
   assert.equal(source.seoTemplates.filter(template => template.kind === 'SPEED_TEST').length, 1, 'SPEED_TEST has its own SEO template');
   assert.ok(validation.catalog.seoByPath[`/${SPEED_TEST_PAGE_SLUG}`]);
   assert.deepEqual(source.pageTemplates.map(template=>template.kind).sort(), ['HOME','CITY_HOME','CITY_ADDRESS_CHECK','CITY_SUPPORT'].sort());
@@ -116,6 +122,23 @@ try {
   assert.notEqual(credentialsMissing.status, 0);
   assert.match(credentialsMissing.stderr, /ADMIN_EMAIL|ADMIN_PASSWORD/);
   assert.deepEqual(await snapshot(), imported, 'missing credentials must fail before any writes');
+
+  const routerMigration = readFileSync(new URL('../prisma/migrations/0082_router_page/migration.sql', import.meta.url), 'utf8');
+  const applyRouterMigration = () => spawnSync('docker', ['exec', '-i', container, 'psql', '-U', 'postgres', '-d', 'provider', '-v', 'ON_ERROR_STOP=1'], {
+    input: routerMigration, encoding: 'utf8', timeout: 30000, windowsHide: true,
+  });
+  await db.page.delete({ where: { id: routerPage.id } });
+  await db.seoTemplate.delete({ where: { siteId_kind: { siteId: site.id, kind: 'EQUIPMENT_ROUTER' } } });
+  const olderSnapshot = await db.sitePublication.create({ data: { siteId: site.id, siteRevision: 0, status: 'SUCCEEDED',
+    catalog: { historical: true }, triggerEntity: 'site', triggerEntityId: site.id } });
+  const restoredRouterSource = applyRouterMigration();
+  assert.equal(restoredRouterSource.status, 0, restoredRouterSource.stderr);
+  assert.deepEqual((await db.page.findFirstOrThrow({ where: { siteId: site.id, type: 'EQUIPMENT_ROUTER' } })).content, routerPage.content);
+  const migrated = await snapshot();
+  const repeatedRouterMigration = applyRouterMigration();
+  assert.equal(repeatedRouterMigration.status, 0, repeatedRouterMigration.stderr);
+  assert.deepEqual(await snapshot(), migrated, 'router migration only initializes missing working rows');
+  assert.deepEqual(await db.sitePublication.findUniqueOrThrow({ where: { id: olderSnapshot.id } }), olderSnapshot);
 
   // Prove rollback after resetting only this owned isolated database.
   await db.$executeRawUnsafe('TRUNCATE TABLE "Provider", "User" CASCADE');

@@ -1,0 +1,37 @@
+---
+import { ROUTER_PAGE_SLUG, type RouterPageContent } from '../../../../api/src/router-page-model';
+import { publicAsset } from '../../data/public-asset';
+import type { SiteView } from '../../data/site';
+import { renderRouterIntro, renderRouterBody, renderRouterSelection, routerConsultation } from '../../lib/router-page-render';
+import AddressOnly from '../general-home/AddressOnly.astro';
+import HomeBlockStyles from '../general-home/HomeBlockStyles.astro';
+import HomeConnectionHelp from '../general-home/HomeConnectionHelp.astro';
+import HomeFaq from '../general-home/HomeFaq.astro';
+import RouterStyles from './RouterStyles.astro';
+
+interface Props { content: RouterPageContent; site: SiteView; apiUrl: string }
+const { content, site, apiUrl } = Astro.props;
+const phone = site.connectionPhone;
+const phoneHref = 'tel:' + phone.replace(/[^+\d]/g, '');
+const options = { asset: publicAsset };
+---
+
+<div class="router-page">
+  <Fragment set:html={renderRouterIntro(content, options)} />
+  <AddressOnly {site} {apiUrl} pageSlug={ROUTER_PAGE_SLUG} pageScope="GLOBAL" />
+  <Fragment set:html={renderRouterBody(content, options)} />
+  <div id="router-consultation" tabindex="-1">
+    <Fragment set:html={renderRouterSelection()} />
+    <HomeConnectionHelp content={routerConsultation(content)} {phone} {phoneHref} {apiUrl} siteSlug={site.slug} callbackNote={content.consultation.note} />
+  </div>
+  <HomeFaq content={content.faq} firstOpen phoneLinks={[site.connectionPhone, site.supportPhone]} />
+</div>
+<HomeBlockStyles />
+<RouterStyles />
+
+<script>
+  import { initializeRouterPage } from '../../lib/router-page-interactions';
+
+  initializeRouterPage();
+  document.addEventListener('astro:page-load', initializeRouterPage);
+</script>

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react"
+import { lazy, Suspense, useCallback, useEffect, useRef, useState, type ComponentType } from "react"
 import { AdminShellLayout } from "./AdminShell"
 import { AdminWorkspaceContext, type Administrator } from "./AdminWorkspaceContext"
 import { installWorkspaceNavigation, type WorkspaceScroll } from "../lib/admin-navigation-guards.mjs"
@@ -19,6 +19,7 @@ const screenLoaders = {
   "news-editor": () => import("./NewsEditorApp").then(m => ({ default: m.NewsEditorApp })),
   "official-site": () => import("./OfficialSitePageApp").then(m => ({ default: m.OfficialSitePageApp })),
   faq: () => import("./FaqPageApp").then(m => ({ default: m.FaqPageApp })),
+  routers: () => import("./SpeedTestPageApp").then(m => ({ default: (props: { apiUrl: string }) => <m.SpeedTestPageApp {...props} editor="routers" /> })),
   "speed-test": () => import("./SpeedTestPageApp").then(m => ({ default: m.SpeedTestPageApp })),
   "support": () => import("./SupportPageApp").then(m => ({ default: m.SupportPageApp })),
   account: () => import("./AccountPageApp").then(m => ({ default: m.AccountPageApp })),
@@ -44,7 +45,8 @@ const screenLoaders = {
   trash: () => import("./TrashApp").then(m => ({ default: m.TrashApp })),
 }
 
-const screens = Object.fromEntries(Object.entries(screenLoaders).map(([key, loader]) => [key, lazy(loader)])) as Record<keyof typeof screenLoaders, ReturnType<typeof lazy>>
+type WorkspaceScreen = ComponentType<{ apiUrl: string }>
+const screens = Object.fromEntries(Object.entries(screenLoaders).map(([key, loader]) => [key, lazy<WorkspaceScreen>(loader)])) as Record<keyof typeof screenLoaders, ReturnType<typeof lazy<WorkspaceScreen>>>
 
 function restoreWorkspaceScroll(hash: string, position: WorkspaceScroll | null) {
   const main = document.getElementById("admin-content")

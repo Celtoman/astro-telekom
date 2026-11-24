@@ -18,6 +18,7 @@ import { AdminPagesController } from './admin-pages.controller';
 import { AdminFaqCookieController } from './admin-faq-cookie.controller';
 import { FaqCookieService } from './faq-cookie.service';
 import { AdminAccountController } from './admin-account.controller';
+import { AdminRouterController } from './admin-router.controller';
 import { AdminSpeedTestController } from './admin-speed-test.controller';
 import { AdminSupportMediaController } from './admin-support-media.controller';
 import { AdminSupportController } from './admin-support.controller';
@@ -98,6 +99,7 @@ import { CodeReleaseService } from './code-release.service';
     AdminFaqCookieController,
     AdminOfficialSiteController,
     AdminSpeedTestController,
+    AdminRouterController,
     AdminTariffsController,
     CrmLeadsController,
     PublicLeadsController,

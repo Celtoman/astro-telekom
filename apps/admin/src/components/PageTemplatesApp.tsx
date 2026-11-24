@@ -19,6 +19,7 @@ export function PageTemplatesApp({ apiUrl }: { apiUrl: string }) {
   const templates = [
     { name: "Техническая поддержка", path: "/{город}/tehpodderzhka", description: "Тексты, ссылки, изображения, области инструкций и отдельный FAQ. Общая композиция для всех городов.", blocks: [{ label: "Редактировать страницу", href: "/templates/support" }] },
     { name: "Вопросы и ответы", path: "/faq", description: "Группы, вопросы и форматированные ответы.", blocks: [{ label: "Редактировать страницу", href: "/templates/faq" }] },
+    { name: "Роутеры", path: "/wifi-router", description: "Тексты блоков, вопросы и ответы.", blocks: [{ label: "Редактировать страницу", href: "/templates/routers" }] },
     { name: "Проверка скорости интернета", path: "/proverit-skorost-interneta", description: "Заголовок, шесть информационных разделов и FAQ. Состав карточек и оформление сохраняются.", blocks: [{ label: "Редактировать страницу", href: "/templates/speed-test" }] },
     { name: "Официальный сайт", path: "/official-site-domru", description: "Вступление, иллюстрации, основной переход и FAQ. Принятая структура сохраняется.", blocks: [{ label: "Редактировать страницу", href: "/templates/official-site" }] },
     { name: "Личный кабинет", path: "/lichnyy-kabinet-dom-ru", description: "Вступление, изображения и вопросы. Инструкции и структура страницы сохраняются.", blocks: [{ label: "Редактировать страницу", href: "/templates/account" }] },

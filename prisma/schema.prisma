@@ -16,6 +16,7 @@ enum PublishStatus {
 enum PageType {
   CITY_SUPPORT
   SPEED_TEST
+  EQUIPMENT_ROUTER
   OFFICIAL_SITE
   ACCOUNT
   HOME
@@ -36,6 +37,7 @@ enum SeoTemplateKind {
   FAQ
   CITY_SUPPORT
   SPEED_TEST
+  EQUIPMENT_ROUTER
   OFFICIAL_SITE
   ACCOUNT
   HOME
