@@ -22,7 +22,11 @@ Push в `master` запускает проверки CI. Сборка образ
 
 ## 2. Собрать и опубликовать образы
 
-1. Текущий GHCR workflow находится только в ветке первого выпуска. Использовать его как [шаблон](https://github.com/Celtoman/astro-telekom/blob/4ccd7abb8e1f43b42991e1e0646da1de9b2dd0d5/.github/workflows/ghcr-production-bf230692.yml). В отдельной ветке сборки от выбранного коммита указать новый branch trigger, точный SHA для `actions/checkout` и тот же SHA для `SOURCE_SHA`. Перед push этой ветки и публикацией приватных пакетов получить разрешение на эти действия. После checkout workflow проверяет `git rev-parse HEAD`.
+1. Запустить ручной workflow GHCR из master. Передать полный SHA коммита, который уже получил успешный push CI в master. Workflow проверяет SHA, результат CI и хеш дерева до запуска сборок. Рабочая ветка остаётся одна.
+
+   ```bash
+   gh workflow run ghcr-release.yml --repo Celtoman/astro-telekom --ref master -f source_sha=<полный-sha>
+   ```
 2. Собрать `linux/amd64` из Dockerfiles выбранного SHA. Для каждой роли проверить target и согласованные публичные build args по исходному Compose и текущему контуру. Ниже роли первого выпуска.
 
    | Сервис Compose | Пакет `ghcr.io/celtoman/astro-telekom-release-…` | Dockerfile / target |

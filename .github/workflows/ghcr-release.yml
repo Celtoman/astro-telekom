@@ -1,0 +1,101 @@
+name: Build exact astro-telekom release images
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_sha:
+        description: Full master commit SHA with a successful push CI
+        required: true
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: ghcr-production-${{ inputs.source_sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify-source:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+    outputs:
+      sha: ${{ steps.verified.outputs.sha }}
+      tree: ${{ steps.verified.outputs.tree }}
+    steps:
+      - name: Verify the source and its completed master CI
+        id: verified
+        shell: bash
+        env:
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          gh run list --repo "$GITHUB_REPOSITORY" --workflow ci.yml --branch master \
+            --commit "$SOURCE_SHA" --event push --limit 1 --json headSha,conclusion,status |
+            jq -e --arg sha "$SOURCE_SHA" 'any(.[]; .headSha == $sha and .status == "completed" and .conclusion == "success")'
+          tree=$(gh api "repos/$GITHUB_REPOSITORY/git/commits/$SOURCE_SHA" --jq '.tree.sha')
+          [[ "$tree" =~ ^[0-9a-f]{40}$ ]]
+          printf 'sha=%s\ntree=%s\n' "$SOURCE_SHA" "$tree" >> "$GITHUB_OUTPUT"
+
+  images:
+    needs: verify-source
+    permissions:
+      contents: read
+      packages: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        role: [migration, api, worker, web, admin]
+    env:
+      IMAGE_ROLE: ${{ matrix.role }}
+      SOURCE_SHA: ${{ needs.verify-source.outputs.sha }}
+      SOURCE_TREE: ${{ needs.verify-source.outputs.tree }}
+      GHCR_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.verify-source.outputs.sha }}
+          persist-credentials: false
+      - name: Build and publish the verified SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE_SHA"
+          test "$(git rev-parse HEAD^{tree})" = "$SOURCE_TREE"
+          target=()
+          args=()
+          case "$IMAGE_ROLE" in
+            migration) dockerfile=apps/api/Dockerfile; target=(--target migration) ;;
+            api) dockerfile=apps/api/Dockerfile; target=(--target runtime) ;;
+            worker) dockerfile=services/worker/Dockerfile ;;
+            web) dockerfile=apps/web/Dockerfile; target=(--target publication-runtime) ;;
+            admin) dockerfile=apps/admin/Dockerfile; args=(--build-arg PUBLIC_API_URL=https://admin.tv-internet-dom.ru/api/v1 --build-arg PUBLIC_PROVIDER_ID= --build-arg PUBLIC_SITE_ID=) ;;
+            *) exit 1 ;;
+          esac
+          mkdir -p "$RUNNER_TEMP/image-identity"
+          printf '%s' "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+          docker buildx create --driver docker-container --use
+          repo="ghcr.io/${GITHUB_REPOSITORY,,}-release-$IMAGE_ROLE"
+          tag="run-$GITHUB_RUN_ID-${SOURCE_SHA:0:8}"
+          docker buildx build --platform linux/amd64 --provenance=false --sbom=false --file "$dockerfile" \
+            "${target[@]}" "${args[@]}" \
+            --label "org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY" \
+            --label "org.opencontainers.image.revision=$SOURCE_SHA" \
+            --metadata-file "$RUNNER_TEMP/build.json" --tag "$repo:$tag" --push .
+          digest=$(jq -er '."containerimage.digest"' "$RUNNER_TEMP/build.json")
+          [[ "$digest" =~ ^sha256:[0-9a-f]{64}$ ]]
+          jq -n --arg role "$IMAGE_ROLE" --arg source "$SOURCE_SHA" --arg image "$repo@$digest" \
+            '{role:$role,sourceSha:$source,image:$image}' > "$RUNNER_TEMP/image-identity/identity.json"
+          cat "$RUNNER_TEMP/image-identity/identity.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-identity-${{ matrix.role }}
+          path: ${{ runner.temp }}/image-identity/identity.json
+          if-no-files-found: error
+          retention-days: 14
