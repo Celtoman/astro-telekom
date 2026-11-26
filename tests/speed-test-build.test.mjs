@@ -35,6 +35,7 @@ test('SPEED_TEST real Astro fixtures preserve optional routing, final CSP isolat
     assert.equal((html.match(/<iframe\b/g) || []).length, 1);
     assert.equal((html.match(/<h1\b/g) || []).length, 1);
     assert.match(html, /src="https:\/\/openspeedtest.com\/speedtest"/);
+    assert.match(html, /<iframe\b[^>]* sandbox="allow-scripts allow-same-origin"/);
     assert.match(html, /data-page-scope="GLOBAL"/);
     assert.match(html, /data-page-slug="proverit-skorost-interneta"/);
     assert.match(html, /<link rel="canonical" href="https:\/\/partner.example.test\/proverit-skorost-interneta"/);

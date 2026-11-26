@@ -27,6 +27,7 @@ test('SPEED_TEST executes only the fixed manual widget in runtime and escapes un
   assert.match(output, /&lt;script&gt;alert\(1\)&lt;\/script&gt; &amp; результат/);
   assert.equal((output.match(/<iframe /g) || []).length, 1);
   assert.match(output, /src="https:\/\/openspeedtest.com\/speedtest"/);
+  assert.match(output, /<iframe\b[^>]* sandbox="allow-scripts allow-same-origin"/);
   assert.match(output, /title="[^"]+" loading="eager"/);
   assert.doesNotMatch(output, /\?Run|<script|onload=|Provided by|fallback|postMessage|setTimeout|Повторить тест/);
 });

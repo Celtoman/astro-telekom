@@ -2,6 +2,7 @@ import { BadRequestException, ConflictException, Injectable } from '@nestjs/comm
 import { isDeepStrictEqual } from 'node:util';
 import { Prisma, PublishStatus, ServiceType, TariffArchiveReason, TariffAvailability, type Redirect, type Tariff } from '../generated';
 import { readSheet, type SheetData } from 'read-excel-file/node';
+import { MAX_IMPORT_COLUMNS, MAX_IMPORT_ROWS, prepareWorkbookArchive } from './xlsx-import-archive';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
 import { regionSlugFromName } from './region-slug';
@@ -54,8 +55,6 @@ type TariffAttributeField = typeof TARIFF_ATTRIBUTE_FIELDS[number];
 const ATTRIBUTE_FIELD_BY_KEY = new Map<string, TariffAttributeField>(TARIFF_ATTRIBUTE_FIELDS.map((field) => [field.key, field]));
 const IMPORT_TRANSACTION_TIMEOUT_MS = 120_000;
 const MAX_IMPORT_FILE_SIZE_BYTES = 25 * 1024 * 1024;
-const MAX_IMPORT_ROWS = 10_000;
-const MAX_IMPORT_COLUMNS = 256;
 const ONLINE_CINEMA_CODES = new Set(['ivi', 'kinopoisk', 'start', 'premier', 'amediateka']);
 const GAME_CODES = new Set(['warface', 'lesta']);
 const SERVICE_STATUS_BY_SOURCE = new Map<number, 'UNAVAILABLE' | 'OPTIONAL' | 'INCLUDED'>([
@@ -493,8 +492,10 @@ export async function parseWorkbook(buffer: Buffer, fileName = 'import.xlsx'): P
 
   let sheet: SheetData;
   try {
-    sheet = await readSheet(buffer);
-  } catch {
+    const archive = await prepareWorkbookArchive(buffer);
+    sheet = await readSheet(Buffer.from(archive.buffer, archive.byteOffset, archive.byteLength));
+  } catch (error) {
+    if (error instanceof BadRequestException) throw error;
     throw new BadRequestException('Не удалось прочитать XLSX-файл');
   }
 

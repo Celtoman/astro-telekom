@@ -24,7 +24,7 @@ function view(options: SpeedTestRenderOptions) {
 export function renderSpeedTestIntro(content: SpeedTestPageContent, options: SpeedTestRenderOptions = {}) {
   const widget = options.interactive === false
     ? '<div class="speed-test-widget speed-test-widget-preview" role="img" aria-label="Область теста скорости. Виджет доступен на опубликованной странице."></div>'
-    : `<iframe class="speed-test-widget" src="${SPEED_TEST_WIDGET_URL}" title="Проверка скорости интернета OpenSpeedTest" loading="eager"></iframe>`;
+    : `<iframe class="speed-test-widget" src="${SPEED_TEST_WIDGET_URL}" sandbox="allow-scripts allow-same-origin" title="Проверка скорости интернета OpenSpeedTest" loading="eager"></iframe>`;
   return `<section class="speed-test-hero" data-speed-test-block="hero" aria-labelledby="speed-test-h1"><h1 id="speed-test-h1">${html(content.hero.h1)}</h1>${widget}</section>`;
 }
 

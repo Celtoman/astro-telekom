@@ -28,7 +28,7 @@ Direct prod Compose использует migration target с Prisma CLI; отд�
 
 | Контур | Команда | Состав |
 | --- | --- | --- |
-| Локальная инфраструктура | `docker compose up -d postgres redis` | Только PostgreSQL и Redis с опубликованными портами 5432/6379. |
+| Локальная инфраструктура | `docker compose up -d postgres redis` | PostgreSQL и Redis публикуют порты 5432 и 6379 на `127.0.0.1`. |
 | Локальные приложения | pnpm-команды из README | API, web, admin, worker в процессах хоста. |
 | Альтернативный direct-контур | `docker compose -f docker-compose.prod.yml up -d --build` | Повторное развертывание при уже доступном `SITE_DATA_API_URL`: PostgreSQL, Redis, one-shot Prisma migrate, API, worker, web, admin, внешний Caddy. |
 | Coolify test, действующий внешний контур | `docker-compose.coolify.yml` из `Celtoman/astro-telekom-release`, образы из приватного GHCR | Защищённые public/admin origins, внутренний API, отдельный migration target, постоянный publication runtime и атомарная Caddy activation. [Выпуск](runbooks/ghcr-release.md). |
