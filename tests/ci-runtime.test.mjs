@@ -11,16 +11,42 @@ test('GitHub workflows use Node 24 actions without weakening the release gate', 
   const ci = readFileSync(join(root, 'ci.yml'), 'utf8');
   const release = readFileSync(join(root, 'release.yml'), 'utf8');
 
-  assert.match(ci, /actions\/checkout@v7/);
-  assert.match(ci, /pnpm\/action-setup@v6/);
-  assert.match(ci, /actions\/setup-node@v7/);
-  assert.match(release, /actions\/checkout@v7/);
+  assert.match(ci, /actions\/checkout@[a-f0-9]{40} # v7/);
+  assert.match(ci, /pnpm\/action-setup@[a-f0-9]{40} # v6/);
+  assert.match(ci, /actions\/setup-node@[a-f0-9]{40} # v7/);
+  assert.match(release, /actions\/checkout@[a-f0-9]{40} # v7/);
   assert.match(ci, /node-version:\s*["']22\.23\.4["']/);
   assert.match(ci, /pnpm install --frozen-lockfile/);
   assert.match(ci, /pnpm check/);
   assert.match(readFileSync(join(repositoryRoot, '.gitattributes'), 'utf8'), /^\*\.sh text eol=lf$/m);
   assert.doesNotMatch(readFileSync(join(repositoryRoot, 'scripts', 'pnpm-install-retry.sh'), 'utf8'), /\r/);
   assert.doesNotMatch(`${ci}\n${release}`, /(?:actions\/(?:checkout|setup-node)|pnpm\/action-setup)@v4/);
+});
+
+test('release Actions are pinned and GHCR write permission is isolated from the build', () => {
+  const ghcr = readFileSync(join(root, 'ghcr-release.yml'), 'utf8');
+  const release = readFileSync(join(root, 'release.yml'), 'utf8');
+  const ci = readFileSync(join(root, 'ci.yml'), 'utf8');
+
+  for (const [, action] of `${ci}\n${ghcr}\n${release}`.matchAll(/^\s*- uses: (\S+)/gm)) {
+    assert.match(action, /^[^@]+@[a-f0-9]{40}$/);
+  }
+
+  const [build, publish] = ghcr.split(/^  publish-images:\r?$/m);
+  assert.match(build, /^permissions: \{\}$/m);
+  assert.match(build, /^  build-images:/m);
+  assert.doesNotMatch(build, /packages: write|GHCR_TOKEN|docker (?:login|push)| --push|secrets\./);
+  assert.match(build, /openssl cms -encrypt -aes-256-gcm/);
+  assert.match(build, /path: \$\{\{ runner\.temp \}\}\/image\.tar\.cms/);
+  assert.match(publish, /needs: \[verify-source, build-images\]/);
+  assert.match(publish, /environment: ghcr-release/);
+  assert.match(publish, /permissions:\s+packages: write\s+runs-on:/);
+  assert.match(publish, /openssl cms -decrypt/);
+  assert.doesNotMatch(publish, /actions\/checkout|docker (?:buildx build|build|run)(?=\s)/);
+  assert.match(publish, /name: Publish the image and read back its digest\s+shell: bash\s+env:\s+GHCR_TOKEN: \$\{\{ github\.token \}\}/);
+  assert.match(publish, /docker buildx imagetools inspect/);
+  assert.match(release, /^permissions: \{\}[\s\S]*?^  release:\s+permissions:\s+contents: write/m);
+  assert.match(release, /softprops\/action-gh-release@[a-f0-9]{40}/);
 });
 
 test('the exact test baseline has docs/TEST_COVERAGE.md as its only source of truth', () => {

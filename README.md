@@ -95,7 +95,7 @@ pnpm dev:worker
 
 ## Внешний деплой
 
-Коммит и разрешённый push в `master` запускают CI. После зелёного CI выбранного SHA GitHub Actions собирает готовые образы и публикует их в приватном GHCR. Coolify получает закреплённый Compose из отдельного репозитория `Celtoman/astro-telekom-release`. Обновление Compose и запуск деплоя выполняются вручную по [runbook GHCR](docs/runbooks/ghcr-release.md).
+Коммит и разрешённый push в `master` запускают CI. После зелёного CI выбранного SHA GitHub Actions собирает образы, передаёт их в зашифрованном виде отдельным заданиям публикации и получает digest из приватного GHCR. Coolify получает закреплённый Compose из отдельного репозитория `Celtoman/astro-telekom-release`. Обновление Compose и запуск деплоя выполняются вручную по [runbook GHCR](docs/runbooks/ghcr-release.md).
 
 Выпуск кода проверяется по SHA образов и Compose, состоянию приложения, сохранности томов и обслуживаемого снимка. Публикация правок из CMS запускается отдельно. [Контракт публикации](docs/publication.md).
 

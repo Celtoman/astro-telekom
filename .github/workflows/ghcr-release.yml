@@ -41,11 +41,10 @@ jobs:
           [[ "$tree" =~ ^[0-9a-f]{40}$ ]]
           printf 'sha=%s\ntree=%s\n' "$SOURCE_SHA" "$tree" >> "$GITHUB_OUTPUT"
 
-  images:
+  build-images:
     needs: verify-source
     permissions:
       contents: read
-      packages: write
     runs-on: ubuntu-latest
     timeout-minutes: 25
     strategy:
@@ -56,13 +55,12 @@ jobs:
       IMAGE_ROLE: ${{ matrix.role }}
       SOURCE_SHA: ${{ needs.verify-source.outputs.sha }}
       SOURCE_TREE: ${{ needs.verify-source.outputs.tree }}
-      GHCR_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ needs.verify-source.outputs.sha }}
           persist-credentials: false
-      - name: Build and publish the verified SHA
+      - name: Build the verified SHA
         shell: bash
         run: |
           set -euo pipefail
@@ -78,24 +76,98 @@ jobs:
             admin) dockerfile=apps/admin/Dockerfile; args=(--build-arg PUBLIC_API_URL=https://admin.tv-internet-dom.ru/api/v1 --build-arg PUBLIC_PROVIDER_ID= --build-arg PUBLIC_SITE_ID=) ;;
             *) exit 1 ;;
           esac
-          mkdir -p "$RUNNER_TEMP/image-identity"
-          printf '%s' "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
           docker buildx create --driver docker-container --use
-          repo="ghcr.io/${GITHUB_REPOSITORY,,}-release-$IMAGE_ROLE"
-          tag="run-$GITHUB_RUN_ID-${SOURCE_SHA:0:8}"
           docker buildx build --platform linux/amd64 --provenance=false --sbom=false --file "$dockerfile" \
             "${target[@]}" "${args[@]}" \
             --label "org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY" \
             --label "org.opencontainers.image.revision=$SOURCE_SHA" \
-            --metadata-file "$RUNNER_TEMP/build.json" --tag "$repo:$tag" --push .
-          digest=$(jq -er '."containerimage.digest"' "$RUNNER_TEMP/build.json")
+            --tag "astro-telekom-release:$IMAGE_ROLE" \
+            --output "type=docker,dest=$RUNNER_TEMP/image.tar" .
+      - name: Encrypt the image archive for the publishing environment
+        shell: bash
+        env:
+          ENCRYPTION_CERT: ${{ vars.GHCR_ARTIFACT_ENCRYPTION_CERT }}
+        run: |
+          set -euo pipefail
+          : "${ENCRYPTION_CERT:?Configure GHCR_ARTIFACT_ENCRYPTION_CERT}"
+          cert_file=$(mktemp)
+          trap 'rm -f -- "$cert_file"' EXIT
+          printf '%s\n' "$ENCRYPTION_CERT" > "$cert_file"
+          openssl cms -encrypt -aes-256-gcm -binary -stream -outform DER \
+            -in "$RUNNER_TEMP/image.tar" -out "$RUNNER_TEMP/image.tar.cms" \
+            -recip "$cert_file"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: release-image-${{ matrix.role }}
+          path: ${{ runner.temp }}/image.tar.cms
+          if-no-files-found: error
+          compression-level: 0
+          overwrite: true
+          retention-days: 1
+
+  publish-images:
+    needs: [verify-source, build-images]
+    environment: ghcr-release
+    permissions:
+      packages: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        role: [migration, api, worker, web, admin]
+    env:
+      IMAGE_ROLE: ${{ matrix.role }}
+      SOURCE_SHA: ${{ needs.verify-source.outputs.sha }}
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: release-image-${{ matrix.role }}
+          path: ${{ runner.temp }}/release-image
+      - name: Decrypt the image archive
+        shell: bash
+        env:
+          DECRYPTION_KEY: ${{ secrets.GHCR_ARTIFACT_DECRYPTION_KEY }}
+        run: |
+          set -euo pipefail
+          : "${DECRYPTION_KEY:?Configure the ghcr-release environment secret}"
+          key_file=$(mktemp)
+          trap 'rm -f -- "$key_file"' EXIT
+          printf '%s\n' "$DECRYPTION_KEY" > "$key_file"
+          openssl cms -decrypt -binary -inform DER -inkey "$key_file" \
+            -in "$RUNNER_TEMP/release-image/image.tar.cms" -out "$RUNNER_TEMP/image.tar"
+      - name: Load and verify the image
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker load --input "$RUNNER_TEMP/image.tar"
+          image="astro-telekom-release:$IMAGE_ROLE"
+          test "$(docker image inspect --format '{{.Os}}/{{.Architecture}}' "$image")" = linux/amd64
+          test "$(docker image inspect --format '{{index .Config.Labels "org.opencontainers.image.revision"}}' "$image")" = "$SOURCE_SHA"
+      - name: Publish the image and read back its digest
+        shell: bash
+        env:
+          GHCR_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          export DOCKER_CONFIG
+          DOCKER_CONFIG=$(mktemp -d)
+          trap 'docker logout ghcr.io >/dev/null 2>&1 || true; rm -rf -- "$DOCKER_CONFIG"' EXIT
+          printf '%s' "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+          repo="ghcr.io/${GITHUB_REPOSITORY,,}-release-$IMAGE_ROLE"
+          image="$repo:run-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT-${SOURCE_SHA:0:8}"
+          docker tag "astro-telekom-release:$IMAGE_ROLE" "$image"
+          docker push "$image"
+          digest=$(docker buildx imagetools inspect --format '{{json .Manifest}}' "$image" | jq -er '.digest')
           [[ "$digest" =~ ^sha256:[0-9a-f]{64}$ ]]
+          mkdir -p "$RUNNER_TEMP/image-identity"
           jq -n --arg role "$IMAGE_ROLE" --arg source "$SOURCE_SHA" --arg image "$repo@$digest" \
             '{role:$role,sourceSha:$source,image:$image}' > "$RUNNER_TEMP/image-identity/identity.json"
           cat "$RUNNER_TEMP/image-identity/identity.json"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: release-identity-${{ matrix.role }}
           path: ${{ runner.temp }}/image-identity/identity.json
           if-no-files-found: error
+          overwrite: true
           retention-days: 14
