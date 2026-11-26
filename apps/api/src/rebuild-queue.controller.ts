@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
-import { AdminTokenGuard } from './admin-token.guard';
+import { AdminTokenGuard, MachineOnly } from './admin-token.guard';
 import { RebuildQueueService } from './rebuild-queue.service';
 
 const DEFAULT_ATTEMPTS = 3;
@@ -20,6 +20,7 @@ export class RebuildQueueController {
   }
 
   @Post('internal/site-rebuilds/:id/start')
+  @MachineOnly()
   start(
     @Param('id') id: string,
     @Body() body: { attemptNumber?: number; maxAttempts?: number; revision?: number },
@@ -33,6 +34,7 @@ export class RebuildQueueController {
   }
 
   @Post('internal/site-rebuilds/:id/result')
+  @MachineOnly()
   result(
     @Param('id') id: string,
     @Body() body: { attemptNumber?: number; maxAttempts?: number; revision?: number; result?: { status: 'SUCCEEDED'; deploymentId?: string; url?: string }; error?: string; deploymentId?: string; providerStatus?: string; providerResponse?: unknown },
@@ -41,6 +43,7 @@ export class RebuildQueueController {
   }
 
   @Post('internal/site-rebuilds/:id/provider-progress')
+  @MachineOnly()
   providerProgress(
     @Param('id') id: string,
     @Body() body: { revision?: number; deploymentId?: string; providerStatus?: string; providerResponse?: unknown },
@@ -49,6 +52,7 @@ export class RebuildQueueController {
   }
 
   @Post('internal/site-rebuilds/:id/publication-progress')
+  @MachineOnly()
   publicationProgress(@Param('id') id: string, @Body() body: Record<string, unknown>) {
     return this.rebuilds.recordPublicationProgress(id, body);
   }

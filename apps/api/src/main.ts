@@ -4,20 +4,24 @@ import fastifyCookie from '@fastify/cookie';
 import fastifyMultipart from '@fastify/multipart';
 import fastifyRateLimit from '@fastify/rate-limit';
 import IORedis from 'ioredis';
+import { AdminTokenGuard } from './admin-token.guard';
 import { AppModule } from './module';
 import { ADMIN_CORS_METHODS } from './cors-options';
+import { configureRequestBodyLimits, PUBLIC_BODY_LIMIT } from './request-body-limits';
 import { createGlobalValidationPipe, rateLimitForPath, rateLimitKeyForRequest, rateLimitWindow } from './security-options';
 import { ServingPublicationInterceptor } from './serving-publication-context';
 
 async function bootstrap() {
   const trustProxy = process.env.TRUST_PROXY === 'true';
+  const adapter = new FastifyAdapter({ bodyLimit: PUBLIC_BODY_LIMIT, trustProxy: trustProxy });
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter({ bodyLimit: 35 * 1024 * 1024, trustProxy: trustProxy }),
+    adapter,
   );
 
   await app.register(fastifyCookie);
   await app.register(fastifyMultipart, { limits: { fileSize: 10 * 1024 * 1024, files: 1, fields: 0, parts: 1 } });
+  configureRequestBodyLimits(adapter, app.get(AdminTokenGuard));
   const rateLimitRedis = process.env.REDIS_URL
     ? new IORedis(process.env.REDIS_URL, { connectTimeout: 1_000, maxRetriesPerRequest: 1, enableOfflineQueue: false })
     : undefined;

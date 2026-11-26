@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, Get, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
-import { AdminTokenGuard } from './admin-token.guard';
+import { AdminTokenGuard, MachineOnly } from './admin-token.guard';
 import { PublicationWorkflowService } from './publication-workflow.service';
 import { RebuildQueueService } from './rebuild-queue.service';
 import { CreateSitePublicationDto } from './publication-workflow.dto';
@@ -94,11 +94,13 @@ export class PublicationWorkflowController {
   }
 
   @Get('internal/site-publications/:siteSlug/catalog')
+  @MachineOnly()
   buildCatalog(@Param('siteSlug') siteSlug: string) {
     return this.publications.getBuildCatalog(siteSlug);
   }
 
   @Get('internal/site-publications/:siteSlug/snapshots/:publicationId')
+  @MachineOnly()
   exactBuildSnapshot(@Param('siteSlug') siteSlug: string, @Param('publicationId') publicationId: string) {
     return this.publications.getExactBuildSnapshot(siteSlug, publicationId);
   }

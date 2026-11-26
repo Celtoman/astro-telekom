@@ -2,26 +2,38 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
+  SetMetadata,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ADMIN_SESSION_COOKIE, AuthService } from './auth.service';
+import { ADMIN_SESSION_COOKIE, AuthService, AuthUser } from './auth.service';
+
+const MACHINE_ONLY = Symbol('machine-only');
+export const MachineOnly = () => SetMetadata(MACHINE_ONLY, true);
+
+interface AdminRequest {
+  headers: { authorization?: string; 'x-admin-token'?: string | string[] };
+  cookies?: Record<string, string | undefined>;
+  user?: AuthUser;
+}
 
 @Injectable()
 export class AdminTokenGuard implements CanActivate {
+  // A protected write can authenticate before parsing, then reach the Nest guard.
+  private readonly authenticatedSessions = new WeakSet<AdminRequest>();
+
   constructor(private readonly auth: AuthService) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const configuredToken = process.env.ADMIN_API_TOKEN;
-    const request = context.switchToHttp().getRequest<{
-      headers: Record<string, string | undefined>;
-      cookies?: Record<string, string | undefined>;
-      url: string;
-    }>();
-    const suppliedToken = request.headers['x-admin-token'];
-    if (configuredToken && suppliedToken === configuredToken) return true;
+  canActivate(context: ExecutionContext): Promise<boolean> {
+    const machineOnly = Reflect.getMetadata(MACHINE_ONLY, context.getHandler()) === true
+      || Reflect.getMetadata(MACHINE_ONLY, context.getClass()) === true;
+    return this.authenticate(context.switchToHttp().getRequest<AdminRequest>(), machineOnly);
+  }
 
-    const path = request.url.split('?')[0];
-    if (path.startsWith('/api/v1/internal/')) throw new UnauthorizedException();
+  async authenticate(request: AdminRequest, machineOnly: boolean): Promise<boolean> {
+    const configuredToken = process.env.ADMIN_API_TOKEN;
+    if (configuredToken && request.headers['x-admin-token'] === configuredToken) return true;
+    if (machineOnly) throw new UnauthorizedException();
+    if (this.authenticatedSessions.has(request)) return true;
 
     const authorization = request.headers.authorization;
     const token = authorization?.startsWith('Bearer ')
@@ -31,7 +43,8 @@ export class AdminTokenGuard implements CanActivate {
 
     const user = await this.auth.getUserByToken(token);
     if (!user) throw new UnauthorizedException();
-    (request as any).user = user;
+    request.user = user;
+    this.authenticatedSessions.add(request);
     return true;
   }
 }

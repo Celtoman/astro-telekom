@@ -1,9 +1,10 @@
 import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
-import { AdminTokenGuard } from './admin-token.guard';
+import { AdminTokenGuard, MachineOnly } from './admin-token.guard';
 import { LeadDecisionService } from './lead-decision.service';
 
 @Controller('internal/lead-decisions')
 @UseGuards(AdminTokenGuard)
+@MachineOnly()
 export class LeadDecisionController {
   constructor(private readonly decisions: LeadDecisionService) {}
 

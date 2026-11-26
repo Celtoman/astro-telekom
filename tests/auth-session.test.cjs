@@ -39,7 +39,11 @@ test('cookie session authenticates every administrator route', async () => {
     },
   });
   const request = { url: '/api/v1/admin/tariffs', headers: {}, cookies: { admin_session: 'cookie-secret' } };
-  await assert.doesNotReject(() => guard.canActivate({ switchToHttp: () => ({ getRequest: () => request }) }));
+  await assert.doesNotReject(() => guard.canActivate({
+    getClass: () => AuthController,
+    getHandler: () => AuthController.prototype.me,
+    switchToHttp: () => ({ getRequest: () => request }),
+  }));
   assert.equal(suppliedToken, 'cookie-secret');
   assert.deepEqual(request.user, { id: 'user-1', email: 'admin@example.test' });
 });

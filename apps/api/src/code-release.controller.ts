@@ -1,10 +1,11 @@
 import { Body, Controller, Param, Post, Res, UseGuards } from '@nestjs/common';
-import { AdminTokenGuard } from './admin-token.guard';
+import { AdminTokenGuard, MachineOnly } from './admin-token.guard';
 import { CodeReleaseDto } from './code-release.dto';
 import { CodeReleaseService } from './code-release.service';
 
 @Controller('internal/site-publications')
 @UseGuards(AdminTokenGuard)
+@MachineOnly()
 export class CodeReleaseController {
   constructor(private readonly releases: CodeReleaseService) {}
 

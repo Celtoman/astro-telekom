@@ -1,9 +1,10 @@
 import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
-import { AdminTokenGuard } from './admin-token.guard';
+import { AdminTokenGuard, MachineOnly } from './admin-token.guard';
 import { LeadDeliveryService } from './lead-delivery.service';
 
 @Controller('internal/lead-deliveries')
 @UseGuards(AdminTokenGuard)
+@MachineOnly()
 export class LeadDeliveryController {
   constructor(private readonly delivery: LeadDeliveryService) {}
 

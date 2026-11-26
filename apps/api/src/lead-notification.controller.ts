@@ -1,9 +1,10 @@
 import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
-import { AdminTokenGuard } from './admin-token.guard';
+import { AdminTokenGuard, MachineOnly } from './admin-token.guard';
 import { LeadNotificationOutboxService } from './lead-notification-outbox.service';
 
 @Controller('internal/lead-notifications')
 @UseGuards(AdminTokenGuard)
+@MachineOnly()
 export class LeadNotificationController {
   constructor(private readonly notifications: LeadNotificationOutboxService) {}
 

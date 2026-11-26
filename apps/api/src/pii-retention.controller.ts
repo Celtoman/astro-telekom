@@ -1,9 +1,10 @@
 import { Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
-import { AdminTokenGuard } from './admin-token.guard';
+import { AdminTokenGuard, MachineOnly } from './admin-token.guard';
 import { PiiRetentionService } from './pii-retention.service';
 
 @Controller('internal/pii-retention')
 @UseGuards(AdminTokenGuard)
+@MachineOnly()
 export class PiiRetentionController {
   constructor(private readonly retention: PiiRetentionService) {}
 
