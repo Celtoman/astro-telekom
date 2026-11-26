@@ -32,7 +32,7 @@ test('release Actions are pinned and GHCR write permission is isolated from the 
     assert.match(action, /^[^@]+@[a-f0-9]{40}$/);
   }
 
-  const [build, publish] = ghcr.split(/^  publish-images:\r?$/m);
+  const [build, publish, attest] = ghcr.split(/^  (?:publish-images|attest-images):\r?$/m);
   assert.match(build, /^permissions: \{\}$/m);
   assert.match(build, /^  build-images:/m);
   assert.doesNotMatch(build, /packages: write|GHCR_TOKEN|docker (?:login|push)| --push|secrets\./);
@@ -44,7 +44,16 @@ test('release Actions are pinned and GHCR write permission is isolated from the 
   assert.match(publish, /openssl cms -decrypt/);
   assert.doesNotMatch(publish, /actions\/checkout|docker (?:buildx build|build|run)(?=\s)/);
   assert.match(publish, /name: Publish the image and read back its digest\s+shell: bash\s+env:\s+GHCR_TOKEN: \$\{\{ github\.token \}\}/);
-  assert.match(publish, /docker buildx imagetools inspect/);
+  assert.match(publish, /docker push "\$image" \| tee/);
+  assert.match(publish, /published="\$repo@\$digest"/);
+  assert.match(publish, /docker buildx imagetools inspect [^\r\n]+"\$published"/);
+  assert.doesNotMatch(`${build}\n${publish}`, /(?:id-token|attestations): write|actions\/attest@/);
+  assert.match(attest, /needs: \[verify-source, publish-images\]/);
+  assert.match(attest, /permissions:\s+attestations: write\s+id-token: write\s+runs-on:/);
+  assert.match(attest, /SOURCE_SHA: \$\{\{ needs\.verify-source\.outputs\.sha \}\}/);
+  assert.match(attest, /SOURCE_TREE: \$\{\{ needs\.verify-source\.outputs\.tree \}\}/);
+  assert.match(attest, /actions\/attest@[a-f0-9]{40}/);
+  assert.doesNotMatch(attest, /packages: write|actions\/checkout|push-to-registry: true|GHCR_TOKEN/);
   assert.match(release, /^permissions: \{\}[\s\S]*?^  release:\s+permissions:\s+contents: write/m);
   assert.match(release, /softprops\/action-gh-release@[a-f0-9]{40}/);
 });

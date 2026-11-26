@@ -155,13 +155,17 @@ jobs:
           trap 'docker logout ghcr.io >/dev/null 2>&1 || true; rm -rf -- "$DOCKER_CONFIG"' EXIT
           printf '%s' "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
           repo="ghcr.io/${GITHUB_REPOSITORY,,}-release-$IMAGE_ROLE"
-          image="$repo:run-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT-${SOURCE_SHA:0:8}"
+          tag="run-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT-${SOURCE_SHA:0:8}"
+          image="$repo:$tag"
           docker tag "astro-telekom-release:$IMAGE_ROLE" "$image"
-          docker push "$image"
-          digest=$(docker buildx imagetools inspect --format '{{json .Manifest}}' "$image" | jq -er '.digest')
+          docker push "$image" | tee "$RUNNER_TEMP/ghcr-push.log"
+          digest=$(awk -v tag="$tag:" '$1 == tag && $2 == "digest:" { print $3 }' "$RUNNER_TEMP/ghcr-push.log")
           [[ "$digest" =~ ^sha256:[0-9a-f]{64}$ ]]
+          published="$repo@$digest"
+          registry_digest=$(docker buildx imagetools inspect --format '{{json .Manifest}}' "$published" | jq -er '.digest')
+          test "$registry_digest" = "$digest"
           mkdir -p "$RUNNER_TEMP/image-identity"
-          jq -n --arg role "$IMAGE_ROLE" --arg source "$SOURCE_SHA" --arg image "$repo@$digest" \
+          jq -n --arg role "$IMAGE_ROLE" --arg source "$SOURCE_SHA" --arg image "$published" \
             '{role:$role,sourceSha:$source,image:$image}' > "$RUNNER_TEMP/image-identity/identity.json"
           cat "$RUNNER_TEMP/image-identity/identity.json"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -171,3 +175,45 @@ jobs:
           if-no-files-found: error
           overwrite: true
           retention-days: 14
+
+  attest-images:
+    needs: [verify-source, publish-images]
+    permissions:
+      attestations: write
+      id-token: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        role: [migration, api, worker, web, admin]
+    env:
+      IMAGE_ROLE: ${{ matrix.role }}
+      SOURCE_SHA: ${{ needs.verify-source.outputs.sha }}
+      SOURCE_TREE: ${{ needs.verify-source.outputs.tree }}
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: release-identity-${{ matrix.role }}
+          path: ${{ runner.temp }}/image-identity
+      - name: Bind the published digest to the built source
+        id: image
+        shell: bash
+        run: |
+          set -euo pipefail
+          repo="ghcr.io/${GITHUB_REPOSITORY,,}-release-$IMAGE_ROLE"
+          image=$(jq -er --arg role "$IMAGE_ROLE" --arg sha "$SOURCE_SHA" \
+            'select(.role == $role and .sourceSha == $sha) | .image' "$RUNNER_TEMP/image-identity/identity.json")
+          [[ "$image" == "$repo@"* ]]
+          digest=${image#"$repo@"}
+          [[ "$digest" =~ ^sha256:[0-9a-f]{64}$ ]]
+          printf 'name=%s\ndigest=%s\n' "$repo" "$digest" >> "$GITHUB_OUTPUT"
+          jq -n --arg sourceSha "$SOURCE_SHA" --arg sourceTree "$SOURCE_TREE" \
+            --arg role "$IMAGE_ROLE" --arg runId "$GITHUB_RUN_ID" \
+            '{sourceSha:$sourceSha,sourceTree:$sourceTree,role:$role,runId:$runId}' > "$RUNNER_TEMP/ghcr-provenance.json"
+      - uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
+        with:
+          subject-name: ${{ steps.image.outputs.name }}
+          subject-digest: ${{ steps.image.outputs.digest }}
+          predicate-type: https://github.com/Celtoman/astro-telekom/attestation/ghcr-image/v1
+          predicate-path: ${{ runner.temp }}/ghcr-provenance.json

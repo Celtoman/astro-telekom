@@ -9,6 +9,7 @@ Push в `master` запускает проверки CI. Сборка образ
 | Идентификатор | Где сверять |
 | --- | --- |
 | SHA кода | Проверенный коммит `master`. Указан в `release.json` (`source`), в `x-astro-release.source-commit` и `APP_SOURCE_COMMIT` в Compose, в OCI-метке `org.opencontainers.image.revision` каждого образа. |
+| SHA workflow | `head_sha` запуска `ghcr-release.yml`. Удостоверяет версию подписывающего workflow. Аттестация отдельно связывает каждый digest с фактически собранным `source_sha` и хешем его Git-дерева. |
 | SHA Compose | Полный коммит репозитория `astro-telekom-release`. Закрепляется в `git_commit_sha` Coolify. Это `commit` в deployment и runtime `SOURCE_COMMIT`, который использует проверка CODE. |
 | Digest образа | Ссылка вида `ghcr.io/celtoman/astro-telekom-release-web@sha256:…`. Compose и `release.json` должны указывать один и тот же digest для каждой роли. |
 
@@ -39,13 +40,21 @@ Push в `master` запускает проверки CI. Сборка образ
 
 3. `build-images` читает исходники с `contents: read` и передаёт зашифрованные архивы через артефакты GitHub Actions. `publish-images` получает `packages: write`, загружает архивы из того же запуска, проверяет платформу и метку исходного SHA, публикует образы и получает digest из GHCR. Внешние Actions в CI и релизных workflows закреплены по полным SHA. В проверенном выпуске `admin` собирался с `PUBLIC_API_URL=https://admin.tv-internet-dom.ru/api/v1` и пустыми `PUBLIC_PROVIDER_ID` и `PUBLIC_SITE_ID`.
 4. Для передачи приватных образов через публичный репозиторий в Actions нужен открытый сертификат `GHCR_ARTIFACT_ENCRYPTION_CERT` и соответствующий закрытый ключ в секрете `GHCR_ARTIFACT_DECRYPTION_KEY` окружения `ghcr-release`. Для окружения разрешена только ветка `master`. При ротации дождаться завершения текущих запусков, заменить оба значения и проверить новый запуск. Зашифрованные архивы хранятся один день. Секреты среды выполнения хранятся в Coolify, который читает GHCR отдельной учётной записью. Убедиться, что все пакеты остались приватными.
-5. Дождаться успеха пяти сборок и пяти публикаций, скачать `release-identity-*` и проверить `role`, `sourceSha` и `image` в каждом `identity.json`. Получить файлы можно командой `gh run download <image-run-id> --pattern 'release-identity-*' --dir <output-dir>`. Проверить с сервера Coolify доступ по каждому точному digest. Одной записи `Logged in` недостаточно для проверки прав на конкретный пакет.
+5. `attest-images` подписывает каждый digest с помощью OIDC GitHub Actions и Sigstore. Подписанные аттестации хранятся в репозитории кода в GitHub Artifact Attestations. У job есть `id-token: write` и `attestations: write`. Образы остаются в приватном GHCR.
+6. Дождаться успеха пяти сборок, пяти публикаций и пяти подписаний. Скачать `release-identity-*` через `gh run download <image-run-id> --pattern 'release-identity-*' --dir <output-dir>`. Проверить `role`, `sourceSha` и `image` в каждом `identity.json`, затем с сервера Coolify проверить доступ ко всем точным digest.
 
 ## 3. Опубликовать Compose выпуска
 
 1. Взять `docker-compose.coolify.yml` из точного SHA кода. Заменить `build` ссылками `image: …@sha256:…` по файлам `identity.json`. `bootstrap-seed` и `serving-projection-warmer` используют тот же образ, что `api`. Убрать у этих ролей `pull_policy: never`, предназначенный для локально собранного образа. На рабочем контуре оставить `RUN_BOOTSTRAP_SEED=false`. Закрепить текущие PostgreSQL и Redis по их digest, если обновление этих сервисов отдельно не согласовано.
 2. Сохранить имена сервисов и томов, сети, mounts, labels, runtime-переменные, healthchecks и зависимости. Добавить `x-astro-release.source-commit` и `APP_SOURCE_COMMIT` для сервисов из GHCR. Оставить `SOURCE_COMMIT` Coolify. Проверить Compose и запустить изолированный прогон с отдельными томами при изменении конфигурации запуска или миграций.
-3. В `release.json` записать `source`, `composeSha256` (SHA-256 UTF-8 текста Compose с LF после удаления внешних пробелов и переводов строк), `imageBuildRun` и `images` со ссылками по digest для всех сервисов. Проверить совпадение по ролям и отсутствие секретов. Закоммитить Compose и манифест в отдельной ветке `release-<short-source-sha>` репозитория выпуска. После разрешённого push сверить полный SHA ветки через GitHub и через `list_github_branches` существующего GitHub App `astro-domru`. Сохранить предыдущую ветку и SHA выпуска для отката.
+3. В `release.json` записать `source`, `composeSha256` (SHA-256 UTF-8 текста Compose с LF после удаления внешних пробелов и переводов строк), `imageBuildRun` и `images` со ссылками по digest для всех сервисов. Сверить отсутствие секретов.
+4. Перед коммитом и push нового Compose из checkout репозитория кода запустить проверку. На машине должны быть настроены GitHub CLI и Docker с доступом к чтению приватных образов GHCR. Команда читает `release.json` и соседний `docker-compose.coolify.yml`, сверяет digest и исходный SHA каждого сервиса, проверяет подписи всех пяти образов, разрешённый подписывающий workflow на `master`, SHA собранного кода, Git-дерево и номер запуска сборки. Продолжать выпуск только после успеха команды. Предыдущие закреплённые выпуски доступны для отката по процедуре ниже. [Проверка аттестаций с GitHub CLI](https://cli.github.com/manual/gh_attestation_verify).
+
+   ```bash
+   node scripts/verify-ghcr-release.mjs <путь-к-репозиторию-выпуска>/release.json
+   ```
+
+5. Закоммитить Compose и манифест в отдельной ветке `release-<short-source-sha>` репозитория выпуска. После разрешённого push сверить полный SHA ветки через GitHub и через `list_github_branches` существующего GitHub App `astro-domru`. Сохранить предыдущую ветку и SHA выпуска для отката.
 
 ## 4. Запустить deployment и проверить публикацию
 
