@@ -44,6 +44,9 @@ let api, nextApi, diagnosticRequest, diagnosticRenderer; let providerReads = 0; 
 let currentToken = token; let deploymentId = 'deployment-1'; let deploymentStatus = 'in_progress';
 try {
   docker(['build', '--file', 'apps/web/Dockerfile', '--target', 'publication-runtime', '--tag', image, '.'], false, 600000);
+  const compilers = docker(['run', '--rm', '--entrypoint', 'find', image, '/workspace',
+    '(', '-name', 'tsc', '-o', '-name', 'typescript-linux-*', ')', '-print']);
+  assert.equal(compilers, '', 'Publication runtime must exclude tsc and its native packages');
   // This positive transport/recovery fixture must not depend on disk left by
   // other Docker suites. Keep the real image/CLI unchanged: a temporary Node
   // preload supplies only statfs capacity inside this disposable container.

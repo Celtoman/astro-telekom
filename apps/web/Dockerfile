@@ -1,4 +1,4 @@
-FROM node:22.23.5-alpine@sha256:1314fb30ec37592d5845e5a160d522c0e680972aa534549940b8d73bde88481a AS web-deps
+FROM node:22.23.5-alpine@sha256:1314fb30ec37592d5845e5a160d522c0e680972aa534549940b8d73bde88481a AS web-manifests
 WORKDIR /workspace
 RUN corepack enable
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -8,6 +8,8 @@ COPY apps/admin/package.json ./apps/admin/package.json
 COPY services/worker/package.json ./services/worker/package.json
 COPY packages/database/package.json ./packages/database/package.json
 COPY scripts/pnpm-install-retry.sh ./scripts/pnpm-install-retry.sh
+
+FROM web-manifests AS web-deps
 RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
     sh scripts/pnpm-install-retry.sh --filter @provider/web --frozen-lockfile --trust-lockfile
 
@@ -37,7 +39,11 @@ RUN pnpm --filter @provider/web run build
 FROM caddy:2.11.9-alpine@sha256:003a97808e781aa9f7e75cc2f43d34d461099031faf5e20faefb9f61126836f0 AS coolify-server
 COPY deploy/coolify-web.Caddyfile /etc/caddy/Caddyfile
 
-FROM web-deps AS publication-runtime
+FROM web-manifests AS web-runtime-deps
+RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
+    sh scripts/pnpm-install-retry.sh --filter @provider/web --prod --frozen-lockfile --trust-lockfile
+
+FROM web-runtime-deps AS publication-runtime
 RUN apk add --no-cache 'zlib>=1.4-r0'
 COPY .npmrc ./.npmrc
 COPY apps/web ./apps/web

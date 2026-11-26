@@ -111,7 +111,8 @@ test('deployment Compose applies migrations and preserves a reproducible Coolify
   assert.match(webDockerfile, /FROM web-deps AS web-sources\r?\nCOPY \. \./);
   assert.match(webDockerfile, /FROM web-sources AS publisher/);
   assert.match(webDockerfile, /FROM web-sources AS build/);
-  const publicationRuntime = webDockerfile.match(/^FROM web-deps AS publication-runtime\r?\n([\s\S]*?)^FROM /m)?.[1];
+  assert.match(webDockerfile, /FROM web-manifests AS web-runtime-deps\r?\n[\s\S]*?sh scripts\/pnpm-install-retry\.sh --filter @provider\/web --prod --frozen-lockfile --trust-lockfile/);
+  const publicationRuntime = webDockerfile.match(/^FROM web-runtime-deps AS publication-runtime\r?\n([\s\S]*?)^FROM /m)?.[1];
   assert.ok(publicationRuntime, 'publication runtime must build directly from the dependency stage');
   assert.deepEqual(publicationRuntime.match(/^COPY .+$/gm), [
     'COPY .npmrc ./.npmrc',

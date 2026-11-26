@@ -386,7 +386,7 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 
 Браузерные ручные/эмулированные проверки и ограничения внешнего rollout находятся в [отчёте ACCOUNT](research/2026-11-05-account-implementation.md); они не подменяются количеством unit tests.
 
-`publication-runtime.test.mjs` / `rehearse-publication-runtime.mjs` дополнительно проверяют переход old snapshot без ACCOUNT → CMS snapshot с ACCOUNT и14 native decoded assets в настоящем Linux/non-root image, выдачу нового URL/asset через Caddy и последующий CODE/restart. Windows observation budget240s для CODE с elapsed diagnostics, Linux120s; production activation guards неизменны. При неуспехе до cleanup читается защищённый CODE outcome без объявления ручного retry автоматическим успехом. Ограничение abort/child cleanup отдельно в #517.
+`publication-runtime.test.mjs` / `rehearse-publication-runtime.mjs` проверяют отсутствие `tsc` и нативных пакетов TypeScript в собранном runtime. На том же Linux-образе без root проходят переход old snapshot без ACCOUNT → CMS snapshot с ACCOUNT и14 native decoded assets, выдача нового URL/asset через Caddy и последующий CODE/restart. Windows observation budget240s для CODE с elapsed diagnostics, Linux120s; production activation guards неизменны. При неуспехе до cleanup читается защищённый CODE outcome без объявления ручного retry автоматическим успехом. Ограничение abort/child cleanup отдельно в #517.
 
 ## ACCOUNT: проверка достоверности мобильного QA (#521)
 
