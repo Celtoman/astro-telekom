@@ -6,7 +6,7 @@ export async function verifyNewsArtifactHttp(root,artifact,{signal}={}){
  const config=createServingConfig(artifact,{apiUpstream:'127.0.0.1:1',publicationToken:'synthetic-news-caddy-fixture-token-534',testMode:true});
  await writeFile(join(root,configName),JSON.stringify(config));
  try{
-  await command(['run','--rm','-d','--name',name,'--label','codex.test=news-http','-p','127.0.0.1::80','-v',`${root}:/publication:ro`,'caddy:2.11.4-alpine','caddy','run','--config',`/publication/${configName}`]);started=true;
+  await command(['run','--rm','-d','--name',name,'--label','codex.test=news-http','-p','127.0.0.1::80','-v',`${root}:/publication:ro`,'caddy:2.11.9-alpine@sha256:003a97808e781aa9f7e75cc2f43d34d461099031faf5e20faefb9f61126836f0','caddy','run','--config',`/publication/${configName}`]);started=true;
   const port=Number((await command(['port',name,'80/tcp'])).stdout.trim().split(':').at(-1));assert.ok(Number.isInteger(port)&&port>0&&port<65536);const origin=`http://127.0.0.1:${port}`;
   const request=path=>fetch(origin+path,{redirect:'manual',signal:signal?AbortSignal.any([signal,AbortSignal.timeout(5000)]):AbortSignal.timeout(5000)});
   let ready=false;const deadline=Date.now()+30000;while(Date.now()<deadline&&!ready){try{ready=(await request('/news')).status===200}catch{}if(!ready)await new Promise(resolve=>setTimeout(resolve,100));if(signal?.aborted)throw signal.reason}assert.ok(ready,'real Caddy must serve the sealed news artifact');

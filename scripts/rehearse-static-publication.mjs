@@ -138,7 +138,7 @@ try {
   const user = process.platform === 'linux' ? ['--user', `${process.getuid()}:${process.getgid()}`] : [];
   docker(['run', '--rm', '-d', '--name', caddy, ...user, '--add-host', 'host.docker.internal:host-gateway', '-v', `${resolve(root)}:/publication`,
     '-e', 'XDG_CONFIG_HOME=/publication/state', '-e', 'XDG_DATA_HOME=/publication/data', '-p', '127.0.0.1::80', '-p', '127.0.0.1::2019',
-    'caddy:2.11.4-alpine', 'caddy', 'run', '--config', '/publication/boot.json']);
+    'caddy:2.11.9-alpine@sha256:003a97808e781aa9f7e75cc2f43d34d461099031faf5e20faefb9f61126836f0', 'caddy', 'run', '--config', '/publication/boot.json']);
   const adminUrl = `http://127.0.0.1:${port(caddy, '2019/tcp')}`; publicUrl = `http://127.0.0.1:${port(caddy, '80/tcp')}`;
   await until(async () => (await fetch(`${adminUrl}/config/`, { headers: { origin: 'http://127.0.0.1:2019' } })).ok, 'Caddy did not become ready');
   manager = new CaddyActivation({ publicationRoot: root, adminUrl, servingOptions: options });

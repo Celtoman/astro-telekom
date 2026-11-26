@@ -94,7 +94,7 @@ try {
   await writeFile(join(root, 'boot.json'), JSON.stringify(createServingConfig(null, options())));
   command(['run', '-d', '--name', server, '--network', network, ...caddyUser,
     '-v', `${resolve(root)}:/publication`, '-e', 'XDG_CONFIG_HOME=/publication/state', '-e', 'XDG_DATA_HOME=/publication/data',
-    '-p', '127.0.0.1::80', '-p', '127.0.0.1::2019', 'caddy:2.11.4-alpine',
+    '-p', '127.0.0.1::80', '-p', '127.0.0.1::2019', 'caddy:2.11.9-alpine@sha256:003a97808e781aa9f7e75cc2f43d34d461099031faf5e20faefb9f61126836f0',
     'caddy', 'run', '--config', '/publication/boot.json']);
   base = `http://127.0.0.1:${port(server, '80/tcp')}`;
   adminUrl = `http://127.0.0.1:${port(server, '2019/tcp')}`;
@@ -145,7 +145,7 @@ try {
   command(['rm', '-f', server]);
   command(['run', '-d', '--name', server, '--network', network, ...caddyUser,
     '-v', `${resolve(root)}:/publication`, '-e', 'XDG_CONFIG_HOME=/publication/state', '-e', 'XDG_DATA_HOME=/publication/data',
-    '-p', `127.0.0.1:${publicPort}:80`, '-p', `127.0.0.1:${adminPort}:2019`, 'caddy:2.11.4-alpine', 'caddy', 'run', '--resume']);
+    '-p', `127.0.0.1:${publicPort}:80`, '-p', `127.0.0.1:${adminPort}:2019`, 'caddy:2.11.9-alpine@sha256:003a97808e781aa9f7e75cc2f43d34d461099031faf5e20faefb9f61126836f0', 'caddy', 'run', '--resume']);
   base = `http://127.0.0.1:${port(server, '80/tcp')}`; adminUrl = `http://127.0.0.1:${port(server, '2019/tcp')}`;
   await waitReady(); await visible('b');
   const restarted = new CaddyActivation({ publicationRoot: root, adminUrl, servingOptions: options() });

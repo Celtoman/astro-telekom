@@ -1,4 +1,4 @@
-FROM node:22.23.4-alpine AS web-deps
+FROM node:22.23.5-alpine@sha256:1314fb30ec37592d5845e5a160d522c0e680972aa534549940b8d73bde88481a AS web-deps
 WORKDIR /workspace
 RUN corepack enable
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -34,10 +34,11 @@ ENV PUBLIC_CONNECTION_PHONE=$PUBLIC_CONNECTION_PHONE
 ENV PUBLIC_SUPPORT_PHONE=$PUBLIC_SUPPORT_PHONE
 RUN pnpm --filter @provider/web run build
 
-FROM caddy:2.11.4-alpine AS coolify-server
+FROM caddy:2.11.9-alpine@sha256:003a97808e781aa9f7e75cc2f43d34d461099031faf5e20faefb9f61126836f0 AS coolify-server
 COPY deploy/coolify-web.Caddyfile /etc/caddy/Caddyfile
 
 FROM web-deps AS publication-runtime
+RUN apk add --no-cache 'zlib>=1.4-r0'
 COPY .npmrc ./.npmrc
 COPY apps/web ./apps/web
 COPY apps/api/src ./apps/api/src
@@ -47,7 +48,8 @@ COPY --from=coolify-server /usr/bin/caddy /usr/bin/caddy
 EXPOSE 80
 CMD ["node", "apps/web/scripts/publication/runtime.mjs"]
 
-FROM caddy:2.11.4-alpine
+FROM coolify-server
+RUN apk add --no-cache 'zlib>=1.4-r0'
 COPY --from=build /workspace/apps/web/dist /srv
 RUN mv /srv/redirects.caddy /etc/caddy/redirects.caddy
 COPY deploy/web.Caddyfile /etc/caddy/Caddyfile

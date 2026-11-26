@@ -19,6 +19,7 @@ ENV PUBLIC_PROVIDER_ID=$PUBLIC_PROVIDER_ID
 ENV PUBLIC_SITE_ID=$PUBLIC_SITE_ID
 RUN pnpm --filter @provider/admin run build
 
-FROM caddy:2.11.4-alpine
+FROM caddy:2.11.9-alpine@sha256:003a97808e781aa9f7e75cc2f43d34d461099031faf5e20faefb9f61126836f0
+RUN apk add --no-cache 'zlib>=1.4-r0'
 COPY --from=build /workspace/apps/admin/dist /srv
 COPY deploy/static.Caddyfile /etc/caddy/Caddyfile

@@ -31,11 +31,13 @@
 | ioredis | 6.0.0 | Redis connections для API и worker. |
 | read-excel-file | 9.3.4 | Безопасный разбор первого листа XLSX в API; лимиты 25 МБ, 10 000 строк и 256 столбцов. |
 | Tabler Icons Webfont | 3.46.0 | Пиктограммы admin. |
-| Caddy | 2.11.4-alpine | Reverse proxy и static file server. |
+| Caddy | 2.11.9-alpine | Reverse proxy и static file server. Образ закреплён по digest в Dockerfile витрины и админки. |
 
 Диапазоны с `^` в manifests разрешаются lockfile при локальной установке. Production Dockerfiles применяют `pnpm install --frozen-lockfile --trust-lockfile` через единый bounded retry wrapper вместе с root `.dockerignore`, исключающим `node_modules`, `.git` и build-артефакты из build context. `--trust-lockfile` ограничен Docker-сборкой из прошедшего CI `master`: обычный CI/local install сохраняет полную supply-chain проверку, а production не повторяет сетевой проход по каждой lockfile-записи в каждом target. Root/workspace manifests, lockfile и retry-script копируются до install отдельным кешируемым слоем, все install stages разделяют BuildKit cache mount `pnpm-store`, а исходники копируются после: изменение исходника, Caddy или документации не переустанавливает зависимости; transient failure повторяет install в уже заполненном store; изменение любого manifest/lockfile корректно инвалидирует слой. API build/runtime, web, admin и worker фильтруют install по нужным workspace, migration target переиспользует API build dependencies; worker копирует только собственный source tree.
 
 ## Принципы использования стека
+
+Контейнер витрины с контроллером статических публикаций использует Node.js 22.23.5. Runtime-образы витрины и админки требуют системный zlib не ниже `1.4-r0`.
 
 ### Astro
 
